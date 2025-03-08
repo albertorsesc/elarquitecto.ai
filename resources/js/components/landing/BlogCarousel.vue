@@ -21,8 +21,8 @@ function handleImageError(event: Event) {
 
 <template>
   <section class="relative py-12 sm:py-20">
-    <div class="container mx-auto px-4">
-      <h2 class="text-glow mb-8 text-center text-2xl font-bold text-accent sm:mb-12 sm:text-3xl md:text-4xl">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="text-glow-light mb-8 text-center text-2xl font-bold text-accent sm:mb-12 sm:text-3xl md:text-4xl">
         Últimos Artículos
       </h2>
 
@@ -40,7 +40,7 @@ function handleImageError(event: Event) {
 
             <!-- Content -->
             <div class="p-4 sm:p-6">
-              <span class="text-glow mb-1 inline-block text-xs font-medium text-secondary sm:mb-2 sm:text-sm">
+              <span class="mb-1 inline-block text-xs font-medium text-cyan-400 sm:mb-2 sm:text-sm">
                 {{ post.category }}
               </span>
               <h3 class="mb-2 text-lg font-bold text-primary sm:mb-3 sm:text-xl">{{ post.title }}</h3>
@@ -54,7 +54,7 @@ function handleImageError(event: Event) {
 
             <!-- Decorative corner -->
             <div class="absolute right-0 top-0 h-12 w-12 overflow-hidden sm:h-16 sm:w-16">
-              <div class="absolute right-0 top-0 h-3 w-3 translate-x-1.5 -translate-y-1.5 rotate-45 bg-accent sm:h-4 sm:w-4 sm:translate-x-2 sm:-translate-y-2"></div>
+              <div class="absolute right-0 top-0 h-3 w-3 translate-x-1.5 -translate-y-1.5 rotate-45 bg-cyan-400 sm:h-4 sm:w-4 sm:translate-x-2 sm:-translate-y-2"></div>
             </div>
           </article>
         </div>

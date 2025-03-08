@@ -109,7 +109,11 @@ html {
 /* Cyberpunk-specific utilities */
 @layer utilities {
     .text-glow {
-        text-shadow: 0 0 10px rgba(var(--primary) / 0.7);
+        text-shadow: 0 0 5px rgba(var(--primary) / 0.4);
+    }
+
+    .text-glow-light {
+        text-shadow: 0 0 3px rgba(var(--accent) / 0.3);
     }
 
     .neon-border {

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <style>
+    .primary { fill: #8A2BE2; }
+    .accent { fill: #FF1493; }
+    @media (prefers-color-scheme: dark) {
+      .primary { fill: #9D4EFF; }
+      .accent { fill: #FF5CAF; }
+    }
+  </style>
+  <rect width="32" height="32" rx="4" fill="#1A1A2E" />
+  <path class="primary" d="M8 8h4v16H8zM14 8h4v4h-4zM14 14h10v4H14zM14 20h4v4h-4z" />
+  <path class="accent" d="M22 8h2v4h-2zM22 20h2v4h-2z" />
+</svg>

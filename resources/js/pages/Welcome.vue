@@ -124,30 +124,31 @@ const sections = [
   <div class="min-h-screen bg-background text-foreground">
     <!-- Navigation -->
     <header class="fixed top-0 z-50 w-full">
-      <nav class="glass-effect border-b border-white/10 bg-background/70 px-2 py-3 backdrop-blur-xl">
-        <div class="container mx-auto flex flex-wrap items-center justify-between">
-          <Link href="/" class="text-xl font-bold text-primary sm:text-2xl">
-            El Arquitecto A.I.
+      <nav class="glass-effect border-b border-white/10 bg-background/70 px-2 py-2 backdrop-blur-xl">
+        <div class="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between px-2">
+          <Link href="/" class="flex items-center">
+            <span class="mr-2 text-lg font-bold text-primary sm:text-xl">El Arquitecto</span>
+            <span class="text-lg font-bold text-cyan-400 sm:text-xl">A.I.</span>
           </Link>
 
-          <div class="flex items-center gap-2 sm:gap-4">
+          <div class="flex items-center gap-1 sm:gap-3">
             <Link
               v-if="page.props.auth.user"
               :href="route('dashboard')"
-              class="neon-border rounded bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary transition-all hover:bg-primary/20 sm:px-4 sm:py-2"
+              class="neon-border rounded bg-primary/10 px-2 py-1 text-xs font-semibold text-primary transition-all hover:bg-primary/20 sm:px-3 sm:py-1.5 sm:text-sm"
             >
               Dashboard
             </Link>
             <template v-else>
               <Link
                 :href="route('login')"
-                class="px-2 text-sm text-foreground/80 transition-colors hover:text-primary sm:text-base"
+                class="px-1 text-xs text-foreground/80 transition-colors hover:text-primary sm:px-2 sm:text-sm"
               >
-                Iniciar Sesión
+                Iniciar
               </Link>
               <Link
                 :href="route('register')"
-                class="neon-border rounded bg-primary px-3 py-1.5 text-sm font-semibold text-white transition-all hover:bg-primary/80 sm:px-4 sm:py-2"
+                class="neon-border rounded bg-primary px-2 py-1 text-xs font-semibold text-white transition-all hover:bg-primary/80 sm:px-3 sm:py-1.5 sm:text-sm"
               >
                 Registrarse
               </Link>
@@ -179,7 +180,7 @@ const sections = [
 
     <!-- Footer -->
     <footer class="border-t border-white/10 bg-background/90 py-8">
-      <div class="container mx-auto px-4 text-center text-foreground/60">
+      <div class="mx-auto max-w-6xl px-4 text-center text-foreground/60">
         <p>&copy; 2024 El Arquitecto A.I. Todos los derechos reservados.</p>
       </div>
     </footer>

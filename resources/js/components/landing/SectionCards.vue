@@ -16,8 +16,8 @@ defineProps<{
 
 <template>
   <section class="relative py-12 sm:py-20">
-    <div class="container mx-auto px-4">
-      <h2 class="text-glow mb-8 text-center text-2xl font-bold text-secondary sm:mb-12 sm:text-3xl md:text-4xl">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="text-glow-light mb-8 text-center text-2xl font-bold text-secondary sm:mb-12 sm:text-3xl md:text-4xl">
         Explora
       </h2>
 
@@ -33,18 +33,18 @@ defineProps<{
             </div>
 
             <!-- Content -->
-            <h3 class="text-glow mb-1 text-lg font-bold text-primary group-hover:text-accent sm:mb-2 sm:text-xl">
+            <h3 class="mb-1 text-lg font-bold text-primary group-hover:text-cyan-400 sm:mb-2 sm:text-xl">
               {{ section.title }}
             </h3>
             <p class="text-sm text-foreground/80 sm:text-base">{{ section.description }}</p>
 
             <!-- Hover effect -->
-            <div class="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-primary via-secondary to-accent opacity-0 transition-opacity group-hover:opacity-10"></div>
+            <div class="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-primary via-cyan-400 to-secondary opacity-0 transition-opacity group-hover:opacity-10"></div>
           </div>
 
           <!-- Decorative corner -->
           <div class="absolute right-0 top-0 h-12 w-12 overflow-hidden sm:h-16 sm:w-16">
-            <div class="absolute right-0 top-0 h-3 w-3 translate-x-1.5 -translate-y-1.5 rotate-45 bg-accent/50 sm:h-4 sm:w-4 sm:translate-x-2 sm:-translate-y-2"></div>
+            <div class="absolute right-0 top-0 h-3 w-3 translate-x-1.5 -translate-y-1.5 rotate-45 bg-cyan-400/50 sm:h-4 sm:w-4 sm:translate-x-2 sm:-translate-y-2"></div>
           </div>
         </a>
       </div>

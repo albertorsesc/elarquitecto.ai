@@ -3,16 +3,16 @@
 const colors = [
   { name: 'Neon Purple', variable: '--primary', hex: '#8A2BE2', class: 'bg-primary' },
   { name: 'Neon Blue', variable: '--secondary', hex: '#00BFFF', class: 'bg-secondary' },
+  { name: 'Cyber Cyan', variable: '--cyan', hex: '#22D3EE', class: 'bg-cyan-400' },
   { name: 'Neon Pink', variable: '--accent', hex: '#FF1493', class: 'bg-accent' },
-  { name: 'Cyber Green', variable: '--chart-4', hex: '#00CC66', class: 'bg-[hsl(var(--chart-4))]' },
-  { name: 'Cyber Yellow', variable: '--chart-5', hex: '#FFB700', class: 'bg-[hsl(var(--chart-5))]' }
+  { name: 'Cyber Green', variable: '--chart-4', hex: '#00CC66', class: 'bg-[hsl(var(--chart-4))]' }
 ];
 </script>
 
 <template>
   <section class="relative py-12 sm:py-20">
-    <div class="container mx-auto px-4">
-      <h2 class="text-glow mb-8 text-center text-2xl font-bold text-primary sm:mb-12 sm:text-3xl md:text-4xl">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="text-glow-light mb-8 text-center text-2xl font-bold text-primary sm:mb-12 sm:text-3xl md:text-4xl">
         Paleta de Colores
       </h2>
 

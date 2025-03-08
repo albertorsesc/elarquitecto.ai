@@ -17,14 +17,14 @@ defineProps<{
       <div class="cyberpunk-grid-bg absolute inset-0 opacity-10"></div>
     </div>
 
-    <div class="container relative mx-auto px-4">
-      <h2 class="text-glow mb-8 text-center text-2xl font-bold text-secondary sm:mb-12 sm:text-3xl md:text-4xl">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="text-glow-light mb-8 text-center text-2xl font-bold text-secondary sm:mb-12 sm:text-3xl md:text-4xl">
         Línea de Tiempo
       </h2>
 
       <div class="relative">
         <!-- Timeline line -->
-        <div class="absolute left-3 top-0 h-full w-0.5 bg-gradient-to-b from-secondary via-accent to-primary sm:left-4 md:left-1/2"></div>
+        <div class="absolute left-3 top-0 h-full w-0.5 bg-gradient-to-b from-secondary via-cyan-400 to-primary sm:left-4 md:left-1/2"></div>
 
         <!-- Timeline items -->
         <div class="space-y-6 sm:space-y-8">
@@ -33,7 +33,7 @@ defineProps<{
                :class="{ 'md:flex-row-reverse': index % 2 !== 0 }">
             <!-- Date -->
             <div class="ml-8 sm:ml-10 md:ml-0 md:w-1/2" :class="{ 'md:pr-8': index % 2 === 0, 'md:pl-8': index % 2 !== 0 }">
-              <span class="text-glow inline-block text-sm font-semibold text-accent sm:text-lg">{{ item.date }}</span>
+              <span class="inline-block text-sm font-semibold text-cyan-400 sm:text-lg">{{ item.date }}</span>
             </div>
 
             <!-- Content -->
@@ -44,8 +44,8 @@ defineProps<{
               </div>
 
               <!-- Timeline dot -->
-              <div class="absolute left-3 top-0 h-3 w-3 rounded-full border-2 border-accent bg-background sm:left-4 sm:h-4 sm:w-4 md:left-1/2 md:-ml-2">
-                <div class="absolute inset-0.5 rounded-full bg-accent"></div>
+              <div class="absolute left-3 top-0 h-3 w-3 rounded-full border-2 border-cyan-400 bg-background sm:left-4 sm:h-4 sm:w-4 md:left-1/2 md:-ml-2">
+                <div class="absolute inset-0.5 rounded-full bg-cyan-400"></div>
               </div>
             </div>
           </div>
