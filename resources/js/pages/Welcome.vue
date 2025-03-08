@@ -6,6 +6,7 @@ import SectionCards from '@/components/landing/SectionCards.vue';
 import TimelineSection from '@/components/landing/TimelineSection.vue';
 import type { PageProps as InertiaPageProps } from '@inertiajs/core';
 import { Head, Link, usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 interface User {
   id: number;
@@ -20,6 +21,29 @@ interface PageProps extends InertiaPageProps {
 }
 
 const page = usePage<PageProps>();
+const isSearchActive = ref(false);
+const searchQuery = ref('');
+
+function activateSearch() {
+  isSearchActive.value = true;
+  // Focus the input after a short delay to allow the animation to start
+  setTimeout(() => {
+    document.getElementById('spotlight-search')?.focus();
+  }, 50);
+}
+
+function deactivateSearch() {
+  if (searchQuery.value === '') {
+    isSearchActive.value = false;
+  }
+}
+
+function handleEscape(event: KeyboardEvent) {
+  if (event.key === 'Escape') {
+    searchQuery.value = '';
+    isSearchActive.value = false;
+  }
+}
 
 // Sample data
 const timelineItems = [
@@ -124,14 +148,16 @@ const sections = [
   <div class="min-h-screen bg-background text-foreground">
     <!-- Navigation -->
     <header class="fixed top-0 z-50 w-full">
-      <nav class="glass-effect border-b border-white/10 bg-background/70 px-2 py-2 backdrop-blur-xl">
-        <div class="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between px-2">
+      <nav class="glass-effect border-b border-white/10 bg-background/70 px-2 py-3 backdrop-blur-xl sm:py-4">
+        <div class="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-2 px-2">
+          <!-- Logo -->
           <Link href="/" class="flex items-center">
             <span class="mr-2 text-lg font-bold text-primary sm:text-xl">El Arquitecto</span>
             <span class="text-lg font-bold text-cyan-400 sm:text-xl">A.I.</span>
           </Link>
 
-          <div class="flex items-center gap-1 sm:gap-3">
+          <!-- Navigation Links -->
+          <div class="order-2 flex items-center gap-1 sm:order-3 sm:gap-3">
             <Link
               v-if="page.props.auth.user"
               :href="route('dashboard')"
@@ -154,9 +180,83 @@ const sections = [
               </Link>
             </template>
           </div>
+
+          <!-- Search Bar -->
+          <div class="order-3 mt-2 w-full sm:order-2 sm:mt-0 sm:w-auto sm:flex-1 sm:px-4 md:px-6">
+            <div class="group relative">
+              <input
+                type="text"
+                placeholder="Buscar contenido..."
+                class="peer w-full rounded-md border border-white/10 bg-background/50 py-1.5 pl-8 pr-4 text-sm text-foreground placeholder:text-foreground/50 focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all duration-300"
+                @focus="activateSearch"
+              />
+              <div class="absolute inset-y-0 left-0 flex items-center pl-2.5 text-foreground/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="absolute bottom-0 left-0 h-[1px] w-0 bg-gradient-to-r from-primary via-cyan-400 to-secondary transition-all duration-300 peer-focus:w-full"></div>
+            </div>
+          </div>
         </div>
       </nav>
     </header>
+
+    <!-- Spotlight Search Overlay -->
+    <div
+      v-if="isSearchActive"
+      class="fixed inset-0 z-[60] flex items-start justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300"
+      :class="isSearchActive ? 'opacity-100' : 'opacity-0 pointer-events-none'"
+      @click="deactivateSearch"
+    >
+      <div
+        class="mt-20 w-full max-w-2xl transform px-4 transition-all duration-300"
+        :class="isSearchActive ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'"
+        @click.stop
+      >
+        <div class="glass-effect overflow-hidden rounded-xl border border-white/20 bg-background/80 shadow-2xl">
+          <!-- Search Input -->
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-cyan-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <input
+              id="spotlight-search"
+              v-model="searchQuery"
+              type="text"
+              placeholder="Buscar en El Arquitecto A.I..."
+              class="w-full border-b border-white/10 bg-transparent py-4 pl-12 pr-4 text-lg text-foreground placeholder:text-foreground/50 focus:outline-none"
+              @keydown="handleEscape"
+              @blur="deactivateSearch"
+            />
+            <div v-if="searchQuery" class="absolute inset-y-0 right-0 flex items-center pr-4">
+              <button
+                class="rounded-full p-1 text-foreground/50 hover:bg-white/10 hover:text-foreground"
+                @click="searchQuery = ''"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Search Results (placeholder) -->
+          <div v-if="searchQuery" class="max-h-[60vh] overflow-y-auto p-2">
+            <div class="p-2 text-center text-sm text-foreground/70">
+              <p>Buscando "{{ searchQuery }}"...</p>
+              <p class="mt-2 text-xs">Presiona ESC para cerrar</p>
+            </div>
+          </div>
+          <div v-else class="p-4 text-center text-sm text-foreground/70">
+            <p>Comienza a escribir para buscar</p>
+            <p class="mt-2 text-xs">Presiona ESC para cerrar</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <main>
       <!-- Hero Section -->

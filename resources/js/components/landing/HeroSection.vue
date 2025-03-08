@@ -6,7 +6,7 @@ defineProps<{
 </script>
 
 <template>
-  <section class="relative min-h-[80vh] w-full overflow-hidden pt-14">
+  <section class="relative min-h-[80vh] w-full overflow-hidden pt-20 sm:pt-24">
     <!-- Cyberpunk background with gradient -->
     <div class="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20">
       <div class="cyberpunk-grid-bg absolute inset-0 opacity-20"></div>
