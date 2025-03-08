@@ -2,6 +2,7 @@
 defineProps<{
   title: string;
   subtitle: string;
+  logoSrc?: string;
 }>();
 </script>
 
@@ -14,8 +15,20 @@ defineProps<{
 
     <!-- Glass container -->
     <div class="mx-auto max-w-6xl px-4 py-12 sm:py-20">
-      <div class="glass-effect rounded-lg border border-white/10 bg-background/70 p-4 backdrop-blur-xl sm:p-8">
-        <div class="max-w-3xl">
+      <div class="glass-effect relative rounded-lg border border-white/10 bg-background/70 p-4 backdrop-blur-xl sm:p-8">
+        <!-- Background Logo -->
+        <div
+          v-if="logoSrc"
+          class="absolute inset-0 z-0 opacity-5"
+          :style="{
+            backgroundImage: `url(${logoSrc})`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }"
+        ></div>
+
+        <div class="relative z-10 max-w-3xl">
           <h1 class="mb-4 text-3xl font-bold sm:mb-6 sm:text-4xl md:text-6xl">
             <span class="mr-2 text-primary">El Arquitecto</span>
             <span class="text-cyan-400">A.I.</span>

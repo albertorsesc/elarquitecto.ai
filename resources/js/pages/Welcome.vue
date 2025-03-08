@@ -152,8 +152,7 @@ const sections = [
         <div class="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-2 px-2">
           <!-- Logo -->
           <Link href="/" class="flex items-center">
-            <span class="mr-2 text-lg font-bold text-primary sm:text-xl">El Arquitecto</span>
-            <span class="text-lg font-bold text-cyan-400 sm:text-xl">A.I.</span>
+            <img src="/logo.png" alt="El Arquitecto A.I. Logo" class="h-8 w-auto sm:h-10" />
           </Link>
 
           <!-- Navigation Links -->
@@ -263,6 +262,7 @@ const sections = [
       <HeroSection
         title="El Arquitecto A.I."
         subtitle="Descubre el poder de la Inteligencia Artificial en español"
+        logo-src="/logo.png"
       />
 
       <!-- Timeline Section -->
