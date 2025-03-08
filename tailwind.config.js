@@ -14,6 +14,35 @@ export default {
             fontFamily: {
                 sans: ['Instrument Sans', ...defaultTheme.fontFamily.sans],
             },
+            keyframes: {
+                'neon-slide-right': {
+                    '0%': { transform: 'translateX(-100%)' },
+                    '100%': { transform: 'translateX(200%)' }
+                },
+                'neon-slide-left': {
+                    '0%': { transform: 'translateX(200%)' },
+                    '100%': { transform: 'translateX(-100%)' }
+                },
+                'neon-slide-down': {
+                    '0%': { transform: 'translateY(-100%)' },
+                    '100%': { transform: 'translateY(200%)' }
+                },
+                'neon-slide-down-delayed': {
+                    '0%': { transform: 'translateY(-100%)' },
+                    '100%': { transform: 'translateY(200%)' }
+                },
+                'pulse': {
+                    '0%, 100%': { opacity: '1' },
+                    '50%': { opacity: '0.5' }
+                }
+            },
+            animation: {
+                'neon-slide-right': 'neon-slide-right 3s linear infinite',
+                'neon-slide-left': 'neon-slide-left 3s linear infinite',
+                'neon-slide-down': 'neon-slide-down 3s linear infinite',
+                'neon-slide-down-delayed': 'neon-slide-down 4s linear infinite 1s',
+                'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+            },
             borderRadius: {
                 lg: 'var(--radius)',
                 md: 'calc(var(--radius) - 2px)',
