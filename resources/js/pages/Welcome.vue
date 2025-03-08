@@ -191,7 +191,7 @@ const sections = [
               <input
                 type="text"
                 placeholder="Buscar contenido..."
-                class="peer w-full rounded-md border border-white/10 bg-background/50 py-1.5 pl-8 pr-4 text-sm text-foreground placeholder:text-foreground/50 focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all duration-300"
+                class="peer w-full rounded-xl border border-white/10 bg-background/50 py-1.5 pl-8 pr-4 text-sm text-foreground placeholder:text-foreground/50 focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all duration-300"
                 @focus="activateSearch"
               />
               <div class="absolute inset-y-0 left-0 flex items-center pl-2.5 text-foreground/50">
@@ -199,7 +199,17 @@ const sections = [
                   <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                 </svg>
               </div>
-              <div class="absolute bottom-0 left-0 h-[1px] w-0 bg-gradient-to-r from-primary via-cyan-400 to-secondary transition-all duration-300 peer-focus:w-full"></div>
+              <!-- Animated border effect -->
+              <div class="absolute bottom-0 left-0 h-[1px] w-0 bg-gradient-to-r from-primary via-cyan-400 to-secondary transition-all duration-300 group-focus-within:w-full"></div>
+              <!-- Corner accents -->
+              <div class="absolute left-0 top-0 h-8 w-8 opacity-0 transition-opacity duration-300 group-focus-within:opacity-100">
+                <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
+                <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-primary via-transparent to-transparent"></div>
+              </div>
+              <div class="absolute right-0 top-0 h-8 w-8 opacity-0 transition-opacity duration-300 group-focus-within:opacity-100">
+                <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
+                <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -218,7 +228,25 @@ const sections = [
         :class="isSearchActive ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'"
         @click.stop
       >
-        <div class="glass-effect overflow-hidden rounded-xl border border-white/20 bg-background/80 shadow-2xl">
+        <div class="glass-effect relative overflow-hidden rounded-xl border border-white/20 bg-background/80 shadow-[0_0_30px_rgba(124,58,237,0.3)]">
+          <!-- Animated corner accents -->
+          <div class="absolute left-0 top-0 h-12 w-12 animate-pulse-slow">
+            <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
+            <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-primary via-transparent to-transparent"></div>
+          </div>
+          <div class="absolute right-0 top-0 h-12 w-12 animate-pulse-slow">
+            <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
+            <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
+          </div>
+          <div class="absolute bottom-0 left-0 h-12 w-12 animate-pulse-slow">
+            <div class="absolute bottom-0 left-0 h-full w-[1px] animate-glow bg-gradient-to-t from-secondary via-transparent to-transparent"></div>
+            <div class="absolute bottom-0 left-0 h-[1px] w-full animate-glow bg-gradient-to-r from-secondary via-transparent to-transparent"></div>
+          </div>
+          <div class="absolute bottom-0 right-0 h-12 w-12 animate-pulse-slow">
+            <div class="absolute bottom-0 right-0 h-full w-[1px] animate-glow bg-gradient-to-t from-accent via-transparent to-transparent"></div>
+            <div class="absolute bottom-0 right-0 h-[1px] w-full animate-glow bg-gradient-to-l from-accent via-transparent to-transparent"></div>
+          </div>
+
           <!-- Search Input -->
           <div class="relative">
             <div class="absolute inset-y-0 left-0 flex items-center pl-4">
@@ -245,18 +273,23 @@ const sections = [
                 </svg>
               </button>
             </div>
+            <!-- Animated border effect -->
+            <div class="absolute bottom-0 left-0 h-[1px] w-full bg-gradient-to-r from-primary via-cyan-400 to-secondary opacity-50"></div>
           </div>
 
           <!-- Search Results (placeholder) -->
-          <div v-if="searchQuery" class="max-h-[60vh] overflow-y-auto p-2">
-            <div class="p-2 text-center text-sm text-foreground/70">
-              <p>Buscando "{{ searchQuery }}"...</p>
-              <p class="mt-2 text-xs">Presiona ESC para cerrar</p>
+          <div v-if="searchQuery" class="max-h-[60vh] overflow-y-auto p-4">
+            <div class="p-4 text-center">
+              <div class="relative mx-auto mb-4 h-8 w-8">
+                <div class="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-cyan-400 opacity-70"></div>
+              </div>
+              <p class="text-sm text-foreground/70">Buscando "<span class="text-cyan-400">{{ searchQuery }}</span>"...</p>
+              <p class="mt-2 text-xs text-foreground/50">Presiona <span class="rounded border border-white/20 bg-white/5 px-1.5 py-0.5 text-[10px] font-mono">ESC</span> para cerrar</p>
             </div>
           </div>
-          <div v-else class="p-4 text-center text-sm text-foreground/70">
-            <p>Comienza a escribir para buscar</p>
-            <p class="mt-2 text-xs">Presiona ESC para cerrar</p>
+          <div v-else class="p-6 text-center">
+            <p class="text-sm text-foreground/70">Comienza a escribir para buscar</p>
+            <p class="mt-2 text-xs text-foreground/50">Presiona <span class="rounded border border-white/20 bg-white/5 px-1.5 py-0.5 text-[10px] font-mono">ESC</span> para cerrar</p>
           </div>
         </div>
       </div>

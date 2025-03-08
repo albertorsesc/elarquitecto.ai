@@ -57,17 +57,42 @@ defineProps<{
           }"
         ></div>
 
-        <div class="relative z-10 max-w-3xl">
-          <h1 class="mb-4 text-3xl font-bold sm:mb-6 sm:text-4xl md:text-6xl">
+        <div class="relative z-10 mx-auto max-w-3xl">
+          <h1 class="mb-4 text-center text-3xl font-bold sm:mb-6 sm:text-4xl md:text-6xl">
             <span class="mr-2 text-primary animate-text-glow">El Arquitecto</span>
             <span class="text-cyan-400 animate-text-glow-delayed">A.I.</span>
           </h1>
-          <p class="text-lg text-foreground/90 sm:text-xl md:text-2xl">
+          <p class="text-center text-lg text-foreground/90 sm:text-xl md:text-2xl">
             {{ subtitle }}
           </p>
 
+          <!-- Subscription form -->
+          <div class="mt-8 flex justify-center sm:mt-10">
+            <div class="group relative w-full max-w-2xl">
+              <input
+                type="email"
+                placeholder="Tu correo electrónico"
+                class="w-full rounded-xl border border-white/10 bg-background/50 py-3 pl-4 pr-36 text-sm text-foreground placeholder:text-foreground/50 focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all duration-300"
+              />
+              <button class="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg bg-primary px-4 py-1.5 text-sm font-semibold text-white transition-all hover:bg-primary/80 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)]">
+                Suscribirse
+              </button>
+              <!-- Animated border effect -->
+              <div class="absolute bottom-0 left-0 h-[1px] w-0 bg-gradient-to-r from-primary via-cyan-400 to-secondary transition-all duration-300 group-focus-within:w-full"></div>
+              <!-- Corner accents -->
+              <div class="absolute left-0 top-0 h-8 w-8 opacity-0 transition-opacity duration-300 group-focus-within:opacity-100">
+                <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
+                <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-primary via-transparent to-transparent"></div>
+              </div>
+              <div class="absolute right-0 top-0 h-8 w-8 opacity-0 transition-opacity duration-300 group-focus-within:opacity-100">
+                <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
+                <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
+              </div>
+            </div>
+          </div>
+
           <!-- Cyberpunk-styled buttons -->
-          <div class="mt-6 flex flex-wrap gap-3 sm:mt-8 sm:gap-4">
+          <div class="mt-6 flex flex-wrap justify-center gap-3 sm:mt-8 sm:gap-4">
             <button class="neon-border group relative rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-primary/80 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-6 sm:py-3">
               <span class="relative z-10">Explorar</span>
               <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary via-secondary to-accent opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
