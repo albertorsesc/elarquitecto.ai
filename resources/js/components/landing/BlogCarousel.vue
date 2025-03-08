@@ -20,51 +20,41 @@ function handleImageError(event: Event) {
 </script>
 
 <template>
-  <section class="relative py-12 sm:py-20">
+  <section class="py-12 sm:py-16">
     <div class="mx-auto max-w-6xl px-4">
       <h2 class="text-glow-light mb-8 text-center text-2xl font-bold text-accent sm:mb-12 sm:text-3xl md:text-4xl">
         Últimos Artículos
       </h2>
 
-      <!-- Carousel container -->
-      <div class="relative overflow-hidden">
-        <div class="flex gap-4 overflow-x-auto pb-6 scrollbar-hide sm:gap-6">
-          <!-- Blog cards -->
-          <article v-for="post in posts" :key="post.id"
-                   class="glass-effect relative min-w-[260px] flex-none rounded-lg border border-white/10 bg-background/70 backdrop-blur-xl sm:min-w-[300px] md:min-w-[400px]">
-            <!-- Image -->
-            <div class="relative h-36 overflow-hidden rounded-t-lg sm:h-48">
-              <img :src="post.image" :alt="post.title" class="h-full w-full object-cover" @error="handleImageError" />
-              <div class="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
-            </div>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div
+          v-for="post in posts"
+          :key="post.id"
+          class="group relative overflow-hidden rounded-xl border border-white/10 bg-background/50 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_20px_rgba(124,58,237,0.2)]"
+        >
+          <!-- Animated corner accents -->
+          <div class="absolute left-0 top-0 h-8 w-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
+            <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-primary via-transparent to-transparent"></div>
+          </div>
+          <div class="absolute right-0 top-0 h-8 w-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
+            <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
+          </div>
 
-            <!-- Content -->
-            <div class="p-4 sm:p-6">
-              <span class="mb-1 inline-block text-xs font-medium text-cyan-400 sm:mb-2 sm:text-sm">
-                {{ post.category }}
-              </span>
-              <h3 class="mb-2 text-lg font-bold text-primary sm:mb-3 sm:text-xl">{{ post.title }}</h3>
-              <p class="text-sm text-foreground/80 sm:text-base">{{ post.excerpt }}</p>
+          <img :src="post.image" :alt="post.title" class="mb-4 rounded-lg" />
+          <span class="mb-2 inline-block rounded bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
+            {{ post.category }}
+          </span>
+          <h3 class="mb-2 text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+            {{ post.title }}
+          </h3>
+          <p class="text-sm text-foreground/70">
+            {{ post.excerpt }}
+          </p>
 
-              <!-- Read more button -->
-              <button class="neon-border mt-3 rounded bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary transition-all hover:bg-primary/20 sm:mt-4 sm:px-4 sm:py-2 sm:text-sm">
-                Leer Más
-              </button>
-            </div>
-
-            <!-- Decorative corner -->
-            <div class="absolute right-0 top-0 h-12 w-12 overflow-hidden sm:h-16 sm:w-16">
-              <div class="absolute right-0 top-0 h-3 w-3 translate-x-1.5 -translate-y-1.5 rotate-45 bg-cyan-400 sm:h-4 sm:w-4 sm:translate-x-2 sm:-translate-y-2"></div>
-            </div>
-          </article>
-        </div>
-
-        <!-- Navigation dots -->
-        <div class="mt-4 flex justify-center gap-2 sm:mt-6">
-          <button v-for="i in Math.ceil(posts.length / 3)" :key="i"
-                  class="h-1.5 w-1.5 rounded-full bg-primary/30 transition-all hover:bg-primary sm:h-2 sm:w-2"
-                  :class="{ 'w-3 bg-primary sm:w-4': i === 1 }">
-          </button>
+          <!-- Hover effect overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
         </div>
       </div>
     </div>
@@ -72,11 +62,12 @@ function handleImageError(event: Event) {
 </template>
 
 <style scoped>
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+@keyframes glow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
 }
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+
+.animate-glow {
+  animation: glow 3s infinite;
 }
 </style>
