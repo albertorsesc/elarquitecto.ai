@@ -27,6 +27,7 @@ class TimelineRequest extends FormRequest
             'description' => ['required', 'string', 'max:255'],
             'excerpt' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string'],
+            'tags' => ['required', 'array'],
         ];
     }
 }

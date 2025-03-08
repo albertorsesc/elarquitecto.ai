@@ -2,10 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\Tag;
 use App\Models\Timeline;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 use Throwable;
@@ -13,64 +14,76 @@ use Throwable;
 class TimelineTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     /**
      * @test
+     *
      * @throws Throwable
-    */
+     */
     public function a_guest_user_can_visit_timeline_page()
     {
         $this->get(route('timeline.index'))
             ->assertOk()
-            ->assertInertia(fn(Assert $page) =>
-                $page->component('Timeline/Index')
-                     ->has('timelines')
+            ->assertInertia(fn (Assert $page) => $page->component('Timeline/Index')
+                ->has('timelines')
             );
     }
-    
+
     /**
      * @test
+     *
      * @throws \Throwable
-    */
+     */
     public function root_user_can_post_timeline_posts()
     {
         // Auth as Root user
-        $this->actingAs(User::factory()->create([
-            'email' => config('app.users.root')
-        ]));
-        
+        $this->actingAs($this->rootUser());
+
+        $tags = Tag::factory()->count(2)->create();
         // get timeline post data
-        $post = Timeline::factory()->make();
-        
+        $post = Timeline::factory()->make([
+            'title' => 'My First Post',
+        ]);
+
         // post timeline post
-        $this->post(route('timeline.store'), $post->toArray())
-            ->assertRedirect(route('timeline.index'));
-        
+        $this->post(route('timeline.store'), [
+            ...$post->toArray(),
+            'tags' => [...$tags->pluck('id')->toArray()],
+        ])->assertRedirect(route('timeline.index'));
+
         $this->assertDatabaseHas('timelines', [
             'author_id' => auth()->id(),
             'title' => $post->title,
-            'slug' => $post->slug,
+            'slug' => Str::slug($post->title),
             'description' => $post->description,
             'excerpt' => $post->excerpt,
             'content' => $post->content,
         ]);
+        
+        $this->assertDatabaseHas('timeline_tags', [
+            'timeline_id' => Timeline::first()->id,
+            'tag_id' => $tags->first()->id,
+        ]);
+        
+        $this->assertDatabaseHas('timeline_tags', [
+            'timeline_id' => Timeline::first()->id,
+            'tag_id' => $tags->last()->id,
+        ]);
     }
-    
+
     /**
      * @test
+     *
      * @throws \Throwable
-    */
+     */
     public function root_user_can_visit_create_timeline_post()
     {
         // Auth as Root user
-        $this->actingAs(User::factory()->create([
-            'email' => config('app.users.root')
-        ]));
-        
+        $this->actingAs($this->rootUser());
+
         $this->get(route('timeline.create'))
             ->assertOk()
-            ->assertInertia(fn(Assert $page) =>
-                $page->component('Timeline/Create')
+            ->assertInertia(fn (Assert $page) => $page->component('Timeline/Create')
             );
     }
 }
