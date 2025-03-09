@@ -3,6 +3,15 @@
  * Provides utility functions for interacting with the Spotify API
  */
 
+import config from '@/config';
+
+/**
+ * Get the default playlist URI from config
+ */
+export function getDefaultPlaylist(): string {
+  return config.spotify.defaultPlaylist;
+}
+
 /**
  * Play a specific playlist on the active device
  * @param token Access token
@@ -14,6 +23,75 @@ export async function playPlaylist(token: string, deviceId: string, playlistUri:
     // Extract playlist ID from URI (format: spotify:playlist:37i9dQZF1DXdLEN7aqioXM)
     const playlistId = playlistUri.split(':').pop();
 
+    if (!playlistId) {
+      throw new Error('Invalid playlist URI');
+    }
+
+    // First check if we can play on this device
+    const deviceResponse = await fetch(`https://api.spotify.com/v1/me/player/devices`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    // Check for 401/403 errors which might indicate a client credentials token or non-premium account
+    if (deviceResponse.status === 401 || deviceResponse.status === 403) {
+      const errorData = await deviceResponse.json();
+      console.error('Authorization error getting devices:', errorData);
+
+      if (errorData.error?.message?.includes('premium')) {
+        throw new Error('Premium required for playback');
+      } else {
+        throw new Error(`Authorization error: ${errorData.error?.message || 'Unauthorized'}`);
+      }
+    }
+
+    if (!deviceResponse.ok) {
+      const errorData = await deviceResponse.json();
+      console.error('Failed to get devices:', errorData);
+      throw new Error(`Failed to get devices: ${errorData.error?.message || 'Unknown error'}`);
+    }
+
+    const devices = await deviceResponse.json();
+    const targetDevice = devices.devices.find((d: any) => d.id === deviceId);
+
+    if (!targetDevice) {
+      throw new Error('Device not found');
+    }
+
+    if (!targetDevice.is_active) {
+      // Transfer playback to our device first
+      const transferResponse = await fetch('https://api.spotify.com/v1/me/player', {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          device_ids: [deviceId],
+          play: false,
+        }),
+      });
+
+      // Check for errors in transfer response
+      if (!transferResponse.ok && transferResponse.status !== 204) {
+        const errorData = await transferResponse.json().catch(() => ({}));
+        console.error('Error transferring playback:', errorData);
+
+        if (errorData.error?.message?.includes('premium')) {
+          throw new Error('Premium required for playback');
+        } else if (transferResponse.status === 401 || transferResponse.status === 403) {
+          throw new Error('Authorization error: Not authorized to transfer playback');
+        } else {
+          throw new Error(`Failed to transfer playback: ${errorData.error?.message || 'Unknown error'}`);
+        }
+      }
+
+      // Wait a moment for the transfer to complete
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    // Now try to play the playlist
     const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
       method: 'PUT',
       headers: {
@@ -26,27 +104,20 @@ export async function playPlaylist(token: string, deviceId: string, playlistUri:
     });
 
     if (!response.ok && response.status !== 204) {
-      const error = await response.json();
-      throw new Error(error.error.message || 'Failed to play playlist');
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Spotify play error:', errorData);
+
+      if (errorData.error?.message?.includes('premium')) {
+        throw new Error('Premium required for playback');
+      } else if (response.status === 401 || response.status === 403) {
+        throw new Error('Authorization error: Not authorized to play content');
+      } else {
+        throw new Error(errorData.error?.message || 'Failed to play playlist');
+      }
     }
   } catch (error) {
     console.error('Error playing playlist:', error);
     throw error;
-  }
-}
-
-/**
- * Get the default playlist URI from the backend
- */
-export async function getDefaultPlaylist(): Promise<string> {
-  try {
-    const response = await fetch('/spotify/default-playlist');
-    const data = await response.json();
-    return data.playlist_uri;
-  } catch (error) {
-    console.error('Error fetching default playlist:', error);
-    // Fallback to a default synthwave playlist
-    return 'spotify:playlist:37i9dQZF1DXdLEN7aqioXM';
   }
 }
 

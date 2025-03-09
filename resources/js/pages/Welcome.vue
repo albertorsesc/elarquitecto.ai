@@ -5,6 +5,7 @@ import HeroSection from '@/components/landing/HeroSection.vue';
 import SectionCards from '@/components/landing/SectionCards.vue';
 import SpotifyPlayerWrapper from '@/components/landing/SpotifyPlayerWrapper.vue';
 import TimelineSection from '@/components/landing/TimelineSection.vue';
+import config from '@/config';
 import type { PageProps as InertiaPageProps } from '@inertiajs/core';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -148,7 +149,7 @@ const sections = [
 
   <div class="min-h-screen bg-background text-foreground">
     <!-- Music Player -->
-    <SpotifyPlayerWrapper />
+    <SpotifyPlayerWrapper v-if="config.spotify.enabled" />
 
     <!-- Navigation -->
     <header class="fixed top-0 z-50 w-full">

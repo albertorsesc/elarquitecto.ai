@@ -80,13 +80,40 @@ onMounted(async () => {
     // Set token in store
     spotifyStore.setAccessToken(data.access_token);
 
-    // If we have a refresh token, this is definitely a user token
-    isUserAuthenticated.value = !!data.refresh_token;
+    // Check if this is a user token or a client credentials token
+    isUserAuthenticated.value = !data.is_default;
     console.log('Is user authenticated with Spotify:', isUserAuthenticated.value);
 
     // Initialize player only if we have a user token
     if (isUserAuthenticated.value) {
       try {
+        // Check if user has Spotify Premium before initializing player
+        const userProfileResponse = await fetch('https://api.spotify.com/v1/me', {
+          headers: {
+            'Authorization': `Bearer ${data.access_token}`
+          }
+        });
+
+        if (!userProfileResponse.ok) {
+          console.log('Failed to get user profile, falling back to preview player');
+          showFallbackPlayer.value = true;
+          initializeFallbackPlayer();
+          isLoading.value = false;
+          return;
+        }
+
+        const userProfile = await userProfileResponse.json();
+        const hasPremium = userProfile.product === 'premium';
+
+        if (!hasPremium) {
+          console.log('User does not have Spotify Premium, falling back to preview player');
+          spotifyStore.setError('Spotify Premium is required for playback. Using preview player instead.');
+          showFallbackPlayer.value = true;
+          initializeFallbackPlayer();
+          isLoading.value = false;
+          return;
+        }
+
         await spotifyStore.initializePlayer();
         console.log('Spotify player initialized successfully');
         // Start progress tracking
@@ -94,11 +121,14 @@ onMounted(async () => {
       } catch (playerError) {
         console.error('Error initializing Spotify player:', playerError);
         spotifyStore.setError('Error initializing Spotify player. Please try logging in again.');
+        showFallbackPlayer.value = true;
+        initializeFallbackPlayer();
       }
     } else {
       // For non-authenticated users, we'll show the login button
       console.log('No valid user token - playback not available');
       showFallbackPlayer.value = true;
+      initializeFallbackPlayer();
     }
 
     isLoading.value = false;
@@ -172,15 +202,58 @@ watch(isPlaying, (newValue) => {
 
 // Watch for device ID changes to play default playlist
 watch(() => spotifyStore.deviceId, async (newDeviceId) => {
-  if (newDeviceId && spotifyStore.accessToken && !isUserAuthenticated.value) {
+  if (newDeviceId && spotifyStore.accessToken) {
     try {
       console.log('Device ID ready:', newDeviceId);
-      const playlistUri = await getDefaultPlaylist();
+      const playlistUri = getDefaultPlaylist();
       console.log('Attempting to play playlist:', playlistUri);
+
+      // Add a small delay to ensure the device is fully ready
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
       await playPlaylist(spotifyStore.accessToken, newDeviceId, playlistUri);
       console.log('Playlist playback initiated');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error playing default playlist:', error);
+
+      // Check for specific error messages
+      const errorMessage = error.message || '';
+
+      if (errorMessage.includes('Premium required') || errorMessage.includes('premium')) {
+        console.log('Premium account required error detected');
+        spotifyStore.setError('Spotify Premium is required for playback. Using preview player instead.');
+        showFallbackPlayer.value = true;
+        initializeFallbackPlayer();
+      } else if (errorMessage.includes('No active device found') || errorMessage.includes('device_not_found')) {
+        console.log('Device not found error, attempting to retry');
+        // Try to activate the device and play again
+        try {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          await playPlaylist(spotifyStore.accessToken, newDeviceId, getDefaultPlaylist());
+          console.log('Retry successful');
+        } catch (retryError: any) {
+          console.error('Retry failed:', retryError);
+
+          // If retry also fails with Premium error, show that message
+          if (retryError.message?.includes('Premium') || retryError.message?.includes('premium')) {
+            spotifyStore.setError('Spotify Premium is required for playback. Using preview player instead.');
+          } else {
+            spotifyStore.setError('Error starting playback. Please try again.');
+          }
+
+          showFallbackPlayer.value = true;
+          initializeFallbackPlayer();
+        }
+      } else if (errorMessage.includes('401') || errorMessage.includes('unauthorized')) {
+        console.log('Authorization error detected');
+        spotifyStore.setError('Spotify authorization error. Please log in again.');
+        showFallbackPlayer.value = true;
+        initializeFallbackPlayer();
+      } else {
+        spotifyStore.setError('Error starting playback. Using preview player instead.');
+        showFallbackPlayer.value = true;
+        initializeFallbackPlayer();
+      }
     }
   }
 });
