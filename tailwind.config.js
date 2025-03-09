@@ -31,6 +31,10 @@ export default {
                     '0%': { transform: 'translateY(-100%)' },
                     '100%': { transform: 'translateY(200%)' }
                 },
+                'neon-slide-up': {
+                    '0%': { transform: 'translateY(100%)' },
+                    '100%': { transform: 'translateY(-100%)' }
+                },
                 'pulse': {
                     '0%, 100%': { opacity: '1' },
                     '50%': { opacity: '0.5' }
@@ -41,6 +45,11 @@ export default {
                 'neon-slide-left': 'neon-slide-left 3s linear infinite',
                 'neon-slide-down': 'neon-slide-down 3s linear infinite',
                 'neon-slide-down-delayed': 'neon-slide-down 4s linear infinite 1s',
+                'neon-slide-up': 'neon-slide-up 3s linear infinite',
+                'neon-slide-right-slow': 'neon-slide-right 4s linear infinite',
+                'neon-slide-left-slow': 'neon-slide-left 4s linear infinite',
+                'neon-slide-down-slow': 'neon-slide-down 4s linear infinite',
+                'neon-slide-up-slow': 'neon-slide-up 4s linear infinite',
                 'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
             },
             textShadow: {

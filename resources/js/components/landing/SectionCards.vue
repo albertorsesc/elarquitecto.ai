@@ -40,6 +40,18 @@ defineProps<{
           <!-- Neon border glow on hover -->
           <div class="absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             <div class="absolute inset-0 rounded-xl border border-primary/0 transition-all duration-300 group-hover:border-primary/30 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.3),inset_0_0_10px_rgba(124,58,237,0.1)]"></div>
+
+            <!-- Sliding neon lights -->
+            <div class="absolute -inset-1 opacity-0 group-hover:opacity-100">
+              <!-- Top edge -->
+              <div class="absolute left-0 top-0 h-[2px] w-full animate-neon-slide-right-slow bg-gradient-to-r from-transparent via-secondary to-transparent"></div>
+              <!-- Right edge -->
+              <div class="absolute right-0 top-0 h-full w-[2px] animate-neon-slide-down-slow bg-gradient-to-b from-transparent via-accent to-transparent"></div>
+              <!-- Bottom edge -->
+              <div class="absolute bottom-0 left-0 h-[2px] w-full animate-neon-slide-left-slow bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
+              <!-- Left edge -->
+              <div class="absolute left-0 top-0 h-full w-[2px] animate-neon-slide-up-slow bg-gradient-to-b from-transparent via-primary to-transparent"></div>
+            </div>
           </div>
 
           <!-- Icon -->
@@ -76,5 +88,41 @@ defineProps<{
 
 .animate-glow {
   animation: glow 3s infinite;
+}
+
+@keyframes neonSlideRight {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes neonSlideLeft {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes neonSlideDown {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes neonSlideUp {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(-100%); }
+}
+
+.animate-neon-slide-right-slow {
+  animation: neonSlideRight 3s linear infinite;
+}
+
+.animate-neon-slide-left-slow {
+  animation: neonSlideLeft 3s linear infinite;
+}
+
+.animate-neon-slide-down-slow {
+  animation: neonSlideDown 3s linear infinite;
+}
+
+.animate-neon-slide-up-slow {
+  animation: neonSlideUp 3s linear infinite;
 }
 </style>

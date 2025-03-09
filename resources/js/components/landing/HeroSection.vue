@@ -80,6 +80,19 @@ defineProps<{
               </button>
               <!-- Animated border effect -->
               <div class="absolute bottom-0 left-0 h-[1px] w-0 bg-gradient-to-r from-primary via-cyan-400 to-secondary transition-all duration-300 group-focus-within:w-full"></div>
+
+              <!-- Sliding neon lights (visible on focus) -->
+              <div class="absolute -inset-1 opacity-0 group-focus-within:opacity-100">
+                <!-- Top edge -->
+                <div class="absolute left-0 top-0 h-[2px] w-full animate-neon-slide-right-slow bg-gradient-to-r from-transparent via-primary to-transparent"></div>
+                <!-- Right edge -->
+                <div class="absolute right-0 top-0 h-full w-[2px] animate-neon-slide-down-slow bg-gradient-to-b from-transparent via-secondary to-transparent"></div>
+                <!-- Bottom edge -->
+                <div class="absolute bottom-0 left-0 h-[2px] w-full animate-neon-slide-left-slow bg-gradient-to-r from-transparent via-accent to-transparent"></div>
+                <!-- Left edge -->
+                <div class="absolute left-0 top-0 h-full w-[2px] animate-neon-slide-up-slow bg-gradient-to-b from-transparent via-cyan-400 to-transparent"></div>
+              </div>
+
               <!-- Corner accents -->
               <div class="absolute left-0 top-0 h-8 w-8 opacity-0 transition-opacity duration-300 group-focus-within:opacity-100">
                 <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
