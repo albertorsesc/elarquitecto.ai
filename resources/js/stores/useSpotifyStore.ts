@@ -101,79 +101,142 @@ export const useSpotifyStore = defineStore('spotify', {
 
       try {
         console.log('Initializing Spotify Web Playback SDK');
-        const script = document.createElement('script');
-        script.src = 'https://sdk.scdn.co/spotify-player.js';
-        script.async = true;
-        document.body.appendChild(script);
 
-        window.onSpotifyWebPlaybackSDKReady = () => {
-          console.log('Spotify Web Playback SDK ready');
-          const player = new window.Spotify.Player({
-            name: 'El Arquitecto A.I. Web Player',
-            getOAuthToken: (cb: SpotifyPlayerCallback) => cb(this.accessToken!),
-            volume: this.volume
+        // Check if the SDK script is already loaded
+        if (!document.getElementById('spotify-player-sdk')) {
+          const script = document.createElement('script');
+          script.id = 'spotify-player-sdk';
+          script.src = 'https://sdk.scdn.co/spotify-player.js';
+          script.async = true;
+          document.body.appendChild(script);
+        }
+
+        // Create a promise that resolves when the SDK is ready
+        const sdkReady = new Promise<void>((resolve) => {
+          if (window.Spotify && window.Spotify.Player) {
+            resolve();
+          } else {
+            window.onSpotifyWebPlaybackSDKReady = () => {
+              resolve();
+            };
+          }
+        });
+
+        // Wait for the SDK to be ready
+        await sdkReady;
+        console.log('Spotify Web Playback SDK ready');
+
+        // Create the player
+        const player = new window.Spotify.Player({
+          name: 'El Arquitecto A.I. Web Player',
+          getOAuthToken: (cb: SpotifyPlayerCallback) => cb(this.accessToken!),
+          volume: this.volume
+        });
+
+        // Add event listeners
+        player.addListener('ready', ({ device_id }: SpotifyDeviceEvent) => {
+          console.log('Spotify player ready with device ID:', device_id);
+          this.setDeviceId(device_id);
+
+          // Start playback on the new device
+          this.startPlayback(device_id);
+        });
+
+        player.addListener('not_ready', ({ device_id }: SpotifyDeviceEvent) => {
+          console.log('Device ID has gone offline', device_id);
+        });
+
+        player.addListener('player_state_changed', (state: SpotifyPlayerState | null) => {
+          if (!state) {
+            console.log('Player state changed but state is null');
+            return;
+          }
+
+          console.log('Player state changed:', {
+            track: state.track_window.current_track?.name,
+            artist: state.track_window.current_track?.artists?.[0]?.name,
+            paused: state.paused
           });
 
-          player.addListener('ready', ({ device_id }: SpotifyDeviceEvent) => {
-            console.log('Spotify player ready with device ID:', device_id);
-            this.setDeviceId(device_id);
-          });
+          this.setCurrentTrack(state.track_window.current_track);
+          this.setPlayingState(!state.paused);
+        });
 
-          player.addListener('not_ready', ({ device_id }: SpotifyDeviceEvent) => {
-            console.log('Device ID has gone offline', device_id);
-          });
+        player.addListener('initialization_error', ({ message }: { message: string }) => {
+          console.error('Spotify player initialization error:', message);
+          this.setError(`Initialization error: ${message}`);
+        });
 
-          player.addListener('player_state_changed', (state: SpotifyPlayerState | null) => {
-            if (!state) {
-              console.log('Player state changed but state is null');
-              return;
-            }
+        player.addListener('authentication_error', ({ message }: { message: string }) => {
+          console.error('Spotify player authentication error:', message);
+          this.setError(`Authentication error: ${message}`);
+        });
 
-            console.log('Player state changed:', {
-              track: state.track_window.current_track?.name,
-              artist: state.track_window.current_track?.artists?.[0]?.name,
-              paused: state.paused
-            });
+        player.addListener('account_error', ({ message }: { message: string }) => {
+          console.error('Spotify player account error:', message);
+          this.setError(`Account error: ${message}`);
+        });
 
-            this.setCurrentTrack(state.track_window.current_track);
-            this.setPlayingState(!state.paused);
-          });
+        player.addListener('playback_error', ({ message }: { message: string }) => {
+          console.error('Spotify player playback error:', message);
+          this.setError(`Playback error: ${message}`);
+        });
 
-          player.addListener('initialization_error', ({ message }: { message: string }) => {
-            console.error('Spotify player initialization error:', message);
-            this.setError(`Initialization error: ${message}`);
-          });
-
-          player.addListener('authentication_error', ({ message }: { message: string }) => {
-            console.error('Spotify player authentication error:', message);
-            this.setError(`Authentication error: ${message}`);
-          });
-
-          player.addListener('account_error', ({ message }: { message: string }) => {
-            console.error('Spotify player account error:', message);
-            this.setError(`Account error: ${message}`);
-          });
-
-          player.addListener('playback_error', ({ message }: { message: string }) => {
-            console.error('Spotify player playback error:', message);
-            this.setError(`Playback error: ${message}`);
-          });
-
-          console.log('Connecting to Spotify player...');
-          player.connect().then((success: boolean) => {
-            if (success) {
-              console.log('Successfully connected to Spotify player');
-            } else {
-              console.error('Failed to connect to Spotify player');
-              this.setError('Failed to connect to Spotify player');
-            }
-          });
-
+        // Connect to Spotify
+        const connected = await player.connect();
+        if (connected) {
+          console.log('Connected to Spotify successfully');
           this.setPlayer(player);
-        };
-      } catch (error) {
-        this.setError('Failed to initialize Spotify player');
+        } else {
+          throw new Error('Failed to connect to Spotify');
+        }
+      } catch (error: any) {
         console.error('Error initializing Spotify player:', error);
+        this.setError(`Failed to initialize Spotify player: ${error.message}`);
+      }
+    },
+
+    // Add a method to start playback on the device
+    async startPlayback(deviceId: string) {
+      if (!this.accessToken || !deviceId) return;
+
+      try {
+        console.log('Starting playback on device:', deviceId);
+
+        // Get a playlist to play
+        const playlistResponse = await fetch('/spotify/default-playlist');
+        const playlistData = await playlistResponse.json();
+        const contextUri = playlistData.playlist_uri || 'spotify:playlist:37i9dQZF1DXdLEN7aqioXM'; // Fallback to a default playlist
+
+        // Start playback
+        const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${this.accessToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            context_uri: contextUri,
+            position_ms: 0
+          })
+        });
+
+        if (!response.ok) {
+          // If we get a 403, it might be because the user doesn't have Spotify Premium
+          if (response.status === 403) {
+            const errorData = await response.json();
+            if (errorData.error && errorData.error.reason === 'PREMIUM_REQUIRED') {
+              throw new Error('Spotify Premium is required for playback');
+            }
+          }
+
+          throw new Error(`Failed to start playback: ${response.statusText}`);
+        }
+
+        console.log('Playback started successfully');
+      } catch (error: any) {
+        console.error('Error starting playback:', error);
+        this.setError(`Failed to start playback: ${error.message}`);
       }
     },
 

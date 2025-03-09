@@ -131,6 +131,7 @@ class SpotifyController extends Controller
                     // Force session to be written
                     Session::save();
 
+                    // Redirect to home with success parameters
                     return redirect()->route('home')
                         ->with('spotify_connected', true)
                         ->with('spotify_auth', 'success');
