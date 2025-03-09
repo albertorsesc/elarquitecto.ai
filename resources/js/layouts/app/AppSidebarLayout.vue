@@ -3,6 +3,7 @@ import AppContent from '@/components/AppContent.vue';
 import AppShell from '@/components/AppShell.vue';
 import AppSidebar from '@/components/AppSidebar.vue';
 import AppSidebarHeader from '@/components/AppSidebarHeader.vue';
+import AppFooter from '@/components/theme/AppFooter.vue';
 import GlassContainer from '@/components/theme/GlassContainer.vue';
 import NeonBorders from '@/components/theme/NeonBorders.vue';
 import type { BreadcrumbItemType } from '@/types';
@@ -52,10 +53,13 @@ withDefaults(defineProps<Props>(), {
                 <NeonBorders position="bottom" color="gradient" :opacity="0.2" />
             </GlassContainer>
 
-            <!-- This is what handles the sidebar gap on desktop -->
+            <!-- Content area -->
             <div class="flex h-full w-full flex-1 flex-col gap-4 p-4 md:p-6 lg:p-8">
                 <slot />
             </div>
+
+            <!-- Footer -->
+            <AppFooter />
         </AppContent>
     </AppShell>
 </template>

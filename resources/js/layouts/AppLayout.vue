@@ -16,7 +16,7 @@ withDefaults(defineProps<Props>(), {
 <template>
     <div class="relative min-h-screen">
         <!-- Background Effects -->
-        <FloatingNeonLines variant="sparse" :opacity="0.15" />
+        <FloatingNeonLines variant="dense" :opacity="0.15" />
 
         <!-- Main Layout -->
         <AppLayout :breadcrumbs="breadcrumbs">
