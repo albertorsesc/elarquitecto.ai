@@ -38,6 +38,26 @@ const breadcrumbs: BreadcrumbItem[] = [
                         <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
                         <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
                     </div>
+                    <div class="absolute bottom-0 left-0 h-12 w-12 animate-pulse-slow">
+                        <div class="absolute bottom-0 left-0 h-full w-[1px] animate-glow bg-gradient-to-t from-secondary via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 h-[1px] w-full animate-glow bg-gradient-to-r from-secondary via-transparent to-transparent"></div>
+                    </div>
+                    <div class="absolute bottom-0 right-0 h-12 w-12 animate-pulse-slow">
+                        <div class="absolute bottom-0 right-0 h-full w-[1px] animate-glow bg-gradient-to-t from-accent via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 right-0 h-[1px] w-full animate-glow bg-gradient-to-l from-accent via-transparent to-transparent"></div>
+                    </div>
+
+                    <!-- Sliding neon lines -->
+                    <div class="pointer-events-none absolute -inset-1">
+                        <!-- Top edge -->
+                        <div class="absolute left-0 top-0 h-[2px] w-full animate-neon-slide-right-slow bg-gradient-to-r from-transparent via-primary to-transparent opacity-30"></div>
+                        <!-- Right edge -->
+                        <div class="absolute right-0 top-0 h-full w-[2px] animate-neon-slide-down-slow bg-gradient-to-b from-transparent via-secondary to-transparent opacity-30"></div>
+                        <!-- Bottom edge -->
+                        <div class="absolute bottom-0 left-0 h-[2px] w-full animate-neon-slide-left-slow bg-gradient-to-r from-transparent via-accent to-transparent opacity-30"></div>
+                        <!-- Left edge -->
+                        <div class="absolute left-0 top-0 h-full w-[2px] animate-neon-slide-up-slow bg-gradient-to-b from-transparent via-cyan-400 to-transparent opacity-30"></div>
+                    </div>
 
                     <PlaceholderPattern />
                 </GlassContainer>
@@ -60,6 +80,26 @@ const breadcrumbs: BreadcrumbItem[] = [
                         <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-accent via-transparent to-transparent"></div>
                         <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-accent via-transparent to-transparent"></div>
                     </div>
+                    <div class="absolute bottom-0 left-0 h-12 w-12 animate-pulse-slow">
+                        <div class="absolute bottom-0 left-0 h-full w-[1px] animate-glow bg-gradient-to-t from-primary via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 h-[1px] w-full animate-glow bg-gradient-to-r from-primary via-transparent to-transparent"></div>
+                    </div>
+                    <div class="absolute bottom-0 right-0 h-12 w-12 animate-pulse-slow">
+                        <div class="absolute bottom-0 right-0 h-full w-[1px] animate-glow bg-gradient-to-t from-cyan-400 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 right-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
+                    </div>
+
+                    <!-- Sliding neon lines -->
+                    <div class="pointer-events-none absolute -inset-1">
+                        <!-- Top edge -->
+                        <div class="absolute left-0 top-0 h-[2px] w-full animate-neon-slide-right-slow bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
+                        <!-- Right edge -->
+                        <div class="absolute right-0 top-0 h-full w-[2px] animate-neon-slide-down-slow bg-gradient-to-b from-transparent via-accent to-transparent opacity-30"></div>
+                        <!-- Bottom edge -->
+                        <div class="absolute bottom-0 left-0 h-[2px] w-full animate-neon-slide-left-slow bg-gradient-to-r from-transparent via-primary to-transparent opacity-30"></div>
+                        <!-- Left edge -->
+                        <div class="absolute left-0 top-0 h-full w-[2px] animate-neon-slide-up-slow bg-gradient-to-b from-transparent via-cyan-400 to-transparent opacity-30"></div>
+                    </div>
 
                     <PlaceholderPattern />
                 </GlassContainer>
@@ -81,6 +121,26 @@ const breadcrumbs: BreadcrumbItem[] = [
                     <div class="absolute right-0 top-0 h-12 w-12 animate-pulse-slow">
                         <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
                         <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-primary via-transparent to-transparent"></div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 h-12 w-12 animate-pulse-slow">
+                        <div class="absolute bottom-0 left-0 h-full w-[1px] animate-glow bg-gradient-to-t from-accent via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 h-[1px] w-full animate-glow bg-gradient-to-r from-accent via-transparent to-transparent"></div>
+                    </div>
+                    <div class="absolute bottom-0 right-0 h-12 w-12 animate-pulse-slow">
+                        <div class="absolute bottom-0 right-0 h-full w-[1px] animate-glow bg-gradient-to-t from-secondary via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 right-0 h-[1px] w-full animate-glow bg-gradient-to-l from-secondary via-transparent to-transparent"></div>
+                    </div>
+
+                    <!-- Sliding neon lines -->
+                    <div class="pointer-events-none absolute -inset-1">
+                        <!-- Top edge -->
+                        <div class="absolute left-0 top-0 h-[2px] w-full animate-neon-slide-right-slow bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-30"></div>
+                        <!-- Right edge -->
+                        <div class="absolute right-0 top-0 h-full w-[2px] animate-neon-slide-down-slow bg-gradient-to-b from-transparent via-primary to-transparent opacity-30"></div>
+                        <!-- Bottom edge -->
+                        <div class="absolute bottom-0 left-0 h-[2px] w-full animate-neon-slide-left-slow bg-gradient-to-r from-transparent via-accent to-transparent opacity-30"></div>
+                        <!-- Left edge -->
+                        <div class="absolute left-0 top-0 h-full w-[2px] animate-neon-slide-up-slow bg-gradient-to-b from-transparent via-secondary to-transparent opacity-30"></div>
                     </div>
 
                     <PlaceholderPattern />
