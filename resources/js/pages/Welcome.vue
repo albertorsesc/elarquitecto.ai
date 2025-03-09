@@ -74,21 +74,21 @@ const blogPosts = [
     id: 1,
     title: 'Introducción a la IA',
     excerpt: 'Descubre los conceptos básicos de la Inteligencia Artificial y cómo está cambiando el mundo.',
-    image: 'https://via.placeholder.com/400x200/1a1a2e/ffffff?text=Introducción+a+la+IA',
+    image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
     category: 'Fundamentos'
   },
   {
     id: 2,
     title: 'Prompts Efectivos',
     excerpt: 'Aprende a crear prompts que generen resultados precisos con modelos de lenguaje avanzados.',
-    image: 'https://via.placeholder.com/400x200/1a1a2e/ffffff?text=Prompts+Efectivos',
+    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
     category: 'Técnicas'
   },
   {
     id: 3,
     title: 'IA en Latinoamérica',
     excerpt: 'Análisis del estado actual de la Inteligencia Artificial en los países latinoamericanos.',
-    image: 'https://via.placeholder.com/400x200/1a1a2e/ffffff?text=IA+en+Latinoamérica',
+    image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
     category: 'Tendencias'
   }
 ];
