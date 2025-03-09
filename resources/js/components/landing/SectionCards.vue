@@ -25,42 +25,45 @@ defineProps<{
         <div
           v-for="section in sections"
           :key="section.id"
-          class="group relative overflow-hidden rounded-xl border border-white/10 bg-background/50 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(124,58,237,0.3)] shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
+          class="group relative overflow-hidden rounded-xl border border-white/10 bg-background/50 p-6 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:shadow-[0_0_30px_rgba(0,0,0,0.3)] shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
         >
           <!-- Animated corner accents -->
-          <div class="absolute left-0 top-0 h-8 w-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
-            <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-primary via-transparent to-transparent"></div>
+          <div class="absolute left-0 top-0 h-8 w-8 opacity-30 group-hover:opacity-100">
+            <div class="absolute left-0 top-0 h-full w-[1px] animate-glow-color bg-gradient-to-b from-primary via-cyan-400 to-transparent"></div>
+            <div class="absolute left-0 top-0 h-[1px] w-full animate-glow-color bg-gradient-to-r from-primary via-cyan-400 to-transparent"></div>
           </div>
-          <div class="absolute right-0 top-0 h-8 w-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
-            <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
+          <div class="absolute right-0 top-0 h-8 w-8 opacity-30 group-hover:opacity-100">
+            <div class="absolute right-0 top-0 h-full w-[1px] animate-glow-color-delayed bg-gradient-to-b from-secondary via-accent to-transparent"></div>
+            <div class="absolute right-0 top-0 h-[1px] w-full animate-glow-color-delayed bg-gradient-to-l from-secondary via-accent to-transparent"></div>
           </div>
 
-          <!-- Neon border glow -->
+          <!-- Neon border glow with breathing effect -->
           <div class="pointer-events-none absolute inset-0 rounded-xl">
-            <div class="absolute inset-0 rounded-xl border border-white/10 transition-all duration-300 group-hover:border-primary/30 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.3),inset_0_0_10px_rgba(124,58,237,0.1)]"></div>
+            <div class="absolute inset-0 rounded-xl border border-white/10 transition-all duration-300 group-hover:border-white/20"></div>
 
-            <!-- Permanent sliding neon lights with lower opacity -->
+            <!-- Multi-colored sliding neon lights -->
             <div class="absolute -inset-1 opacity-30 group-hover:opacity-100">
               <!-- Top edge -->
-              <div class="absolute left-0 top-0 h-[2px] w-full animate-neon-slide-right-slow bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
+              <div class="absolute left-0 top-0 h-[2px] w-full animate-neon-slide-right-color bg-gradient-to-r from-transparent via-[#FF1CF7] to-transparent"></div>
               <!-- Right edge -->
-              <div class="absolute right-0 top-0 h-full w-[2px] animate-neon-slide-down-slow bg-gradient-to-b from-transparent via-secondary to-transparent"></div>
+              <div class="absolute right-0 top-0 h-full w-[2px] animate-neon-slide-down-color bg-gradient-to-b from-transparent via-[#00FFE1] to-transparent"></div>
               <!-- Bottom edge -->
-              <div class="absolute bottom-0 left-0 h-[2px] w-full animate-neon-slide-left-slow bg-gradient-to-r from-transparent via-accent to-transparent"></div>
+              <div class="absolute bottom-0 left-0 h-[2px] w-full animate-neon-slide-left-color bg-gradient-to-r from-transparent via-[#01FF88] to-transparent"></div>
               <!-- Left edge -->
-              <div class="absolute left-0 top-0 h-full w-[2px] animate-neon-slide-up-slow bg-gradient-to-b from-transparent via-primary to-transparent"></div>
+              <div class="absolute left-0 top-0 h-full w-[2px] animate-neon-slide-up-color bg-gradient-to-b from-transparent via-[#5B6EF7] to-transparent"></div>
             </div>
+
+            <!-- Breathing glow effect -->
+            <div class="absolute inset-0 animate-breath rounded-xl bg-gradient-to-br from-primary/5 via-cyan-400/5 to-accent/5 opacity-0 group-hover:opacity-100"></div>
           </div>
 
-          <!-- Icon -->
-          <div class="relative z-10 mb-4 inline-block rounded-lg bg-primary/10 p-3 text-primary transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.3)] group-hover:bg-primary/20">
-            <Icon :icon="section.icon" class="h-6 w-6" />
+          <!-- Icon with dynamic color -->
+          <div class="relative z-10 mb-4 inline-block rounded-lg bg-white/5 p-3 transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:bg-white/10">
+            <Icon :icon="section.icon" class="h-6 w-6 animate-icon-color" />
           </div>
 
           <!-- Content -->
-          <h3 class="relative z-10 mb-2 text-lg font-semibold text-foreground transition-colors duration-300 group-hover:text-primary group-hover:text-shadow-sm">
+          <h3 class="relative z-10 mb-2 text-lg font-semibold text-foreground transition-colors duration-300 group-hover:text-glow-multi">
             {{ section.title }}
           </h3>
           <p class="relative z-10 text-sm text-foreground/70">
@@ -86,47 +89,158 @@ defineProps<{
   50% { opacity: 0.8; }
 }
 
-.animate-glow {
-  animation: glow 3s infinite;
+@keyframes glowColor {
+  0%, 100% {
+    opacity: 0.3;
+    --tw-gradient-from: #7C3AED;
+    --tw-gradient-via: #22D3EE;
+  }
+  25% {
+    opacity: 0.8;
+    --tw-gradient-from: #22D3EE;
+    --tw-gradient-via: #F471B5;
+  }
+  50% {
+    opacity: 0.5;
+    --tw-gradient-from: #F471B5;
+    --tw-gradient-via: #818CF8;
+  }
+  75% {
+    opacity: 0.8;
+    --tw-gradient-from: #818CF8;
+    --tw-gradient-via: #7C3AED;
+  }
 }
 
-@keyframes neonSlideRight {
-  0% { transform: translateX(-100%); opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { transform: translateX(100%); opacity: 0.6; }
+@keyframes breath {
+  0%, 100% {
+    opacity: 0.1;
+    transform: scale(0.99);
+  }
+  50% {
+    opacity: 0.2;
+    transform: scale(1.01);
+  }
 }
 
-@keyframes neonSlideLeft {
-  0% { transform: translateX(100%); opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { transform: translateX(-100%); opacity: 0.6; }
+@keyframes iconColor {
+  0%, 100% { color: #7C3AED; }
+  25% { color: #22D3EE; }
+  50% { color: #F471B5; }
+  75% { color: #818CF8; }
 }
 
-@keyframes neonSlideDown {
-  0% { transform: translateY(-100%); opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { transform: translateY(100%); opacity: 0.6; }
+@keyframes neonSlideRightColor {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0.6;
+    --tw-gradient-via: #FF1CF7;
+  }
+  33% {
+    --tw-gradient-via: #00FFE1;
+  }
+  66% {
+    --tw-gradient-via: #01FF88;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0.6;
+    --tw-gradient-via: #5B6EF7;
+  }
 }
 
-@keyframes neonSlideUp {
-  0% { transform: translateY(100%); opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { transform: translateY(-100%); opacity: 0.6; }
+@keyframes neonSlideLeftColor {
+  0% {
+    transform: translateX(100%);
+    opacity: 0.6;
+    --tw-gradient-via: #00FFE1;
+  }
+  33% {
+    --tw-gradient-via: #01FF88;
+  }
+  66% {
+    --tw-gradient-via: #5B6EF7;
+  }
+  100% {
+    transform: translateX(-100%);
+    opacity: 0.6;
+    --tw-gradient-via: #FF1CF7;
+  }
 }
 
-.animate-neon-slide-right-slow {
-  animation: neonSlideRight 4s linear infinite;
+@keyframes neonSlideDownColor {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0.6;
+    --tw-gradient-via: #01FF88;
+  }
+  33% {
+    --tw-gradient-via: #5B6EF7;
+  }
+  66% {
+    --tw-gradient-via: #FF1CF7;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0.6;
+    --tw-gradient-via: #00FFE1;
+  }
 }
 
-.animate-neon-slide-left-slow {
-  animation: neonSlideLeft 4s linear infinite;
+@keyframes neonSlideUpColor {
+  0% {
+    transform: translateY(100%);
+    opacity: 0.6;
+    --tw-gradient-via: #5B6EF7;
+  }
+  33% {
+    --tw-gradient-via: #FF1CF7;
+  }
+  66% {
+    --tw-gradient-via: #00FFE1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0.6;
+    --tw-gradient-via: #01FF88;
+  }
 }
 
-.animate-neon-slide-down-slow {
-  animation: neonSlideDown 4s linear infinite;
+.animate-glow-color {
+  animation: glowColor 6s infinite;
 }
 
-.animate-neon-slide-up-slow {
-  animation: neonSlideUp 4s linear infinite;
+.animate-glow-color-delayed {
+  animation: glowColor 6s infinite 3s;
+}
+
+.animate-breath {
+  animation: breath 4s ease-in-out infinite;
+}
+
+.animate-icon-color {
+  animation: iconColor 6s infinite;
+}
+
+.animate-neon-slide-right-color {
+  animation: neonSlideRightColor 4s linear infinite;
+}
+
+.animate-neon-slide-left-color {
+  animation: neonSlideLeftColor 4s linear infinite;
+}
+
+.animate-neon-slide-down-color {
+  animation: neonSlideDownColor 4s linear infinite;
+}
+
+.animate-neon-slide-up-color {
+  animation: neonSlideUpColor 4s linear infinite;
+}
+
+.text-glow-multi {
+  color: #F471B5;
+  text-shadow: 0 0 10px rgba(244, 113, 181, 0.5);
+  animation: iconColor 6s infinite;
 }
 </style>
