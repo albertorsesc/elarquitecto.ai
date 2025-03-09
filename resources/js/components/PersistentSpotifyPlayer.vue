@@ -30,6 +30,7 @@ const volume = computed({
 });
 const isExpanded = computed(() => spotifyStore.isExpanded);
 const hasError = computed(() => !!spotifyStore.error);
+const shuffleEnabled = computed(() => spotifyStore.shuffleEnabled);
 
 // Toggle collapsed state
 function toggleCollapsed() {
@@ -52,6 +53,11 @@ function nextTrack() {
 
 function toggleExpanded() {
   spotifyStore.toggleExpanded();
+}
+
+// Add shuffle toggle function
+function toggleShuffle() {
+  spotifyStore.toggleShuffle();
 }
 
 // Initialize Spotify player
@@ -185,6 +191,17 @@ onMounted(() => {
         <!-- Controls -->
         <div class="mb-3 flex items-center justify-center space-x-4">
           <button
+            @click="toggleShuffle"
+            class="rounded p-1"
+            :class="[
+              shuffleEnabled ? 'text-primary' : 'text-foreground/70',
+              'hover:bg-white/10 hover:text-foreground'
+            ]"
+            :disabled="!isReady"
+          >
+            <Icon icon="mdi:shuffle-variant" class="h-5 w-5" />
+          </button>
+          <button
             @click="previousTrack"
             class="rounded p-1 text-foreground/70 hover:bg-white/10 hover:text-foreground"
             :disabled="!isReady"
@@ -248,13 +265,26 @@ onMounted(() => {
             <div class="truncate text-xs font-medium text-foreground">{{ currentTrack.name }}</div>
           </div>
         </div>
-        <button
-          @click="togglePlay"
-          class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white hover:bg-primary/90"
-          :disabled="!isReady"
-        >
-          <Icon :icon="isPlaying ? 'mdi:pause' : 'mdi:play'" class="h-4 w-4" />
-        </button>
+        <div class="flex items-center space-x-1">
+          <button
+            @click="toggleShuffle"
+            class="rounded p-1"
+            :class="[
+              shuffleEnabled ? 'text-primary' : 'text-foreground/70',
+              'hover:bg-white/10 hover:text-foreground'
+            ]"
+            :disabled="!isReady"
+          >
+            <Icon icon="mdi:shuffle-variant" class="h-4 w-4" />
+          </button>
+          <button
+            @click="togglePlay"
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white hover:bg-primary/90"
+            :disabled="!isReady"
+          >
+            <Icon :icon="isPlaying ? 'mdi:pause' : 'mdi:play'" class="h-4 w-4" />
+          </button>
+        </div>
       </div>
 
       <!-- Neon border effect -->

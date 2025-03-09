@@ -11,6 +11,8 @@ interface SpotifyState {
   isExpanded: boolean;
   isMinimized: boolean;
   error: string | null;
+  playbackPosition: number;
+  shuffleEnabled: boolean;
 }
 
 interface SpotifyPlayerCallback {
@@ -26,6 +28,7 @@ interface SpotifyPlayerState {
     current_track: any;
   };
   paused: boolean;
+  position: number;
 }
 
 export const useSpotifyStore = defineStore('spotify', {
@@ -40,6 +43,8 @@ export const useSpotifyStore = defineStore('spotify', {
     isExpanded: localStorage.getItem('spotify_expanded') ? localStorage.getItem('spotify_expanded') === 'true' : true,
     isMinimized: localStorage.getItem('spotify_minimized') ? localStorage.getItem('spotify_minimized') === 'true' : false,
     error: null,
+    playbackPosition: 0,
+    shuffleEnabled: localStorage.getItem('spotify_shuffle') ? localStorage.getItem('spotify_shuffle') === 'true' : true,
   }),
 
   getters: {
@@ -155,11 +160,15 @@ export const useSpotifyStore = defineStore('spotify', {
           console.log('Player state changed:', {
             track: state.track_window.current_track?.name,
             artist: state.track_window.current_track?.artists?.[0]?.name,
-            paused: state.paused
+            paused: state.paused,
+            position: state.position,
           });
 
           this.setCurrentTrack(state.track_window.current_track);
           this.setPlayingState(!state.paused);
+
+          // Store the current playback position
+          this.playbackPosition = state.position;
         });
 
         player.addListener('initialization_error', ({ message }: { message: string }) => {
@@ -179,7 +188,8 @@ export const useSpotifyStore = defineStore('spotify', {
 
         player.addListener('playback_error', ({ message }: { message: string }) => {
           console.error('Spotify player playback error:', message);
-          this.setError(`Playback error: ${message}`);
+          // Don't set error for playback errors as they're often transient
+          // this.setError(`Playback error: ${message}`);
         });
 
         // Connect to Spotify
@@ -208,6 +218,14 @@ export const useSpotifyStore = defineStore('spotify', {
         const playlistData = await playlistResponse.json();
         const contextUri = playlistData.playlist_uri || 'spotify:playlist:37i9dQZF1DXdLEN7aqioXM'; // Fallback to a default playlist
 
+        // Set shuffle mode first
+        await fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${this.shuffleEnabled}&device_id=${deviceId}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${this.accessToken}`,
+          }
+        });
+
         // Start playback
         const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
           method: 'PUT',
@@ -217,7 +235,7 @@ export const useSpotifyStore = defineStore('spotify', {
           },
           body: JSON.stringify({
             context_uri: contextUri,
-            position_ms: 0
+            position_ms: this.playbackPosition > 0 ? this.playbackPosition : 0
           })
         });
 
@@ -237,6 +255,34 @@ export const useSpotifyStore = defineStore('spotify', {
       } catch (error: any) {
         console.error('Error starting playback:', error);
         this.setError(`Failed to start playback: ${error.message}`);
+      }
+    },
+
+    // Toggle shuffle mode
+    async toggleShuffle() {
+      if (!this.accessToken || !this.deviceId) return;
+
+      try {
+        this.shuffleEnabled = !this.shuffleEnabled;
+        localStorage.setItem('spotify_shuffle', this.shuffleEnabled.toString());
+
+        const response = await fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${this.shuffleEnabled}&device_id=${this.deviceId}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${this.accessToken}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to set shuffle mode: ${response.statusText}`);
+        }
+
+        console.log(`Shuffle mode ${this.shuffleEnabled ? 'enabled' : 'disabled'}`);
+      } catch (error: any) {
+        console.error('Error toggling shuffle mode:', error);
+        // Revert the local state if the API call failed
+        this.shuffleEnabled = !this.shuffleEnabled;
+        localStorage.setItem('spotify_shuffle', this.shuffleEnabled.toString());
       }
     },
 
