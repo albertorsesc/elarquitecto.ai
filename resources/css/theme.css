@@ -1,0 +1,109 @@
+/* Neon Animations */
+@keyframes neonSlideRight {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+@keyframes neonSlideLeft {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+
+@keyframes neonSlideDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(100%); }
+}
+
+@keyframes neonSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(-100%); }
+}
+
+@keyframes glow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Animation Classes */
+.animate-neon-slide-right {
+  animation: neonSlideRight 3s linear infinite;
+}
+
+.animate-neon-slide-right-slow {
+  animation: neonSlideRight 8s linear infinite;
+}
+
+.animate-neon-slide-left {
+  animation: neonSlideLeft 3s linear infinite;
+}
+
+.animate-neon-slide-left-slow {
+  animation: neonSlideLeft 8s linear infinite;
+}
+
+.animate-neon-slide-down {
+  animation: neonSlideDown 3s linear infinite;
+}
+
+.animate-neon-slide-down-slow {
+  animation: neonSlideDown 8s linear infinite;
+}
+
+.animate-neon-slide-down-delayed {
+  animation: neonSlideDown 3s linear infinite;
+  animation-delay: 1.5s;
+}
+
+.animate-neon-slide-up {
+  animation: neonSlideUp 3s linear infinite;
+}
+
+.animate-neon-slide-up-slow {
+  animation: neonSlideUp 8s linear infinite;
+}
+
+.animate-glow {
+  animation: glow 3s infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse 4s infinite;
+}
+
+/* Glass Effect */
+.glass-effect {
+  backdrop-filter: blur(10px);
+  background-color: rgba(10, 10, 20, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Neon Border */
+.neon-border {
+  position: relative;
+  overflow: hidden;
+}
+
+.neon-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--primary), var(--cyan-400), var(--secondary));
+  background-size: 200% 100%;
+  animation: neonSlideRight 3s linear infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
