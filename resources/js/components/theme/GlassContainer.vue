@@ -1,6 +1,5 @@
 <script setup lang="ts">
-// GlassContainer.vue - Glass effect container component
-// This component provides a glass effect container with optional neon borders and corners
+// GlassContainer.vue - Provides glass-effect containers
 
 import NeonBorders from './NeonBorders.vue';
 import NeonCorners from './NeonCorners.vue';
@@ -11,65 +10,65 @@ interface Props {
   withCorners?: boolean;
   rounded?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
   padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
-  borderOpacity?: number;
+  borderColor?: 'primary' | 'secondary' | 'accent' | 'cyan' | 'white';
+  cornerColor?: 'primary' | 'secondary' | 'accent' | 'cyan';
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  variant: 'default',
-  withBorders: true,
-  withCorners: true,
-  rounded: 'md',
-  padding: 'md',
-  borderOpacity: 0.3
-});
+defineProps<Props>();
 
-// Map rounded values to Tailwind classes
-const roundedMap = {
-  'none': '',
-  'sm': 'rounded',
-  'md': 'rounded-md',
-  'lg': 'rounded-lg',
-  'xl': 'rounded-xl',
-  'full': 'rounded-full'
+// Variant classes
+const variantClasses = {
+  default: 'bg-background/70 border-white/10',
+  dark: 'bg-background/90 border-white/5',
+  light: 'bg-background/50 border-white/20',
 };
 
-// Map padding values to Tailwind classes
-const paddingMap = {
-  'none': '',
-  'sm': 'p-2',
-  'md': 'p-4',
-  'lg': 'p-6',
-  'xl': 'p-8'
+// Rounded classes
+const roundedClasses = {
+  none: '',
+  sm: 'rounded-sm',
+  md: 'rounded-md',
+  lg: 'rounded-lg',
+  xl: 'rounded-xl',
+  full: 'rounded-full',
 };
 
-// Get background based on variant
-const getBackground = () => {
-  switch (props.variant) {
-    case 'dark': return 'bg-background/90';
-    case 'light': return 'bg-white/10';
-    default: return 'bg-background/70';
-  }
+// Padding classes
+const paddingClasses = {
+  none: 'p-0',
+  sm: 'p-2 sm:p-3',
+  md: 'p-3 sm:p-4',
+  lg: 'p-4 sm:p-6',
+  xl: 'p-6 sm:p-8',
+};
+
+// Border color classes
+const borderColorClasses = {
+  primary: 'border-primary/30',
+  secondary: 'border-secondary/30',
+  accent: 'border-accent/30',
+  cyan: 'border-cyan-400/30',
+  white: 'border-white/10',
 };
 </script>
 
 <template>
   <div
-    class="glass-container relative overflow-hidden border border-white/10"
-    :class="[roundedMap[rounded], paddingMap[padding], getBackground()]"
+    class="glass-effect relative border backdrop-blur-md"
+    :class="[
+      variantClasses[variant || 'default'],
+      roundedClasses[rounded || 'lg'],
+      paddingClasses[padding || 'md'],
+      borderColorClasses[borderColor || 'white']
+    ]"
   >
-    <!-- Glass effect backdrop filter -->
-    <div class="absolute inset-0 backdrop-blur-md -z-10"></div>
+    <slot></slot>
 
-    <!-- Neon borders -->
-    <NeonBorders v-if="withBorders" :opacity="borderOpacity" />
+    <!-- Optional neon borders -->
+    <NeonBorders v-if="withBorders" position="all" color="gradient" :opacity="0.3" />
 
-    <!-- Neon corners -->
-    <NeonCorners v-if="withCorners" />
-
-    <!-- Content -->
-    <div class="relative z-10">
-      <slot></slot>
-    </div>
+    <!-- Optional corner accents -->
+    <NeonCorners v-if="withCorners" position="all" :color="cornerColor || 'primary'" size="md" />
   </div>
 </template>
 

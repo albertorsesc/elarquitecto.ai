@@ -1,15 +1,21 @@
 <script setup lang="ts">
-import {reactive, watch} from "vue";
+import FormButton from '@/components/theme/FormButton.vue';
+import FormInput from '@/components/theme/FormInput.vue';
+import FormTextarea from '@/components/theme/FormTextarea.vue';
+import GlassContainer from '@/components/theme/GlassContainer.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 import { router } from '@inertiajs/vue3';
+import { reactive, watch } from "vue";
 
 defineProps({ errors: Object });
 
 type FormState = {
-    title: String,
-    slug: String,
-    description: String,
-    content: String,
-    excerpt: String,
+    title: string,
+    slug: string,
+    description: string,
+    content: string,
+    excerpt: string,
+    tags: Array<number>,
 }
 
 const form = reactive<FormState>({
@@ -18,10 +24,11 @@ const form = reactive<FormState>({
     description: '',
     content: '',
     excerpt: '',
+    tags: [],
 })
 
 // slugify the slug property based on title onchange
-watch(() => form.title, (title: String) => {
+watch(() => form.title, (title: string) => {
     form.slug = title.toLowerCase().replace(/ /g, '-');
 });
 
@@ -32,79 +39,126 @@ const store = () => {
         description: form.description,
         content: form.content,
         excerpt: form.excerpt,
+        tags: form.tags,
     });
 }
 </script>
 
 <template>
-    <div class="divide-y divide-gray-900/10">
-        <div class="grid grid-cols-1 gap-x-8 gap-y-8 py-10 md:grid-cols-3">
-            <div class="px-4 sm:px-0">
-                <h2 class="text-base/7 font-semibold text-gray-900">Publicacion para Timeline</h2>
-                <p class="mt-1 text-sm/6 text-gray-600">This information will be displayed publicly so be careful what you share.</p>
+    <AppLayout>
+        <div class="relative py-10 px-4 sm:px-6 lg:px-8">
+            <!-- Page header with neon glow -->
+            <h1 class="text-glow-medium mb-8 text-center text-2xl font-bold text-primary sm:text-3xl">
+                Crear Publicación para Timeline
+            </h1>
+
+            <div class="mx-auto max-w-4xl">
+                <GlassContainer
+                    variant="default"
+                    :withBorders="true"
+                    :withCorners="true"
+                    rounded="xl"
+                    padding="lg"
+                    borderColor="primary"
+                >
+                    <form @submit.prevent="store" class="space-y-8">
+                        <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                            <!-- Title input -->
+                            <div class="sm:col-span-full">
+                                <FormInput
+                                    v-model="form.title"
+                                    id="title"
+                                    label="Titulo"
+                                    placeholder="Ingrese el título"
+                                    :error="errors?.title"
+                                />
+                            </div>
+
+                            <!-- Slug input -->
+                            <div class="sm:col-span-full">
+                                <FormInput
+                                    v-model="form.slug"
+                                    id="slug"
+                                    label="Slug"
+                                    :disabled="true"
+                                    :error="errors?.slug"
+                                />
+                            </div>
+
+                            <!-- Excerpt textarea -->
+                            <div class="sm:col-span-full">
+                                <FormTextarea
+                                    v-model="form.excerpt"
+                                    id="excerpt"
+                                    label="Excerpt"
+                                    placeholder="Breve resumen del contenido"
+                                    :error="errors?.excerpt"
+                                />
+                            </div>
+
+                            <!-- Description textarea -->
+                            <div class="sm:col-span-full">
+                                <FormTextarea
+                                    v-model="form.description"
+                                    id="description"
+                                    label="Descripción"
+                                    placeholder="Descripción detallada"
+                                    :error="errors?.description"
+                                />
+                            </div>
+
+                            <!-- Content textarea -->
+                            <div class="sm:col-span-full">
+                                <FormTextarea
+                                    v-model="form.content"
+                                    id="content"
+                                    label="Contenido"
+                                    :rows="6"
+                                    placeholder="Contenido completo"
+                                    :error="errors?.content"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Form actions -->
+                        <div class="flex items-center justify-end gap-x-4 border-t border-white/10 pt-6">
+                            <FormButton
+                                type="button"
+                                variant="text"
+                            >
+                                Cancelar
+                            </FormButton>
+                            <FormButton
+                                type="submit"
+                                variant="primary"
+                            >
+                                Guardar
+                            </FormButton>
+                        </div>
+                    </form>
+                </GlassContainer>
+
+                <!-- Corner accents for the page -->
+                <div class="absolute left-0 top-0 h-16 w-16">
+                    <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
+                    <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-primary via-transparent to-transparent"></div>
+                </div>
+                <div class="absolute right-0 top-0 h-16 w-16">
+                    <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
+                    <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
+                </div>
             </div>
-
-            <form @submit.prevent="store" class="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
-                <div class="px-4 py-6 sm:p-8">
-                    <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                        <div class="sm:col-span-full">
-                            <label for="username" class="block text-sm/6 font-medium text-gray-900">
-                                Titulo
-                            </label>
-                            <div class="mt-2">
-                                <div class="flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                    <input v-model="form.title" type="text" id="username" class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6" placeholder="janesmith">
-                                </div>
-                                <div v-if="errors.title" class="text-red-400">{{ errors.title }}</div>
-                            </div>
-                        </div>
-
-                        <div class="sm:col-span-full">
-                            <label for="username" class="block text-sm/6 font-medium text-gray-900">
-                                Slug
-                            </label>
-                            <div class="mt-2">
-                                <div class="flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                    <input v-model="form.slug" type="text" id="slug" class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6" disabled>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-span-full">
-                            <label for="excerpt" class="block text-sm/6 font-medium text-gray-900">Excerpt</label>
-                            <div class="mt-2">
-                                <textarea v-model="form.excerpt" id="excerpt" rows="3" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"></textarea>
-                            </div>
-                            <div v-if="errors.excerpt" class="text-red-400">{{ errors.excerpt }}</div>
-                        </div>
-
-                        <div class="col-span-full">
-                            <label for="description" class="block text-sm/6 font-medium text-gray-900">Descripción</label>
-                            <div class="mt-2">
-                                <textarea v-model="form.description" id="description" rows="3" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"></textarea>
-                            </div>
-                            <div v-if="errors.description" class="text-red-400">{{ errors.description }}</div>
-                        </div>
-
-                        <div class="col-span-full">
-                            <label for="content" class="block text-sm/6 font-medium text-gray-900">Contenido</label>
-                            <div class="mt-2">
-                                <textarea v-model="form.content" id="content" rows="3" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"></textarea>
-                            </div>
-                            <div v-if="errors.content" class="text-red-400">{{ errors.content }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
-                    <button type="button" class="text-sm/6 font-semibold text-gray-900">Cancel</button>
-                    <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
-                </div>
-            </form>
         </div>
-    </div>
-
+    </AppLayout>
 </template>
 
 <style scoped>
+@keyframes glow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
 
+.animate-glow {
+  animation: glow 3s infinite;
+}
 </style>

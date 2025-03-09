@@ -1,68 +1,61 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select'
+import Button from '@/components/theme/Button.vue';
+import GlassContainer from '@/components/theme/GlassContainer.vue';
+import NeonBorders from '@/components/theme/NeonBorders.vue';
+import NeonCorners from '@/components/theme/NeonCorners.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
+import { type BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/vue3';
 
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+interface TimelineItem {
+    id: number;
+    title: string;
+    excerpt: string;
+    description: string;
+    // Add other properties as needed
+}
 
-defineProps({
-    timelines: Array,
-});
+defineProps<{
+    timelines: TimelineItem[];
+}>();
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Timeline',
+        href: '/timeline',
+    },
+];
 </script>
 
 <template>
-    <ul role="list" class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-12">
-        <li v-for="timeline in timelines" :key="timeline.id" class="relative w-[350px]">
-            <Card class="dark:hover:bg-gray-600 cursor-pointer">
-                <CardHeader>
-                    <CardTitle>
-                        {{ timeline.title }}
-                    </CardTitle>
-                    <CardDescription>
-                        {{ timeline.excerpt }}
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Carousel v-if="false" class="relative w-full max-w-xs">
-                        <CarouselContent>
-                            <CarouselItem v-for="(_, index) in 5" :key="index">
-                                <div class="p-1">
-                                    <Card>
-                                        <CardContent class="flex aspect-square items-center justify-center p-6">
-                                            <span class="text-4xl font-semibold">{{ index + 1 }}</span>
-                                        </CardContent>
-                                    </Card>
-                                </div>
-                            </CarouselItem>
-                        </CarouselContent>
-                        <CarouselPrevious />
-                        <CarouselNext />
-                    </Carousel>
-                </CardContent>
-                <CardFooter v-if="false" class="flex justify-between px-6 pb-6">
-                    <Button variant="outline">
-                        Cancel
-                    </Button>
-                    <Button>Deploy</Button>
-                </CardFooter>
-            </Card>
-        </li>
-    </ul>
+    <Head title="Timeline" />
+    <AppLayout :breadcrumbs="breadcrumbs">
+        <div class="flex flex-col gap-4">
+            <div class="flex justify-end">
+                <Button to="/timeline/create" text="Create new Timeline Post" variant="primary" size="md" />
+            </div>
+            <ul role="list" class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-8">
+                <li v-for="timeline in timelines" :key="timeline.id" class="relative">
+                    <GlassContainer
+                        variant="dark"
+                        withBorders
+                        withCorners
+                        rounded="xl"
+                        padding="md"
+                        class="relative"
+                    >
+                        <NeonCorners position="all" color="primary" size="md" class="absolute -inset-1" />
+                        <NeonBorders position="all" color="primary" :opacity="0.3" class="absolute -inset-1" />
+                        <div class="p-4">
+                            <h3 class="mb-2 text-lg font-semibold text-white">{{ timeline.title }}</h3>
+                            <p class="text-sm text-gray-300">{{ timeline.excerpt }}</p>
+                            <p class="mt-2 text-sm text-gray-300">{{ timeline.description }}</p>
+                        </div>
+                    </GlassContainer>
+                </li>
+            </ul>
+        </div>
+    </AppLayout>
 </template>
 
 <style scoped>
