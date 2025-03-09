@@ -23,7 +23,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::get('timeline/create', function () {
-        return Inertia::render('Timeline/Create');
+        $tags = Tag::select('id', 'name')->get();
+        return Inertia::render('Timeline/Create', [
+            'tags' => $tags
+        ]);
     })->name('timeline.create');
 
     Route::post('timeline', function (TimelineRequest $request) {
@@ -34,7 +37,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'content' => $request->input('content'),
         ]);
 
-        $timeline->tags()->sync($request->input('tags'));
+        if ($request->has('tags')) {
+            $timeline->tags()->sync($request->input('tags'));
+        }
 
         return to_route('timeline.index');
     })->name('timeline.store');

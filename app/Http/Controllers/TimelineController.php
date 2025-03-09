@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TimelineRequest;
 use App\Models\Timeline;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -26,7 +27,11 @@ class TimelineController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Timeline/Create');
+        $tags = Tag::select('id', 'name')->get();
+
+        return Inertia::render('Timeline/Create', [
+            'tags' => $tags
+        ]);
     }
 
     /**
@@ -62,9 +67,11 @@ class TimelineController extends Controller
     public function edit(Timeline $timeline)
     {
         $timeline->load('tags');
+        $tags = Tag::select('id', 'name')->get();
 
         return Inertia::render('Timeline/Edit', [
-            'timeline' => $timeline
+            'timeline' => $timeline,
+            'tags' => $tags
         ]);
     }
 
