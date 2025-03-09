@@ -143,7 +143,7 @@ const sections = [
   <Head>
     <title>El Arquitecto A.I. - Conocimiento de IA en Español</title>
     <meta name="description" content="Aprende sobre Inteligencia Artificial en español con El Arquitecto A.I. Blog, tutoriales, prompts y más." />
-  </Head>
+    </Head>
 
   <div class="min-h-screen bg-background text-foreground">
     <!-- Navigation -->
@@ -162,27 +162,27 @@ const sections = [
 
           <!-- Navigation Links -->
           <div class="order-2 flex items-center gap-1 sm:order-3 sm:gap-3">
-            <Link
+                <Link
               v-if="page.props.auth.user"
-              :href="route('dashboard')"
+                    :href="route('dashboard')"
               class="neon-border rounded bg-primary/10 px-2 py-1 text-xs font-semibold text-primary transition-all hover:bg-primary/20 sm:px-3 sm:py-1.5 sm:text-sm"
-            >
-              Dashboard
-            </Link>
-            <template v-else>
-              <Link
-                :href="route('login')"
+                >
+                    Dashboard
+                </Link>
+                <template v-else>
+                    <Link
+                        :href="route('login')"
                 class="px-1 text-xs text-foreground/80 transition-colors hover:text-primary sm:px-2 sm:text-sm"
-              >
+                    >
                 Iniciar
-              </Link>
-              <Link
-                :href="route('register')"
+                    </Link>
+                    <Link
+                        :href="route('register')"
                 class="neon-border rounded bg-primary px-2 py-1 text-xs font-semibold text-white transition-all hover:bg-primary/80 sm:px-3 sm:py-1.5 sm:text-sm"
-              >
+                    >
                 Registrarse
-              </Link>
-            </template>
+                    </Link>
+                </template>
           </div>
 
           <!-- Search Bar -->
@@ -226,8 +226,8 @@ const sections = [
             </div>
           </div>
         </div>
-      </nav>
-    </header>
+            </nav>
+        </header>
 
     <!-- Spotlight Search Overlay -->
     <div
@@ -277,8 +277,8 @@ const sections = [
             <div class="absolute inset-y-0 left-0 z-10 flex items-center pl-4">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-cyan-400" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-              </svg>
-            </div>
+                                    </svg>
+                </div>
             <input
               id="spotlight-search"
               v-model="searchQuery"
@@ -295,7 +295,7 @@ const sections = [
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                </svg>
+                    </svg>
               </button>
             </div>
             <!-- Animated border effect -->
@@ -315,7 +315,7 @@ const sections = [
           <div v-else class="p-6 text-center">
             <p class="text-sm text-foreground/70">Comienza a escribir para buscar</p>
             <p class="mt-2 text-xs text-foreground/50">Presiona <span class="rounded border border-white/20 bg-white/5 px-1.5 py-0.5 text-[10px] font-mono">ESC</span> para cerrar</p>
-          </div>
+                </div>
         </div>
       </div>
     </div>
@@ -405,7 +405,7 @@ const sections = [
         <p>&copy; 2024 El Arquitecto A.I. Todos los derechos reservados.</p>
       </div>
     </footer>
-  </div>
+    </div>
 </template>
 
 <style scoped>
