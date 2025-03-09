@@ -25,7 +25,7 @@ defineProps<{
         <div
           v-for="section in sections"
           :key="section.id"
-          class="group relative overflow-hidden rounded-xl border border-white/10 bg-background/50 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_20px_rgba(124,58,237,0.2)]"
+          class="group relative overflow-hidden rounded-xl border border-white/10 bg-background/50 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_20px_rgba(124,58,237,0.3)]"
         >
           <!-- Animated corner accents -->
           <div class="absolute left-0 top-0 h-8 w-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -37,13 +37,18 @@ defineProps<{
             <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
           </div>
 
+          <!-- Neon border glow on hover -->
+          <div class="absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div class="absolute inset-0 rounded-xl border border-primary/0 transition-all duration-300 group-hover:border-primary/30 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.3),inset_0_0_10px_rgba(124,58,237,0.1)]"></div>
+          </div>
+
           <!-- Icon -->
-          <div class="mb-4 inline-block rounded-lg bg-primary/10 p-3 text-primary transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.3)]">
+          <div class="mb-4 inline-block rounded-lg bg-primary/10 p-3 text-primary transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.3)] group-hover:bg-primary/20">
             <Icon :icon="section.icon" class="h-6 w-6" />
           </div>
 
           <!-- Content -->
-          <h3 class="mb-2 text-lg font-semibold text-foreground transition-colors group-hover:text-primary">
+          <h3 class="mb-2 text-lg font-semibold text-foreground transition-colors duration-300 group-hover:text-primary group-hover:text-shadow-sm">
             {{ section.title }}
           </h3>
           <p class="text-sm text-foreground/70">

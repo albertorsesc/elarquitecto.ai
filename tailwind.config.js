@@ -43,6 +43,11 @@ export default {
                 'neon-slide-down-delayed': 'neon-slide-down 4s linear infinite 1s',
                 'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
             },
+            textShadow: {
+                sm: '0 0 2px rgba(124,58,237,0.3)',
+                DEFAULT: '0 0 4px rgba(124,58,237,0.4)',
+                lg: '0 0 8px rgba(124,58,237,0.5)',
+            },
             borderRadius: {
                 lg: 'var(--radius)',
                 md: 'calc(var(--radius) - 2px)',
@@ -102,5 +107,24 @@ export default {
             },
         },
     },
-    plugins: [require('tailwindcss-animate')],
+    plugins: [
+        require('tailwindcss-animate'),
+        function({ addUtilities, theme }) {
+            const newUtilities = {
+                '.text-shadow': {
+                    textShadow: theme('textShadow.DEFAULT'),
+                },
+                '.text-shadow-sm': {
+                    textShadow: theme('textShadow.sm'),
+                },
+                '.text-shadow-lg': {
+                    textShadow: theme('textShadow.lg'),
+                },
+                '.text-shadow-none': {
+                    textShadow: 'none',
+                },
+            }
+            addUtilities(newUtilities)
+        }
+    ],
 };

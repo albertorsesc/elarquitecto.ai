@@ -48,12 +48,13 @@ defineProps<{
         <!-- Background Logo -->
         <div
           v-if="logoSrc"
-          class="absolute inset-0 z-0 opacity-5"
+          class="absolute inset-0 z-0 opacity-10"
           :style="{
             backgroundImage: `url(${logoSrc})`,
-            backgroundSize: 'contain',
+            backgroundSize: '150%',
             backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
+            backgroundRepeat: 'no-repeat',
+            filter: 'blur(2px) brightness(1.2)'
           }"
         ></div>
 

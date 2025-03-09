@@ -30,7 +30,7 @@ function handleImageError(event: Event) {
         <div
           v-for="post in posts"
           :key="post.id"
-          class="group relative overflow-hidden rounded-xl border border-white/10 bg-background/50 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_20px_rgba(124,58,237,0.2)]"
+          class="group relative overflow-hidden rounded-xl border border-white/10 bg-background/50 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_20px_rgba(124,58,237,0.3)]"
         >
           <!-- Animated corner accents -->
           <div class="absolute left-0 top-0 h-8 w-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -42,11 +42,16 @@ function handleImageError(event: Event) {
             <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
           </div>
 
-          <img :src="post.image" :alt="post.title" class="mb-4 rounded-lg" />
+          <!-- Neon border glow on hover -->
+          <div class="absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div class="absolute inset-0 rounded-xl border border-primary/0 transition-all duration-300 group-hover:border-primary/30 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.3),inset_0_0_10px_rgba(124,58,237,0.1)]"></div>
+          </div>
+
+          <img :src="post.image" :alt="post.title" class="mb-4 rounded-lg" @error="handleImageError" />
           <span class="mb-2 inline-block rounded bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
             {{ post.category }}
           </span>
-          <h3 class="mb-2 text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+          <h3 class="mb-2 text-lg font-semibold text-foreground transition-colors duration-300 group-hover:text-primary group-hover:text-shadow-sm">
             {{ post.title }}
           </h3>
           <p class="text-sm text-foreground/70">
