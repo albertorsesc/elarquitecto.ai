@@ -191,10 +191,10 @@ const sections = [
               <input
                 type="text"
                 placeholder="Buscar contenido..."
-                class="peer w-full rounded-xl border border-white/10 bg-background/50 py-1.5 pl-8 pr-4 text-sm text-foreground placeholder:text-foreground/50 focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all duration-300"
+                class="peer relative z-10 w-full rounded-xl border border-white/10 bg-background/50 py-1.5 pl-8 pr-4 text-sm text-foreground placeholder:text-foreground/50 focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all duration-300"
                 @focus="activateSearch"
               />
-              <div class="absolute inset-y-0 left-0 flex items-center pl-2.5 text-foreground/50">
+              <div class="absolute inset-y-0 left-0 z-10 flex items-center pl-2.5 text-foreground/50">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                 </svg>
@@ -203,7 +203,7 @@ const sections = [
               <div class="absolute bottom-0 left-0 h-[1px] w-0 bg-gradient-to-r from-primary via-cyan-400 to-secondary transition-all duration-300 group-focus-within:w-full"></div>
 
               <!-- Sliding neon lights (visible on focus) -->
-              <div class="absolute -inset-1 opacity-0 group-focus-within:opacity-100">
+              <div class="pointer-events-none absolute -inset-1 opacity-0 group-focus-within:opacity-100">
                 <!-- Top edge -->
                 <div class="absolute left-0 top-0 h-[2px] w-full animate-neon-slide-right-slow bg-gradient-to-r from-transparent via-accent to-transparent"></div>
                 <!-- Right edge -->
@@ -261,7 +261,7 @@ const sections = [
           </div>
 
           <!-- Sliding neon lights -->
-          <div class="absolute -inset-1">
+          <div class="pointer-events-none absolute -inset-1">
             <!-- Top edge -->
             <div class="absolute left-0 top-0 h-[2px] w-full animate-neon-slide-right-slow bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
             <!-- Right edge -->
@@ -274,7 +274,7 @@ const sections = [
 
           <!-- Search Input -->
           <div class="relative">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-4">
+            <div class="absolute inset-y-0 left-0 z-10 flex items-center pl-4">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-cyan-400" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
               </svg>
@@ -284,11 +284,11 @@ const sections = [
               v-model="searchQuery"
               type="text"
               placeholder="Buscar en El Arquitecto A.I..."
-              class="w-full border-b border-white/10 bg-transparent py-4 pl-12 pr-4 text-lg text-foreground placeholder:text-foreground/50 focus:outline-none"
+              class="relative z-10 w-full border-b border-white/10 bg-transparent py-4 pl-12 pr-4 text-lg text-foreground placeholder:text-foreground/50 focus:outline-none"
               @keydown="handleEscape"
               @blur="deactivateSearch"
             />
-            <div v-if="searchQuery" class="absolute inset-y-0 right-0 flex items-center pr-4">
+            <div v-if="searchQuery" class="absolute inset-y-0 right-0 z-10 flex items-center pr-4">
               <button
                 class="rounded-full p-1 text-foreground/50 hover:bg-white/10 hover:text-foreground"
                 @click="searchQuery = ''"

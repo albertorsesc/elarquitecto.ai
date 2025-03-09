@@ -38,7 +38,7 @@ defineProps<{
           </div>
 
           <!-- Neon border glow on hover -->
-          <div class="absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <div class="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             <div class="absolute inset-0 rounded-xl border border-primary/0 transition-all duration-300 group-hover:border-primary/30 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.3),inset_0_0_10px_rgba(124,58,237,0.1)]"></div>
 
             <!-- Sliding neon lights -->
