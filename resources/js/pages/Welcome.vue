@@ -2,8 +2,8 @@
 import BlogCarousel from '@/components/landing/BlogCarousel.vue';
 import ColorPalette from '@/components/landing/ColorPalette.vue';
 import HeroSection from '@/components/landing/HeroSection.vue';
-import MusicPlayer from '@/components/landing/MusicPlayer.vue';
 import SectionCards from '@/components/landing/SectionCards.vue';
+import SpotifyPlayerWrapper from '@/components/landing/SpotifyPlayerWrapper.vue';
 import TimelineSection from '@/components/landing/TimelineSection.vue';
 import type { PageProps as InertiaPageProps } from '@inertiajs/core';
 import { Head, Link, usePage } from '@inertiajs/vue3';
@@ -148,7 +148,7 @@ const sections = [
 
   <div class="min-h-screen bg-background text-foreground">
     <!-- Music Player -->
-    <MusicPlayer />
+    <SpotifyPlayerWrapper />
 
     <!-- Navigation -->
     <header class="fixed top-0 z-50 w-full">

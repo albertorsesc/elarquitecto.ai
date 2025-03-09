@@ -33,7 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'excerpt' => $request->input('excerpt'),
             'content' => $request->input('content'),
         ]);
-        
+
         $timeline->tags()->sync($request->input('tags'));
 
         return to_route('timeline.index');
@@ -49,6 +49,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return back();
     })->name('tags.store');
 });
+
+// Spotify routes
+Route::get('/spotify/login', [App\Http\Controllers\SpotifyController::class, 'login'])->name('spotify.login');
+Route::get('/auth/spotify/callback', [App\Http\Controllers\SpotifyController::class, 'callback'])->name('spotify.callback');
+Route::get('/spotify/token', [App\Http\Controllers\SpotifyController::class, 'getToken'])->name('spotify.token');
+Route::get('/spotify/logout', [App\Http\Controllers\SpotifyController::class, 'logout'])->name('spotify.logout');
+Route::get('/spotify/default-playlist', [App\Http\Controllers\SpotifyController::class, 'getDefaultPlaylist'])->name('spotify.default-playlist');
+
+// Debug route - only in local environment
+if (app()->environment('local')) {
+    Route::get('/spotify/debug', function () {
+        return response()->json([
+            'client_id' => config('services.spotify.client_id'),
+            'redirect_uri' => config('services.spotify.redirect'),
+            'app_url' => config('app.url'),
+            'routes' => [
+                'login' => route('spotify.login'),
+                'callback' => route('spotify.callback'),
+                'token' => route('spotify.token'),
+                'logout' => route('spotify.logout'),
+            ]
+        ]);
+    })->name('spotify.debug');
+}
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
