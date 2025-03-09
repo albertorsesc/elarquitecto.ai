@@ -54,7 +54,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/spotify/login', [App\Http\Controllers\SpotifyController::class, 'login'])->name('spotify.login');
 Route::get('/auth/spotify/callback', [App\Http\Controllers\SpotifyController::class, 'callback'])->name('spotify.callback');
 Route::get('/spotify/token', [App\Http\Controllers\SpotifyController::class, 'getToken'])->name('spotify.token');
-Route::get('/spotify/logout', [App\Http\Controllers\SpotifyController::class, 'logout'])->name('spotify.logout');
+Route::match(['get', 'post'], '/spotify/logout', [App\Http\Controllers\SpotifyController::class, 'logout'])->name('spotify.logout');
 Route::get('/spotify/default-playlist', [App\Http\Controllers\SpotifyController::class, 'getDefaultPlaylist'])->name('spotify.default-playlist');
 
 // Debug route - only in local environment

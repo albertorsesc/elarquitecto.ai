@@ -39,7 +39,8 @@ return [
         'client_id' => env('SPOTIFY_CLIENT_ID'),
         'client_secret' => env('SPOTIFY_CLIENT_SECRET'),
         'redirect' => env('SPOTIFY_REDIRECT_URI'),
-        'default_playlist' => env('SPOTIFY_DEFAULT_PLAYLIST', 'spotify:playlist:37i9dQZF1DXdLEN7aqioXM'), // Synthwave/Retro/Lofi playlist
+        'default_playlist' => env('SPOTIFY_DEFAULT_PLAYLIST'),
+        'preview_url' => env('SPOTIFY_PREVIEW_URL'),
     ],
 
 ];

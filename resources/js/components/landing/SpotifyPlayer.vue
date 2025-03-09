@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getDefaultPlaylist, isUserToken, playPlaylist } from '@/services/spotify';
+import { getDefaultPlaylist, playPlaylist } from '@/services/spotify';
 import { useSpotifyStore } from '@/stores/useSpotifyStore';
 import { Icon } from '@iconify/vue';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
@@ -16,11 +16,15 @@ try {
   throw new Error('Spotify store initialization failed');
 }
 
+// Add new refs for fallback player
 const isLoading = ref(true);
 const isSpotifyAvailable = ref(true);
 const progress = ref(0);
 const progressInterval = ref<number | null>(null);
 const isUserAuthenticated = ref(false);
+const showFallbackPlayer = ref(false);
+const fallbackIsPlaying = ref(false);
+const fallbackAudio = ref<HTMLAudioElement | null>(null);
 
 // Computed properties
 const isAuthenticated = computed(() => spotifyStore.isAuthenticated);
@@ -33,19 +37,42 @@ const volume = computed({
 });
 const isExpanded = computed(() => spotifyStore.isExpanded);
 const isMinimized = computed(() => spotifyStore.isMinimized);
+const errorMessage = computed(() => spotifyStore.error);
+const hasError = computed(() => !!spotifyStore.error);
 
 // Initialize Spotify player
 onMounted(async () => {
   try {
     isLoading.value = true;
 
+    // Check if we're returning from Spotify auth
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('spotify_auth') && urlParams.get('spotify_auth') === 'success') {
+      console.log('Detected successful Spotify authentication redirect');
+      // Clear the URL parameters without reloading the page
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
     // Fetch token from backend
     const response = await fetch('/spotify/token');
     const data = await response.json();
 
-    if (data.error) {
-      console.error('Error fetching Spotify token:', data.error);
-      isSpotifyAvailable.value = false;
+    // Debug token response
+    console.log('Token response:', {
+      status: response.status,
+      isError: !!data.error,
+      requiresAuth: data.requires_authentication,
+      hasToken: !!data.access_token,
+      hasRefreshToken: !!data.refresh_token,
+      isDefault: data.is_default || false
+    });
+
+    if (response.status === 401 || data.error) {
+      console.log('No valid Spotify session:', data.error);
+      isUserAuthenticated.value = false;
+      showFallbackPlayer.value = true;
+      // Initialize fallback audio player
+      initializeFallbackPlayer();
       isLoading.value = false;
       return;
     }
@@ -53,36 +80,85 @@ onMounted(async () => {
     // Set token in store
     spotifyStore.setAccessToken(data.access_token);
 
-    // Check if this is a user token or default token
-    isUserAuthenticated.value = await isUserToken(data.access_token);
+    // If we have a refresh token, this is definitely a user token
+    isUserAuthenticated.value = !!data.refresh_token;
+    console.log('Is user authenticated with Spotify:', isUserAuthenticated.value);
 
     // Initialize player only if we have a user token
     if (isUserAuthenticated.value) {
       try {
         await spotifyStore.initializePlayer();
+        console.log('Spotify player initialized successfully');
         // Start progress tracking
         startProgressTracking();
       } catch (playerError) {
         console.error('Error initializing Spotify player:', playerError);
-        // Don't set isSpotifyAvailable to false here, we'll just show the login button
+        spotifyStore.setError('Error initializing Spotify player. Please try logging in again.');
       }
     } else {
       // For non-authenticated users, we'll show the login button
-      console.log('Using client credentials token - playback not available');
+      console.log('No valid user token - playback not available');
+      showFallbackPlayer.value = true;
     }
 
     isLoading.value = false;
   } catch (error) {
     console.error('Error initializing Spotify:', error);
     isSpotifyAvailable.value = false;
+    showFallbackPlayer.value = true;
+    // Initialize fallback audio player
+    initializeFallbackPlayer();
     isLoading.value = false;
   }
 });
+
+// Add fallback player functions
+async function initializeFallbackPlayer() {
+  try {
+    // Get the default playlist audio URL
+    const response = await fetch('/spotify/default-playlist');
+    const data = await response.json();
+
+    if (data.preview_url) {
+      fallbackAudio.value = new Audio(data.preview_url);
+
+      // Add event listeners
+      fallbackAudio.value.addEventListener('ended', () => {
+        fallbackIsPlaying.value = false;
+      });
+
+      fallbackAudio.value.addEventListener('error', (e) => {
+        console.error('Error playing audio:', e);
+        fallbackIsPlaying.value = false;
+      });
+    }
+  } catch (error) {
+    console.error('Error initializing fallback player:', error);
+  }
+}
+
+function toggleFallbackPlay() {
+  if (!fallbackAudio.value) return;
+
+  if (fallbackIsPlaying.value) {
+    fallbackAudio.value.pause();
+    fallbackIsPlaying.value = false;
+  } else {
+    fallbackAudio.value.play();
+    fallbackIsPlaying.value = true;
+  }
+}
 
 // Clean up on component unmount
 onUnmounted(() => {
   stopProgressTracking();
   spotifyStore.disconnect();
+
+  // Clean up fallback player
+  if (fallbackAudio.value) {
+    fallbackAudio.value.pause();
+    fallbackAudio.value = null;
+  }
 });
 
 // Watch for player state changes
@@ -98,8 +174,11 @@ watch(isPlaying, (newValue) => {
 watch(() => spotifyStore.deviceId, async (newDeviceId) => {
   if (newDeviceId && spotifyStore.accessToken && !isUserAuthenticated.value) {
     try {
+      console.log('Device ID ready:', newDeviceId);
       const playlistUri = await getDefaultPlaylist();
+      console.log('Attempting to play playlist:', playlistUri);
       await playPlaylist(spotifyStore.accessToken, newDeviceId, playlistUri);
+      console.log('Playlist playback initiated');
     } catch (error) {
       console.error('Error playing default playlist:', error);
     }
@@ -168,11 +247,22 @@ function toggleMinimized() {
   spotifyStore.toggleMinimized();
 }
 
-const logoutFromSpotify = () => {
-  // Clear the token and reset the store
-  spotifyStore.setAccessToken(null);
-  isUserAuthenticated.value = false;
-  window.location.href = '/spotify/logout';
+const logoutFromSpotify = async () => {
+  try {
+    // First, clear the local state
+    spotifyStore.setAccessToken(null);
+    isUserAuthenticated.value = false;
+
+    // Disconnect the player
+    spotifyStore.disconnect();
+
+    // Use a GET request instead of POST since that's how the route is defined
+    window.location.href = '/spotify/logout';
+  } catch (error) {
+    console.error('Error during Spotify logout:', error);
+    // Still redirect to home page even if there's an error
+    window.location.href = '/';
+  }
 };
 </script>
 
@@ -191,34 +281,79 @@ const logoutFromSpotify = () => {
     </div>
 
     <!-- Error State -->
-    <div v-else-if="!isSpotifyAvailable" class="fixed bottom-4 right-4 z-40">
+    <div v-else-if="!isSpotifyAvailable || hasError" class="fixed bottom-4 right-4 z-40">
       <div class="glass-effect overflow-hidden rounded-lg border border-white/10 bg-background/80 p-4 shadow-lg backdrop-blur-sm">
         <div class="flex items-center">
           <Icon icon="carbon:warning" class="h-6 w-6 text-yellow-400" />
-          <span class="ml-2 text-sm text-foreground/70">Spotify no está disponible</span>
+          <span class="ml-2 text-sm text-foreground/70">
+            {{ hasError ? errorMessage : 'Spotify no está disponible' }}
+          </span>
+        </div>
+        <div v-if="hasError" class="mt-2 text-xs text-foreground/50">
+          <p>Posibles soluciones:</p>
+          <ul class="ml-4 list-disc">
+            <li>Asegúrate de tener una cuenta Premium de Spotify</li>
+            <li>Intenta <a href="/spotify/login" class="text-primary hover:underline">iniciar sesión nuevamente</a></li>
+            <li>Verifica que no tengas Spotify abierto en otro dispositivo</li>
+          </ul>
         </div>
       </div>
     </div>
 
     <!-- Login Required State -->
-    <div v-else-if="!isUserAuthenticated" class="fixed bottom-4 right-4 z-40">
+    <div v-else-if="!isUserAuthenticated && !showFallbackPlayer" class="fixed bottom-4 right-4 z-40">
       <div class="glass-effect overflow-hidden rounded-lg border border-white/10 bg-background/80 p-4 shadow-lg backdrop-blur-sm">
-        <div class="flex flex-col items-center gap-2">
-          <span class="text-sm text-foreground/70">Inicia sesión para reproducir música</span>
+        <div class="flex flex-col items-center gap-3">
+          <div class="flex items-center gap-2">
+            <Icon icon="carbon:warning" class="h-5 w-5 text-yellow-400" />
+            <span class="text-sm font-medium text-foreground/90">Spotify Premium Requerido</span>
+          </div>
+          <p class="text-center text-xs text-foreground/70">Para reproducir música, necesitas iniciar sesión con tu cuenta Premium de Spotify</p>
           <a
             href="/spotify/login"
-            class="flex items-center gap-2 rounded-md bg-[#1DB954] px-4 py-2 text-sm font-medium text-white hover:bg-[#1ed760] transition-colors"
+            class="flex w-full items-center justify-center gap-2 rounded-md bg-[#1DB954] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#1ed760] hover:shadow-lg"
           >
             <Icon icon="mdi:spotify" class="h-5 w-5" />
-            Conectar con Spotify
+            Conectar con Spotify Premium
           </a>
         </div>
       </div>
     </div>
 
-    <!-- Minimized Player Button -->
+    <!-- Fallback Player -->
+    <div v-if="showFallbackPlayer" class="fixed bottom-4 right-4 z-40">
+      <div class="glass-effect overflow-hidden rounded-lg border border-white/10 bg-background/80 p-4 shadow-lg backdrop-blur-sm">
+        <div class="flex flex-col items-center gap-3">
+          <div class="flex items-center gap-2">
+            <Icon icon="carbon:music" class="h-5 w-5 text-primary" />
+            <span class="text-sm font-medium text-foreground/90">Reproductor de Música</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <button class="rounded-full p-2 text-foreground/30">
+              <Icon icon="carbon:previous-filled" class="h-5 w-5" />
+            </button>
+            <button
+              @click="toggleFallbackPlay"
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white transition-all hover:bg-primary/80 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] button-hover"
+            >
+              <Icon :icon="fallbackIsPlaying ? 'carbon:pause-filled' : 'carbon:play-filled'" class="h-5 w-5" />
+            </button>
+            <button class="rounded-full p-2 text-foreground/30">
+              <Icon icon="carbon:next-filled" class="h-5 w-5" />
+            </button>
+          </div>
+          <div class="mt-2 text-center">
+            <a href="/spotify/login" class="text-xs text-primary hover:underline">
+              Conectar con Spotify Premium para control total
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Minimized Player Button (Only show if authenticated) -->
     <button
-      v-if="isMinimized && isReady && currentTrack"
+      v-if="!showFallbackPlayer && isMinimized && isReady && currentTrack"
       @click="toggleMinimized"
       class="fixed bottom-4 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg transition-all hover:scale-105 hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] pulse"
     >
@@ -230,9 +365,9 @@ const logoutFromSpotify = () => {
       ></div>
     </button>
 
-    <!-- Full Player -->
+    <!-- Full Player (Only show if authenticated) -->
     <div
-      v-else
+      v-if="!showFallbackPlayer && !isMinimized"
       :class="[
         'fixed z-50 transition-all duration-500 ease-in-out slide-fade-enter-active',
         isExpanded ? 'bottom-0 left-0 right-0' : 'bottom-4 right-4 w-80'

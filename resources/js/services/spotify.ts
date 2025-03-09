@@ -79,25 +79,30 @@ export async function getUserProfile(token: string): Promise<any> {
  */
 export async function isUserToken(token: string): Promise<boolean> {
   try {
-    // Check if the token response includes a refresh_token
-    const response = await fetch('/spotify/token');
-    const data = await response.json();
+    console.log('Checking if token is a user token...');
 
-    // If we have a refresh token, it's a user token
-    if (data.refresh_token) {
-      return true;
-    }
-
-    // If the response indicates it's a default token, it's not a user token
-    if (data.is_default) {
-      return false;
-    }
-
-    // Otherwise, try to access user profile as a fallback
+    // First, check if we can access user profile - this is the most reliable method
     try {
       await getUserProfile(token);
+      console.log('Successfully retrieved user profile, token is a user token');
       return true;
-    } catch {
+    } catch (profileError) {
+      console.log('Failed to retrieve user profile:', profileError);
+
+      // If profile access fails, check token response
+      const response = await fetch('/spotify/token');
+      const data = await response.json();
+
+      console.log('Token response:', {
+        isDefault: data.is_default || false,
+        hasRefreshToken: !!data.refresh_token
+      });
+
+      // If we have a refresh token or it's explicitly not a default token, it's a user token
+      if (data.refresh_token || (data.is_default === false)) {
+        return true;
+      }
+
       return false;
     }
   } catch (error) {
