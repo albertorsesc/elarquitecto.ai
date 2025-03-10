@@ -5,7 +5,11 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 import NeonBorders from '@/components/theme/NeonBorders.vue';
 import NeonEffects from '@/components/theme/NeonEffects.vue';
-import NeonCorners from '@/components/theme/NeonCorners.vue';
+import { PropType } from 'vue';
+
+defineProps({
+    articles: Array as PropType<Article[]>,
+})
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -14,36 +18,20 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-const blogPosts = [
-    {
-        id: 1,
-        title: 'Introducción a la IA',
-        excerpt: 'Descubre los conceptos básicos de la Inteligencia Artificial y cómo está cambiando el mundo.',
-        image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-        category: 'Fundamentos'
-    },
-    {
-        id: 2,
-        title: 'Prompts Efectivos',
-        excerpt: 'Aprende a crear prompts que generen resultados precisos con modelos de lenguaje avanzados.',
-        image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-        category: 'Técnicas'
-    },
-    {
-        id: 3,
-        title: 'IA en Latinoamérica',
-        excerpt: 'Análisis del estado actual de la Inteligencia Artificial en los países latinoamericanos.',
-        image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-        category: 'Tendencias'
-    },
-    {
-        id: 4,
-        title: 'IA en Latinoamérica 2',
-        excerpt: 'Análisis del estado actual de la Inteligencia Artificial en los países latinoamericanos.',
-        image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-        category: 'Tendencias'
-    },
-];
+// format image URL for when it's in storage or S3
+const getImageUrl = (image: string) => {
+    console.log('image', image);
+    if (! image) {
+        return 'https://images.unsplash.com/photo-1735825764451-d2186b7f4bf9?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+    }
+
+    if (image.includes('http')) {
+        return image;
+    }
+
+    return `/storage/${image}`;
+};
+
 </script>
 
 <template>
@@ -103,7 +91,7 @@ const blogPosts = [
 
                 <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 p-4">
                     <div
-                        v-for="post in blogPosts"
+                        v-for="post in articles"
                         :key="post.id"
                         class="group relative overflow-hidden rounded-xl border border-white/10 bg-background/50 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:shadow-[0_0_30px_rgba(0,0,0,0.3)] shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
                     >
@@ -122,7 +110,7 @@ const blogPosts = [
 
                             <!-- Image with hover zoom -->
                             <img
-                                :src="post.image"
+                                :src="getImageUrl(post.image)"
                                 :alt="post.title"
                                 class="h-full w-full object-cover transition-transform duration-700 will-change-transform group-hover:scale-110"
                                 @error="handleImageError"
@@ -166,7 +154,7 @@ const blogPosts = [
                         </div>
 
                         <!-- Link overlay -->
-                        <Link :href="'/blog/' + post.id" class="absolute inset-0">
+                        <Link :href="route('root.articles.show', post)" class="absolute inset-0">
                             <span class="sr-only">Leer más sobre {{ post.title }}</span>
                         </Link>
                     </div>

@@ -91,11 +91,17 @@ class ArticlesTest extends TestCase
         $this->signInAsRoot();
         
         $article = $this->create(Article::class);
-        $articleData = $this->make(Article::class);
+        $articleData = $this->make(Article::class, ['author_id' => null]);
         
         $response = $this->put(route('root.articles.update', $article), $articleData->toArray());
         $response->assertRedirect();
-        $this->assertDatabaseHas('articles', $articleData->toArray());
+        $this->assertDatabaseHas('articles', [
+            'id' => $article->id,
+            'title' => $articleData->title,
+            'content' => $articleData->content,
+            'excerpt' => $articleData->excerpt,
+            'author_id' => $article->author_id,
+        ]);
     }
     
     /**

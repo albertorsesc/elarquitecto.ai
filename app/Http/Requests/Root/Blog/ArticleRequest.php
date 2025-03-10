@@ -25,6 +25,8 @@ class ArticleRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string'],
             'excerpt' => ['required', 'string'],
+            'image' => ['nullable', 'image', 'max:5000'],
+            'published_at' => ['nullable', 'date'],
         ];
     }
 }

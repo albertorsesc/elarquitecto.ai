@@ -18,30 +18,37 @@ class ArticleController extends Controller
             'articles' => Article::all(),
         ]);
     }
-    
+
     public function create() : Response
     {
         return Inertia::render('Root/Blog/Articles/Create');
     }
-    
+
     public function store(ArticleRequest $request) : RedirectResponse
     {
         Article::create($request->validated());
-        
+
         return redirect()->route('root.articles.index');
     }
-    
+
+    public function show(Article $article) : Response
+    {
+        return Inertia::render('Root/Blog/Articles/Show', [
+            'article' => $article,
+        ]);
+    }
+
     public function edit(Article $article) : Response
     {
         return Inertia::render('Root/Blog/Articles/Edit', [
             'article' => $article,
         ]);
     }
-    
+
     public function update(ArticleRequest $request, Article $article) : RedirectResponse
     {
         $article->update($request->validated());
-        
+
         return redirect()->route('root.articles.index');
     }
 }

@@ -7,6 +7,20 @@ import GlassContainer from '@/components/theme/GlassContainer.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { MdEditor, config } from 'md-editor-v3';
+import 'md-editor-v3/lib/style.css';
+// import theme css
+import '@vavt/cm-extension/dist/previewTheme/arknights.css';
+// import existing language
+import es_ES from '@vavt/cm-extension/dist/locale/es-ES';
+
+config({
+    editorConfig: {
+        languageUserDefined: {
+            'es-ES': es_ES,
+        }
+    }
+})
 
 const props = defineProps({
     categories: Array,
@@ -17,6 +31,7 @@ const form = useForm({
     title: '',
     content: '',
     excerpt: '',
+    image: null,
     published: false,
 });
 
@@ -24,7 +39,7 @@ const preview = ref(null);
 
 const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    form.featured_image = file;
+    form.image = file;
 
     if (file) {
         const reader = new FileReader();
@@ -105,6 +120,8 @@ const submit = () => {
                             You can use HTML for formatting.
                         </p>
 
+                        <MdEditor v-model="form.content" language="es-ES" />
+
                         <div>
                             <label class="block text-sm/6 font-medium text-foreground">Featured Image</label>
                             <div class="relative mt-2">
@@ -117,8 +134,8 @@ const submit = () => {
                                         class="block w-full bg-transparent text-foreground file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-primary/90"
                                     />
                                 </div>
-                                <div v-if="form.errors.featured_image" class="mt-1 text-sm text-red-400">
-                                    {{ form.errors.featured_image }}
+                                <div v-if="form.errors.image" class="mt-1 text-sm text-red-400">
+                                    {{ form.errors.image }}
                                 </div>
 
                                 <div v-if="preview" class="mt-4">

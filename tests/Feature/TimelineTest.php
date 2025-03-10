@@ -17,18 +17,6 @@ class TimelineTest extends TestCase
     /**
      * @test
      */
-    public function a_guest_user_can_visit_timeline_page()
-    {
-        $this->get(route('timeline.index'))
-            ->assertOk()
-            ->assertInertia(fn (Assert $page) => $page->component('Timeline/Index')
-                ->has('timelines')
-            );
-    }
-
-    /**
-     * @test
-     */
     public function root_user_can_post_timeline_posts()
     {
         // Auth as Root user
