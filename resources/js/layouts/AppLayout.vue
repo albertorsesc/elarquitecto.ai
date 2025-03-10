@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import PersistentSpotifyPlayer from '@/components/PersistentSpotifyPlayer.vue';
 import FloatingNeonLines from '@/components/theme/FloatingNeonLines.vue';
 import AppLayout from '@/layouts/app/AppSidebarLayout.vue';
 import type { BreadcrumbItemType } from '@/types';
@@ -23,8 +22,5 @@ withDefaults(defineProps<Props>(), {
         <AppLayout :breadcrumbs="breadcrumbs">
             <slot />
         </AppLayout>
-
-        <!-- Persistent Spotify Player -->
-        <!-- <PersistentSpotifyPlayer /> -->
     </div>
 </template>

@@ -7,6 +7,7 @@ import AppFooter from '@/components/theme/AppFooter.vue';
 import GlassContainer from '@/components/theme/GlassContainer.vue';
 import NeonBorders from '@/components/theme/NeonBorders.vue';
 import type { BreadcrumbItemType } from '@/types';
+import { provide, ref } from 'vue';
 
 interface Props {
     breadcrumbs?: BreadcrumbItemType[];
@@ -15,6 +16,12 @@ interface Props {
 withDefaults(defineProps<Props>(), {
     breadcrumbs: () => [],
 });
+
+// Create a reactive reference for the footer state
+const isFooterExpanded = ref(false);
+
+// Provide the footer state to child components
+provide('isFooterExpanded', isFooterExpanded);
 </script>
 
 <template>
@@ -53,13 +60,14 @@ withDefaults(defineProps<Props>(), {
                 <NeonBorders position="bottom" color="gradient" :opacity="0.2" />
             </GlassContainer>
 
-            <!-- Content area -->
-            <div class="flex h-full w-full flex-1 flex-col gap-4 p-4 md:p-6 lg:p-8">
+            <!-- Content area - adjust height based on footer state -->
+            <div class="flex w-full flex-1 flex-col gap-4 p-4 md:p-6 lg:p-8 transition-all duration-300"
+                 :class="{ 'h-[calc(100%-40px)]': isFooterExpanded, 'h-[calc(100%-48px)]': !isFooterExpanded }">
                 <slot />
             </div>
 
             <!-- Footer -->
-            <AppFooter />
+            <AppFooter @toggle="isFooterExpanded = !isFooterExpanded" />
         </AppContent>
     </AppShell>
 </template>

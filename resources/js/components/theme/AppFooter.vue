@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { Link } from '@inertiajs/vue3';
+import { inject, ref, watch } from 'vue';
 import NeonBorders from './NeonBorders.vue';
 
 interface FooterLink {
@@ -41,18 +42,65 @@ const links: FooterLink[] = [
     icon: 'carbon:group'
   }
 ];
+
+// Get the footer expanded state from parent component
+const isFooterExpanded = inject('isFooterExpanded', ref(false));
+
+// Local state to track if footer is expanded or collapsed
+const isExpanded = ref(false);
+
+// Define emits
+const emit = defineEmits(['toggle']);
+
+// Toggle footer expansion state
+const toggleFooter = () => {
+  isExpanded.value = !isExpanded.value;
+  emit('toggle');
+};
+
+// Sync local state with injected state
+watch(isFooterExpanded, (newValue) => {
+  isExpanded.value = newValue;
+});
+
+// Sync injected state with local state
+watch(isExpanded, (newValue) => {
+  if (isFooterExpanded.value !== newValue) {
+    isFooterExpanded.value = newValue;
+  }
+});
 </script>
 
 <template>
-  <footer class="relative border-t border-white/10 bg-background/90 py-4">
+  <footer class="relative border-t border-white/10 bg-background/90 transition-all duration-300"
+          :class="{ 'py-4': isExpanded, 'py-2': !isExpanded }">
     <!-- Animated bottom border -->
     <div class="absolute inset-x-0 bottom-0 h-[1px]">
       <div class="absolute inset-0 animate-neon-slide-left bg-gradient-to-r from-transparent via-primary to-transparent opacity-30"></div>
     </div>
 
-    <!-- Footer content -->
-    <div class="mx-auto max-w-6xl px-4">
-      <!-- Footer links -->
+    <!-- Toggle button -->
+    <div class="absolute -top-4 left-1/2 -translate-x-1/2 transform">
+      <button
+        @click="toggleFooter"
+        class="group flex h-8 w-8 items-center justify-center rounded-full bg-background border border-white/10 transition-all hover:bg-primary/20"
+        :aria-expanded="isExpanded"
+        aria-label="Toggle footer"
+      >
+        <Icon
+          :icon="isExpanded ? 'carbon:chevron-down' : 'carbon:chevron-up'"
+          class="text-lg text-primary transition-transform"
+        />
+        <!-- Glow effect on hover -->
+        <div class="absolute -inset-1 rounded-full opacity-0 transition-opacity group-hover:opacity-100">
+          <NeonBorders position="all" color="primary" :opacity="0.3" />
+        </div>
+      </button>
+    </div>
+
+    <!-- Expanded footer content -->
+    <div v-if="isExpanded" class="mx-auto max-w-6xl px-4 transition-all duration-300">
+      <!-- Footer links with text labels -->
       <div class="mb-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
         <Link
           v-for="link in links"
@@ -71,9 +119,38 @@ const links: FooterLink[] = [
         </Link>
       </div>
 
-      <!-- Copyright -->
+      <!-- Full copyright -->
       <div class="text-center text-xs text-foreground/60">
         <p>&copy; 2024 El Arquitecto A.I. Todos los derechos reservados.</p>
+      </div>
+    </div>
+
+    <!-- Collapsed footer with icons only -->
+    <div v-else class="mx-auto max-w-3xl px-4 transition-all duration-300 w-full">
+      <div class="flex flex-col items-center">
+        <!-- Icons only in collapsed state -->
+        <div class="flex flex-1 justify-between w-full">
+          <Link
+            v-for="link in links"
+            :key="link.title"
+            :href="link.href"
+            class="group relative"
+            :title="link.title"
+          >
+            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 transition-all group-hover:bg-primary/20">
+              <Icon :icon="link.icon" class="text-lg text-primary" />
+            </div>
+            <!-- Glow effect on hover -->
+            <div class="absolute -inset-1 rounded-full opacity-0 transition-opacity group-hover:opacity-100">
+              <NeonBorders position="all" color="primary" :opacity="0.3" />
+            </div>
+          </Link>
+        </div>
+
+        <!-- Subtle copyright -->
+        <div class="text-[10px] text-foreground/40 mt-1">
+          &copy; 2024 El Arquitecto A.I.
+        </div>
       </div>
     </div>
   </footer>
