@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Blog;
 
+use App\Models\BlogCategory;
+use App\Models\BlogTag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -22,8 +24,8 @@ class CategoryTagTest extends TestCase
             'description' => 'This is a test category',
         ];
 
-        $this->post(route('admin.blog.categories.store'), $categoryData);
-        $category = \App\Models\BlogCategory::where('name', 'Test Category')->first();
+        $this->post(route('root.blog.categories.store'), $categoryData);
+        $category = BlogCategory::where('name', 'Test Category')->first();
 
         // Create a post with the category
         $postData = [
@@ -34,7 +36,7 @@ class CategoryTagTest extends TestCase
             'published' => true,
         ];
 
-        $this->post(route('admin.blog.posts.store'), $postData);
+        $this->post(route('root.blog.store'), $postData);
 
         $this->assertDatabaseHas('blog_posts', [
             'title' => 'Categorized Post',
@@ -48,11 +50,11 @@ class CategoryTagTest extends TestCase
         $this->actingAs($user);
 
         // Create tags
-        $this->post(route('admin.blog.tags.store'), ['name' => 'Tag One']);
-        $this->post(route('admin.blog.tags.store'), ['name' => 'Tag Two']);
+        $this->post(route('root.blog.tags.store'), ['name' => 'Tag One']);
+        $this->post(route('root.blog.tags.store'), ['name' => 'Tag Two']);
 
-        $tagOne = \App\Models\BlogTag::where('name', 'Tag One')->first();
-        $tagTwo = \App\Models\BlogTag::where('name', 'Tag Two')->first();
+        $tagOne = BlogTag::where('name', 'Tag One')->first();
+        $tagTwo = BlogTag::where('name', 'Tag Two')->first();
 
         // Create a post
         $postData = [
@@ -64,7 +66,7 @@ class CategoryTagTest extends TestCase
             'tags' => [$tagOne->id, $tagTwo->id],
         ];
 
-        $this->post(route('admin.blog.posts.store'), $postData);
+        $this->post(route('root.blog.store'), $postData);
 
         $post = \App\Models\BlogPost::where('title', 'Tagged Post')->first();
 
@@ -90,8 +92,8 @@ class CategoryTagTest extends TestCase
             'description' => 'This is a test category',
         ];
 
-        $this->post(route('admin.blog.categories.store'), $categoryData);
-        $category = \App\Models\BlogCategory::where('name', 'View Category')->first();
+        $this->post(route('root.blog.categories.store'), $categoryData);
+        $category = BlogCategory::where('name', 'View Category')->first();
 
         // Create posts in the category
         $postData = [
@@ -102,7 +104,7 @@ class CategoryTagTest extends TestCase
             'published' => true,
         ];
 
-        $this->post(route('admin.blog.posts.store'), $postData);
+        $this->post(route('root.blog.store'), $postData);
 
         $postData = [
             'title' => 'Category Post Two',
@@ -112,13 +114,13 @@ class CategoryTagTest extends TestCase
             'published' => true,
         ];
 
-        $this->post(route('admin.blog.posts.store'), $postData);
+        $this->post(route('root.blog.store'), $postData);
 
         // Test as a guest user
         $this->actingAs(User::factory()->create());
 
-        $response = $this->get(route('blog.category', $category->slug));
-        $response->assertStatus(200);
+        $response = $this->get(route('blog.category', $category));
+        $response->assertOk();
         $response->assertSee('Category Post One');
         $response->assertSee('Category Post Two');
     }
@@ -129,8 +131,8 @@ class CategoryTagTest extends TestCase
         $this->actingAs($user);
 
         // Create a tag
-        $this->post(route('admin.blog.tags.store'), ['name' => 'View Tag']);
-        $tag = \App\Models\BlogTag::where('name', 'View Tag')->first();
+        $this->post(route('root.blog.tags.store'), ['name' => 'View Tag']);
+        $tag = BlogTag::where('name', 'View Tag')->first();
 
         // Create posts with the tag
         $postData = [
@@ -142,7 +144,7 @@ class CategoryTagTest extends TestCase
             'tags' => [$tag->id],
         ];
 
-        $this->post(route('admin.blog.posts.store'), $postData);
+        $this->post(route('root.blog.store'), $postData);
 
         $postData = [
             'title' => 'Tag Post Two',
@@ -153,12 +155,14 @@ class CategoryTagTest extends TestCase
             'tags' => [$tag->id],
         ];
 
-        $this->post(route('admin.blog.posts.store'), $postData);
+        $this->post(route('root.blog.store'), $postData);
 
         // Test as a guest user
         $this->actingAs(User::factory()->create());
 
-        $response = $this->get(route('blog.tag', $tag->slug));
+        $response = $this->get(route('blog.tag', [
+            'tag' => $tag,
+        ]));
         $response->assertStatus(200);
         $response->assertSee('Tag Post One');
         $response->assertSee('Tag Post Two');

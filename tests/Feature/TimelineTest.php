@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Tag;
 use App\Models\Timeline;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -17,8 +16,6 @@ class TimelineTest extends TestCase
 
     /**
      * @test
-     *
-     * @throws Throwable
      */
     public function a_guest_user_can_visit_timeline_page()
     {
@@ -31,8 +28,6 @@ class TimelineTest extends TestCase
 
     /**
      * @test
-     *
-     * @throws \Throwable
      */
     public function root_user_can_post_timeline_posts()
     {
@@ -73,8 +68,6 @@ class TimelineTest extends TestCase
 
     /**
      * @test
-     *
-     * @throws \Throwable
      */
     public function root_user_can_visit_create_timeline_post()
     {

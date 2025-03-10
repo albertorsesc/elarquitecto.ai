@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Blog;
 
+use App\Models\BlogPost;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -24,9 +25,9 @@ class SeoTest extends TestCase
             'published' => true,
         ];
 
-        $this->post(route('admin.blog.posts.store'), $postData);
+        $this->post(route('root.blog.store'), $postData);
 
-        $response = $this->get(route('blog.show', 'seo-test-post'));
+        $response = $this->get(route('blog.show', BlogPost::first()));
 
         $response->assertStatus(200);
         $response->assertSee('<title>SEO Test Post | El Arquitecto A.I.</title>', false);
@@ -46,9 +47,9 @@ class SeoTest extends TestCase
             'published' => true,
         ];
 
-        $this->post(route('admin.blog.posts.store'), $postData);
+        $this->post(route('root.blog.store'), $postData);
 
-        $response = $this->get(route('blog.show', 'open-graph-test'));
+        $response = $this->get(route('blog.show', BlogPost::first()));
 
         $response->assertStatus(200);
         $response->assertSee('<meta property="og:title" content="Open Graph Test"', false);
@@ -70,11 +71,11 @@ class SeoTest extends TestCase
             'published' => true,
         ];
 
-        $this->post(route('admin.blog.posts.store'), $postData);
+        $this->post(route('root.blog.store'), $postData);
 
-        $response = $this->get(route('blog.show', 'canonical-url-test'));
+        $response = $this->get(route('blog.show', BlogPost::first()));
 
-        $response->assertStatus(200);
+        $response->assertOk();
         $response->assertSee('<link rel="canonical" href="', false);
     }
 }

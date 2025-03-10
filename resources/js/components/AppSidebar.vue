@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import NavFooter from '@/components/NavFooter.vue';
-import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/vue3';
-import { BookOpen, Calendar, Folder, LayoutGrid } from 'lucide-vue-next';
+import { Link, usePage } from '@inertiajs/vue3';
+import { BookOpen, Calendar, FileText, Folder, LayoutGrid, Settings } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
+
+const page = usePage();
+// Check if the current user is a root user by using type assertions
+const auth = page.props.auth as { user: { email: string }, is_root: boolean } | undefined;
+const isRootUser = auth?.is_root;
 
 const mainNavItems: NavItem[] = [
     {
@@ -18,6 +22,19 @@ const mainNavItems: NavItem[] = [
         title: 'Timeline',
         href: '/timeline',
         icon: Calendar,
+    },
+];
+
+const rootNavItems: NavItem[] = [
+    {
+        title: 'Blog',
+        href: route('root.articles.index'),
+        icon: FileText,
+    },
+    {
+        title: 'Categories',
+        href: '#',
+        icon: Settings,
     },
 ];
 
@@ -50,7 +67,35 @@ const footerNavItems: NavItem[] = [
         </SidebarHeader>
 
         <SidebarContent>
-            <NavMain :items="mainNavItems" />
+            <!-- Platform Section -->
+            <SidebarGroup class="px-2 py-2">
+                <SidebarGroupLabel>Plataforma</SidebarGroupLabel>
+                <SidebarMenu>
+                    <SidebarMenuItem v-for="item in mainNavItems" :key="item.title">
+                        <SidebarMenuButton as-child :is-active="page.url.startsWith(item.href)">
+                            <Link :href="item.href">
+                                <component :is="item.icon" />
+                                <span>{{ item.title }}</span>
+                            </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarGroup>
+
+            <!-- Root Section -->
+            <SidebarGroup v-if="isRootUser" class="px-2 py-2">
+                <SidebarGroupLabel>Root</SidebarGroupLabel>
+                <SidebarMenu>
+                    <SidebarMenuItem v-for="item in rootNavItems" :key="item.title">
+                        <SidebarMenuButton as-child :is-active="page.url.startsWith(item.href)">
+                            <Link :href="item.href">
+                                <component :is="item.icon" />
+                                <span>{{ item.title }}</span>
+                            </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarGroup>
         </SidebarContent>
 
         <SidebarFooter>

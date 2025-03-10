@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -27,7 +30,7 @@ class BlogPost extends Model
         'published_at' => 'datetime',
     ];
 
-    protected static function boot()
+    protected static function boot() : void
     {
         parent::boot();
 
@@ -47,24 +50,23 @@ class BlogPost extends Model
         });
 
         static::deleting(function ($post) {
-            // Delete featured image if exists
             if ($post->featured_image) {
                 Storage::delete($post->featured_image);
             }
         });
     }
 
-    public function category()
+    public function category() : BelongsTo
     {
         return $this->belongsTo(BlogCategory::class, 'category_id');
     }
 
-    public function tags()
+    public function tags() : BelongsToMany
     {
         return $this->belongsToMany(BlogTag::class, 'blog_post_tag');
     }
 
-    public function scopePublished($query)
+    public function scopePublished(Builder $query): Builder
     {
         return $query->where('published', true);
     }

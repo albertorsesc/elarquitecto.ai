@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Blog;
 
+use App\Models\BlogPost;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -31,9 +32,9 @@ class StorageTest extends TestCase
             'featured_image' => $image,
         ];
 
-        $response = $this->post(route('admin.blog.posts.store'), $postData);
+        $response = $this->post(route('root.blog.store'), $postData);
 
-        $post = \App\Models\BlogPost::where('title', 'Image Test Post')->first();
+        $post = BlogPost::where('title', 'Image Test Post')->first();
 
         $this->assertNotNull($post->featured_image);
         Storage::disk('public')->assertExists($post->featured_image);
@@ -57,21 +58,17 @@ class StorageTest extends TestCase
             'featured_image' => $image,
         ];
 
-        $this->post(route('admin.blog.posts.store'), $postData);
+        $this->post(route('root.blog.store'), $postData);
 
-        $post = \App\Models\BlogPost::where('title', 'Image URL Test')->first();
-
-        $response = $this->get(route('blog.show', 'image-url-test'));
-
-        $response->assertStatus(200);
+        $post = BlogPost::where('title', 'Image URL Test')->first();
+        
+        $response = $this->get(route('blog.show', $post));
+        $response->assertOk();
         $response->assertSee(Storage::url($post->featured_image), false);
     }
 
     public function test_storage_driver_can_be_switched_with_env_variable()
     {
-        // This test is more of an integration test that would depend on the actual implementation
-        // For now, we'll just test that the configuration can be changed
-
         $originalDriver = config('filesystems.default');
 
         // Temporarily change the config

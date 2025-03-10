@@ -19,7 +19,7 @@ class TagsTest extends TestCase
     {
         $this->actingAs($this->rootUser());
 
-        $response = $this->post(route('tags.store'), [
+        $response = $this->post(route('root.tags.store'), [
             'name' => 'agentes',
         ]);
 
