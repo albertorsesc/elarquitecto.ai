@@ -28,7 +28,7 @@ export async function playPlaylist(token: string, deviceId: string, playlistUri:
     }
 
     // First check if we can play on this device
-    const deviceResponse = await fetch(`https://api.spotify.com/v1/me/player/devices`, {
+    const deviceResponse = await fetch(`${config.spotify.apiUrl}/me/player/devices`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -61,7 +61,7 @@ export async function playPlaylist(token: string, deviceId: string, playlistUri:
 
     if (!targetDevice.is_active) {
       // Transfer playback to our device first
-      const transferResponse = await fetch('https://api.spotify.com/v1/me/player', {
+      const transferResponse = await fetch(`${config.spotify.apiUrl}/me/player`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -92,7 +92,7 @@ export async function playPlaylist(token: string, deviceId: string, playlistUri:
     }
 
     // Now try to play the playlist
-    const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+    const response = await fetch(`${config.spotify.apiUrl}/me/player/play?device_id=${deviceId}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -127,7 +127,7 @@ export async function playPlaylist(token: string, deviceId: string, playlistUri:
  */
 export async function getUserProfile(token: string): Promise<any> {
   try {
-    const response = await fetch('https://api.spotify.com/v1/me', {
+    const response = await fetch(`${config.spotify.apiUrl}/me`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },

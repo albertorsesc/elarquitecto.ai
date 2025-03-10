@@ -19,18 +19,28 @@ declare global {
     }
 }
 
+// Import the config
+import config from '@/config';
+
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+
+// Extract the base domain from the API URL for interceptor matching
+const spotifyApiDomain = new URL(config.spotify.apiUrl).hostname;
 
 // Fix for Spotify API errors
 const originalFetch = window.fetch;
 window.fetch = function(input, init) {
     // Check if this is a request to the problematic endpoint
-    if (typeof input === 'string' && input.includes('cpapi.spotify.com')) {
-        // Return a mock successful response
-        return Promise.resolve(new Response(JSON.stringify({ success: true }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
-        }));
+    if (typeof input === 'string' && input.includes(spotifyApiDomain)) {
+        // Check if this is a request to the event endpoint
+        if (input.includes('/event/')) {
+            console.log('Intercepting Spotify event API call:', input);
+            // Return a mock successful response
+            return Promise.resolve(new Response(JSON.stringify({ success: true }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' }
+            }));
+        }
     }
     // Otherwise, proceed with the original fetch
     return originalFetch.apply(this, [input, init]);

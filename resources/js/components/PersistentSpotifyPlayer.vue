@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import config from '@/config';
 import { useSpotifyStore } from '@/stores/useSpotifyStore';
 import { Icon } from '@iconify/vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 // Define the type for the store
 type SpotifyStoreType = ReturnType<typeof useSpotifyStore>;
@@ -31,6 +32,27 @@ const volume = computed({
 const isExpanded = computed(() => spotifyStore.isExpanded);
 const hasError = computed(() => !!spotifyStore.error);
 const shuffleEnabled = computed(() => spotifyStore.shuffleEnabled);
+const trackProgress = computed(() => spotifyStore.playbackPosition);
+const trackDuration = computed(() => spotifyStore.trackDuration);
+const progressPercentage = computed(() => {
+  if (!trackDuration.value) return 0;
+  return (trackProgress.value / trackDuration.value) * 100;
+});
+
+// Format time in mm:ss
+function formatTime(ms: number): string {
+  const seconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+}
+
+// Update progress
+function updateProgress(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const position = Math.floor((parseFloat(input.value) / 100) * trackDuration.value);
+  spotifyStore.updatePlaybackPosition(position);
+}
 
 // Toggle collapsed state
 function toggleCollapsed() {
@@ -55,9 +77,26 @@ function toggleExpanded() {
   spotifyStore.toggleExpanded();
 }
 
-// Add shuffle toggle function
 function toggleShuffle() {
   spotifyStore.toggleShuffle();
+}
+
+// Error recovery function
+async function retryConnection() {
+  try {
+    spotifyStore.setError(null);
+    isLoading.value = true;
+
+    // Cleanup and reinitialize
+    spotifyStore.cleanup();
+    await spotifyStore.initialize();
+  } catch (error) {
+    console.error('Retry attempt failed:', error);
+    spotifyStore.setError('Failed to reconnect to Spotify');
+    window.location.href = '/spotify/login';
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 // Initialize Spotify player
@@ -73,22 +112,8 @@ onMounted(async () => {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
 
-    // Fetch token from backend
-    const response = await fetch('/spotify/token');
-    const data = await response.json();
-
-    if (response.ok && data.access_token) {
-      console.log('Successfully retrieved Spotify token');
-      spotifyStore.setAccessToken(data.access_token);
-
-      // Initialize player if we have a valid token
-      if (!data.is_default) {
-        await spotifyStore.initializePlayer();
-      }
-    } else {
-      console.log('No valid Spotify token available');
-      spotifyStore.setError(data.error || 'Failed to retrieve Spotify token');
-    }
+    // Initialize the store
+    await spotifyStore.initialize();
   } catch (error) {
     console.error('Error initializing Spotify:', error);
     spotifyStore.setError('Failed to initialize Spotify player');
@@ -97,24 +122,82 @@ onMounted(async () => {
   }
 });
 
-// Fix for Spotify API errors
+// Cleanup on component unmount
+onUnmounted(() => {
+  spotifyStore.cleanup();
+});
+
+// Extract the base domain from the API URL for interceptor matching
+const spotifyApiDomain = new URL(config.spotify.apiUrl).hostname;
+
+// Fix for Spotify API errors and add interceptor for debugging
 onMounted(() => {
-  // Override the Spotify API endpoint to prevent 404 errors
-  if (window.Spotify && window.Spotify.Player) {
+  // Define the interceptor function
+  const setupSpotifyApiInterceptor = () => {
     const originalFetch = window.fetch;
-    window.fetch = function(input, init) {
-      // Check if this is a request to the problematic endpoint
-      if (typeof input === 'string' && input.includes('cpapi.spotify.com')) {
-        // Modify the URL or return a mock response
-        return Promise.resolve(new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
-        }));
+    window.fetch = async function(input, init) {
+      // Only intercept Spotify API calls
+      if (typeof input === 'string' && input.includes(spotifyApiDomain)) {
+        console.debug(`Intercepting Spotify API request:`, input);
+
+        try {
+          const response = await originalFetch.apply(this, [input, init]);
+          const clonedResponse = response.clone();
+
+          // Handle specific error cases
+          if (!response.ok) {
+            const errorText = await clonedResponse.text();
+            let errorData;
+
+            try {
+              errorData = JSON.parse(errorText);
+            } catch {
+              errorData = { error: errorText };
+            }
+
+            console.error(`Spotify API error (${response.status}):`, errorData);
+
+            // Handle specific error cases
+            switch (response.status) {
+              case 401:
+                console.log('Token expired, redirecting to login...');
+                window.location.href = '/spotify/login';
+                break;
+              case 404:
+                if (input.includes('/event/')) {
+                  console.log('Intercepting 404 for event endpoint');
+                  return new Response(JSON.stringify({
+                    event_id: Date.now().toString(),
+                    status: 'ok'
+                  }), {
+                    status: 200,
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  });
+                }
+                break;
+              case 429:
+                const retryAfter = response.headers.get('Retry-After');
+                console.warn(`Rate limited. Retry after ${retryAfter} seconds`);
+                break;
+            }
+          }
+
+          return response;
+        } catch (error) {
+          console.error('Spotify API request failed:', error);
+          throw error;
+        }
       }
-      // Otherwise, proceed with the original fetch
+
+      // Pass through non-Spotify requests
       return originalFetch.apply(this, [input, init]);
     };
-  }
+  };
+
+  // Set up the interceptor
+  setupSpotifyApiInterceptor();
 });
 </script>
 
@@ -188,6 +271,23 @@ onMounted(() => {
           </div>
         </div>
 
+        <!-- Progress Slider -->
+        <div class="mb-3">
+          <div class="flex items-center justify-between text-xs text-foreground/70 mb-1">
+            <span>{{ formatTime(trackProgress) }}</span>
+            <span>{{ formatTime(trackDuration) }}</span>
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            step="0.1"
+            :value="progressPercentage"
+            @input="updateProgress"
+            class="progress-slider h-1 w-full appearance-none rounded-full bg-white/20"
+          >
+        </div>
+
         <!-- Controls -->
         <div class="mb-3 flex items-center justify-center space-x-4">
           <button
@@ -238,8 +338,24 @@ onMounted(() => {
         </div>
 
         <!-- Error Message -->
-        <div v-if="hasError" class="mt-2 text-xs text-red-400">
-          {{ spotifyStore.error }}
+        <div v-if="hasError" class="mt-2 flex flex-col items-center">
+          <div class="mb-1 text-xs text-red-400">
+            {{ spotifyStore.error }}
+          </div>
+          <div class="flex space-x-2">
+            <button
+              @click="retryConnection"
+              class="text-xs px-2 py-1 rounded bg-primary/80 text-white hover:bg-primary"
+            >
+              Retry Connection
+            </button>
+            <a
+              href="/spotify/login"
+              class="text-xs px-2 py-1 rounded bg-green-600/80 text-white hover:bg-green-600"
+            >
+              Reconnect to Spotify
+            </a>
+          </div>
         </div>
 
         <!-- Not Authenticated Message -->
@@ -328,5 +444,51 @@ input[type="range"]::-moz-range-thumb {
 /* Update volume slider background position based on value */
 input[type="range"] {
   --volume-position: v-bind('volume * 100 + "%"');
+}
+
+/* Progress slider styling */
+.progress-slider {
+  -webkit-appearance: none;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  background-image: linear-gradient(to right, rgba(124, 58, 237, 1) 0%, rgba(124, 58, 237, 1) 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 100%);
+  background-size: 200% 100%;
+  background-position: var(--progress-position, 0%) 0;
+}
+
+.progress-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s;
+}
+
+.progress-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.progress-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s;
+}
+
+.progress-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Update progress slider position based on value */
+.progress-slider {
+  --progress-position: v-bind('progressPercentage + "%"');
 }
 </style>

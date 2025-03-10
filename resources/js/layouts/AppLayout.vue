@@ -25,6 +25,6 @@ withDefaults(defineProps<Props>(), {
         </AppLayout>
 
         <!-- Persistent Spotify Player -->
-        <PersistentSpotifyPlayer />
+        <!-- <PersistentSpotifyPlayer /> -->
     </div>
 </template>
