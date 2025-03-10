@@ -14,7 +14,7 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-    <div class="relative min-h-screen">
+    <div class="relative min-h-screen overflow-x-hidden">
         <!-- Background Effects -->
         <FloatingNeonLines variant="dense" :opacity="0.15" />
 

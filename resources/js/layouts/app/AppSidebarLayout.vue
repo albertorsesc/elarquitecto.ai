@@ -25,7 +25,7 @@ provide('isFooterExpanded', isFooterExpanded);
 </script>
 
 <template>
-    <AppShell variant="sidebar" class="h-full">
+    <AppShell variant="sidebar" class="h-full overflow-x-hidden">
         <!-- Sidebar with glass effect -->
         <div class="relative h-full">
             <GlassContainer
@@ -44,7 +44,7 @@ provide('isFooterExpanded', isFooterExpanded);
         </div>
 
         <!-- Main content -->
-        <AppContent variant="sidebar" class="h-full">
+        <AppContent variant="sidebar" class="h-full relative">
             <!-- Header with glass effect -->
             <GlassContainer
                 variant="dark"
@@ -61,8 +61,8 @@ provide('isFooterExpanded', isFooterExpanded);
             </GlassContainer>
 
             <!-- Content area - adjust height based on footer state -->
-            <div class="flex w-full flex-1 flex-col gap-4 p-4 md:p-6 lg:p-8 transition-all duration-300"
-                 :class="{ 'h-[calc(100%-40px)]': isFooterExpanded, 'h-[calc(100%-48px)]': !isFooterExpanded }">
+            <div class="flex w-full flex-1 flex-col gap-4 p-4 md:p-6 lg:p-8 transition-all duration-300 overflow-y-auto pb-[80px] relative z-10"
+                 :class="{ 'pb-[176px]': isFooterExpanded, 'pb-[80px]': !isFooterExpanded }">
                 <slot />
             </div>
 
