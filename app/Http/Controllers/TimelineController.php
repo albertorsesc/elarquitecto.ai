@@ -15,7 +15,7 @@ class TimelineController extends Controller
      */
     public function index()
     {
-        $timelines = Timeline::with('author')->latest()->paginate(10);
+        $timelines = Timeline::with(['author', 'tags'])->latest()->paginate(10);
 
         return Inertia::render('Timeline/Index', [
             'timelines' => $timelines
