@@ -1,0 +1,166 @@
+<?php
+
+namespace Tests\Feature\Blog;
+
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+
+class CategoryTagTest extends TestCase
+{
+    use RefreshDatabase, WithFaker;
+
+    public function test_blog_post_can_be_assigned_to_category()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        // Create a category
+        $categoryData = [
+            'name' => 'Test Category',
+            'description' => 'This is a test category',
+        ];
+
+        $this->post(route('admin.blog.categories.store'), $categoryData);
+        $category = \App\Models\BlogCategory::where('name', 'Test Category')->first();
+
+        // Create a post with the category
+        $postData = [
+            'title' => 'Categorized Post',
+            'content' => 'Test content',
+            'excerpt' => 'Test excerpt',
+            'category_id' => $category->id,
+            'published' => true,
+        ];
+
+        $this->post(route('admin.blog.posts.store'), $postData);
+
+        $this->assertDatabaseHas('blog_posts', [
+            'title' => 'Categorized Post',
+            'category_id' => $category->id,
+        ]);
+    }
+
+    public function test_blog_post_can_be_assigned_multiple_tags()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        // Create tags
+        $this->post(route('admin.blog.tags.store'), ['name' => 'Tag One']);
+        $this->post(route('admin.blog.tags.store'), ['name' => 'Tag Two']);
+
+        $tagOne = \App\Models\BlogTag::where('name', 'Tag One')->first();
+        $tagTwo = \App\Models\BlogTag::where('name', 'Tag Two')->first();
+
+        // Create a post
+        $postData = [
+            'title' => 'Tagged Post',
+            'content' => 'Test content',
+            'excerpt' => 'Test excerpt',
+            'category_id' => null,
+            'published' => true,
+            'tags' => [$tagOne->id, $tagTwo->id],
+        ];
+
+        $this->post(route('admin.blog.posts.store'), $postData);
+
+        $post = \App\Models\BlogPost::where('title', 'Tagged Post')->first();
+
+        $this->assertDatabaseHas('blog_post_tag', [
+            'blog_post_id' => $post->id,
+            'blog_tag_id' => $tagOne->id,
+        ]);
+
+        $this->assertDatabaseHas('blog_post_tag', [
+            'blog_post_id' => $post->id,
+            'blog_tag_id' => $tagTwo->id,
+        ]);
+    }
+
+    public function test_users_can_view_posts_by_category()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        // Create a category
+        $categoryData = [
+            'name' => 'View Category',
+            'description' => 'This is a test category',
+        ];
+
+        $this->post(route('admin.blog.categories.store'), $categoryData);
+        $category = \App\Models\BlogCategory::where('name', 'View Category')->first();
+
+        // Create posts in the category
+        $postData = [
+            'title' => 'Category Post One',
+            'content' => 'Test content',
+            'excerpt' => 'Test excerpt',
+            'category_id' => $category->id,
+            'published' => true,
+        ];
+
+        $this->post(route('admin.blog.posts.store'), $postData);
+
+        $postData = [
+            'title' => 'Category Post Two',
+            'content' => 'Test content',
+            'excerpt' => 'Test excerpt',
+            'category_id' => $category->id,
+            'published' => true,
+        ];
+
+        $this->post(route('admin.blog.posts.store'), $postData);
+
+        // Test as a guest user
+        $this->actingAs(User::factory()->create());
+
+        $response = $this->get(route('blog.category', $category->slug));
+        $response->assertStatus(200);
+        $response->assertSee('Category Post One');
+        $response->assertSee('Category Post Two');
+    }
+
+    public function test_users_can_view_posts_by_tag()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        // Create a tag
+        $this->post(route('admin.blog.tags.store'), ['name' => 'View Tag']);
+        $tag = \App\Models\BlogTag::where('name', 'View Tag')->first();
+
+        // Create posts with the tag
+        $postData = [
+            'title' => 'Tag Post One',
+            'content' => 'Test content',
+            'excerpt' => 'Test excerpt',
+            'category_id' => null,
+            'published' => true,
+            'tags' => [$tag->id],
+        ];
+
+        $this->post(route('admin.blog.posts.store'), $postData);
+
+        $postData = [
+            'title' => 'Tag Post Two',
+            'content' => 'Test content',
+            'excerpt' => 'Test excerpt',
+            'category_id' => null,
+            'published' => true,
+            'tags' => [$tag->id],
+        ];
+
+        $this->post(route('admin.blog.posts.store'), $postData);
+
+        // Test as a guest user
+        $this->actingAs(User::factory()->create());
+
+        $response = $this->get(route('blog.tag', $tag->slug));
+        $response->assertStatus(200);
+        $response->assertSee('Tag Post One');
+        $response->assertSee('Tag Post Two');
+    }
+}

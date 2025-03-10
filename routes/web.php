@@ -79,5 +79,21 @@ if (app()->environment('local')) {
     })->name('spotify.debug');
 }
 
+// Blog Routes
+Route::get('/blog', [App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/search', [App\Http\Controllers\BlogController::class, 'search'])->name('blog.search');
+Route::get('/blog/category/{slug}', [App\Http\Controllers\BlogController::class, 'category'])->name('blog.category');
+Route::get('/blog/tag/{slug}', [App\Http\Controllers\BlogController::class, 'tag'])->name('blog.tag');
+Route::get('/blog/{slug}', [App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
+
+// Admin Blog Routes
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::prefix('blog')->name('blog.')->group(function () {
+        Route::resource('posts', App\Http\Controllers\Admin\BlogPostController::class);
+        Route::resource('categories', App\Http\Controllers\Admin\BlogCategoryController::class);
+        Route::resource('tags', App\Http\Controllers\Admin\BlogTagController::class);
+    });
+});
+
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
