@@ -32,7 +32,7 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts and Styles -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.ts'])
 
     <!-- Additional Styles -->
     <style>
@@ -174,11 +174,9 @@
                 <div class="absolute inset-0 animate-neon-slide-left bg-gradient-to-r from-transparent via-primary to-transparent opacity-30"></div>
             </div>
             <div class="mx-auto max-w-6xl px-4 text-center text-foreground/60">
-                <p>&copy; {{ date('Y') }} El Arquitecto A.I. Todos los derechos reservados.</p>
+                <p>&copy; {{ date('Y') }} El Arquitecto A.I.</p>
             </div>
         </footer>
     </div>
-
-    @stack('scripts')
 </body>
 </html>

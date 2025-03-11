@@ -6,7 +6,7 @@ import FormTextarea from '@/components/theme/FormTextarea.vue';
 import GlassContainer from '@/components/theme/GlassContainer.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
-import { MdEditor, config } from 'md-editor-v3';
+import { MdEditor, config, XSSPlugin } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { PropType, computed, reactive, ref } from 'vue';
 // import theme css
@@ -33,7 +33,17 @@ config({
         languageUserDefined: {
             'es-ES': es_ES,
         }
-    }
+    },
+    markdownItPlugins(plugins) {
+        return [
+            ...plugins,
+            {
+                type: 'xss',
+                plugin: XSSPlugin,
+                options: {},
+            },
+        ];
+    },
 })
 
 const props = defineProps({

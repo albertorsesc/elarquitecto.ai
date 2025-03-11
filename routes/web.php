@@ -104,7 +104,7 @@ Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/search', [BlogController::class, 'search'])->name('blog.search');
 Route::get('/blog/category/{category}', [BlogController::class, 'category'])->name('blog.category');
 Route::get('/blog/tag/{tag}', [BlogController::class, 'tag'])->name('blog.tag');
-Route::get('/blog/{post}', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/blog/{article}', [BlogController::class, 'show'])->name('blog.show');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

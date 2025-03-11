@@ -17,9 +17,9 @@
         <p class="text-foreground/70">Explora nuestros artículos sobre Inteligencia Artificial, tutoriales y recursos.</p>
     </div>
 
-    @if($posts->count() > 0)
+    @if($articles->count() > 0)
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            @foreach($posts as $post)
+            @foreach($articles as $article)
                 <article class="glass-effect group relative overflow-hidden rounded-xl transition-all duration-300 hover:shadow-[0_0_15px_rgba(124,58,237,0.2)]">
                     <!-- Corner accents -->
                     <div class="absolute left-0 top-0 h-8 w-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -32,23 +32,23 @@
                     </div>
 
                     <!-- Featured Image -->
-                    @if($post->featured_image)
+                    @if($article->image)
                         <div class="relative aspect-video overflow-hidden">
                             <img
-                                src="{{ Storage::url($post->featured_image) }}"
-                                alt="{{ $post->title }}"
+                                src="{{ Storage::url($article->image) }}"
+                                alt="{{ $article->title }}"
                                 class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                             >
                             <!-- Image overlay gradient -->
                             <div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
 
                             <!-- Category badge -->
-                            @if($post->category)
+                            @if($article->category)
                                 <a
-                                    href="{{ route('blog.category', $post->category->slug) }}"
+                                    href="{{ route('blog.category', $article->category->slug) }}"
                                     class="absolute left-3 top-3 rounded-full bg-primary/80 px-2 py-1 text-xs font-medium text-white backdrop-blur-sm transition-all hover:bg-primary"
                                 >
-                                    {{ $post->category->name }}
+                                    {{ $article->category->name }}
                                 </a>
                             @endif
                         </div>
@@ -61,25 +61,25 @@
                                 <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                {{ $post->published_at->format('d M, Y') }}
+                                {{ $article->published_at->format('d M, Y') }}
                             </span>
                         </div>
 
                         <!-- Post Title -->
                         <h2 class="mb-2 text-xl font-bold transition-colors group-hover:text-primary">
-                            <a href="{{ route('blog.show', $post->slug) }}" class="block">
-                                {{ $post->title }}
+                            <a href="{{ route('blog.show', $article) }}" class="block">
+                                {{ $article->title }}
                             </a>
                         </h2>
 
                         <!-- Post Excerpt -->
                         <p class="mb-4 text-sm text-foreground/70">
-                            {{ Str::limit($post->excerpt ?? strip_tags($post->rendered_content), 120) }}
+                            {{ Str::limit($article->excerpt ?? strip_tags($article->content), 120) }}
                         </p>
 
                         <!-- Read More Link -->
                         <a
-                            href="{{ route('blog.show', $post->slug) }}"
+                            href="{{ route('blog.show', $article) }}"
                             class="inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-primary/80"
                         >
                             Leer más
@@ -94,7 +94,7 @@
 
         <!-- Pagination -->
         <div class="mt-8">
-            {{ $posts->links() }}
+            {{ $articles->links() }}
         </div>
     @else
         <div class="glass-effect rounded-xl p-8 text-center">

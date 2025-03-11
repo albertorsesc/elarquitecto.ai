@@ -12,11 +12,6 @@ interface FooterLink {
 
 const links: FooterLink[] = [
   {
-    title: 'Blog',
-    href: '/blog',
-    icon: 'carbon:blog'
-  },
-  {
     title: 'Prompts',
     href: '/prompts',
     icon: 'carbon:chat'
@@ -133,6 +128,19 @@ watch(isExpanded, (newValue) => {
         <div class="flex flex-col items-center">
           <!-- Icons only in collapsed state -->
           <div class="flex flex-1 justify-between w-full items-center">
+              <a href="/blog"
+                 class="group relative"
+                 title="Blog"
+              >
+                  <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 transition-all group-hover:bg-primary/20">
+                      <Icon icon="carbon:blog" class="text-lg text-primary" />
+                  </div>
+                  <!-- Glow effect on hover -->
+                  <div class="absolute -inset-1 rounded-full opacity-0 transition-opacity group-hover:opacity-100">
+                      <NeonBorders position="all" color="primary" :opacity="0.3" />
+                  </div>
+              </a>
+
             <Link
               v-for="link in links"
               :key="link.title"

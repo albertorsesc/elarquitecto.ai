@@ -1,15 +1,17 @@
 @extends('layouts.blog')
 
-@section('title', $post->title)
-@section('meta_description', $post->excerpt)
+@section('title', $article->title)
+@section('meta_description', $article->excerpt)
+
 @section('og_type', 'article')
-@section('og_title', $post->title)
-@section('og_description', $post->excerpt)
-@section('og_image', $post->featured_image ? Storage::url($post->featured_image) : asset('images/default-og-image.jpg'))
-@section('twitter_title', $post->title)
-@section('twitter_description', $post->excerpt)
-@section('twitter_image', $post->featured_image ? Storage::url($post->featured_image) : asset('images/default-twitter-image.jpg'))
-@section('canonical_url', route('blog.show', $post->slug))
+@section('og_title', $article->title)
+@section('og_description', $article->excerpt)
+@section('og_image', $article->image ? Storage::url($article->image) : asset('images/default-og-image.jpg'))
+
+@section('twitter_title', $article->title)
+@section('twitter_description', $article->excerpt)
+@section('twitter_image', $article->image ? Storage::url($article->image) : asset('images/default-twitter-image.jpg'))
+@section('canonical_url', route('blog.show', $article))
 
 @section('breadcrumbs')
     <div class="flex items-center gap-2 text-sm">
@@ -17,12 +19,25 @@
         <span class="text-foreground/40">/</span>
         <a href="{{ route('blog.index') }}" class="text-foreground/60 hover:text-primary">Blog</a>
         <span class="text-foreground/40">/</span>
-        <span class="text-foreground/80">{{ $post->title }}</span>
+        <span class="text-foreground/80">{{ $article->title }}</span>
     </div>
 @endsection
 
 @section('content')
     <article class="glass-effect relative overflow-hidden rounded-xl p-6">
+        <!-- Featured Image -->
+        @if($article->image)
+            <div class="relative mb-8 aspect-video overflow-hidden rounded-lg">
+                <img
+                        src="{{ Storage::url($article->image) }}"
+                        alt="{{ $article->title }}"
+                        class="h-full w-full object-cover"
+                >
+                <!-- Image overlay gradient -->
+                <div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+            </div>
+        @endif
+
         <!-- Corner accents -->
         <div class="absolute left-0 top-0 h-12 w-12">
             <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
@@ -35,16 +50,16 @@
 
         <!-- Post Header -->
         <header class="mb-8">
-            <h1 class="mb-4 text-3xl font-bold text-glow sm:text-4xl">{{ $post->title }}</h1>
+            <h1 class="mb-4 text-3xl font-bold text-glow sm:text-4xl">{{ $article->title }}</h1>
 
             <!-- Post Meta -->
             <div class="flex flex-wrap items-center gap-4 text-sm text-foreground/60">
-                @if($post->category)
-                    <a href="{{ route('blog.category', $post->category->slug) }}" class="flex items-center gap-1 hover:text-primary">
+                @if($article->category)
+                    <a href="{{ route('blog.category', $article->category->slug) }}" class="flex items-center gap-1 hover:text-primary">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                         </svg>
-                        {{ $post->category->name }}
+                        {{ $article->category->name }}
                     </a>
                 @endif
 
@@ -52,33 +67,21 @@
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    {{ $post->published_at->format('d M, Y') }}
+                    {{ $article->published_at->format('d M, Y') }}
                 </span>
             </div>
         </header>
 
-        <!-- Featured Image -->
-        @if($post->featured_image)
-            <div class="relative mb-8 aspect-video overflow-hidden rounded-lg">
-                <img
-                    src="{{ Storage::url($post->featured_image) }}"
-                    alt="{{ $post->title }}"
-                    class="h-full w-full object-cover"
-                >
-                <!-- Image overlay gradient -->
-                <div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
-            </div>
-        @endif
-
         <!-- Post Content -->
         <div class="prose prose-invert max-w-none prose-headings:text-glow prose-a:text-primary prose-a:no-underline hover:prose-a:text-primary/80 prose-strong:text-primary prose-code:text-cyan-400 prose-pre:glass-effect">
-            {!! $post->content !!}
+            {{ (new \App\Classes\Markdown($article->content))->setImageHeight(350)->render() }}
         </div>
 
         <!-- Tags -->
-        @if($post->tags->count() > 0)
+        @if(false)
+            {{-- || $article->tags->count() > 0--}}
             <div class="mt-8 flex flex-wrap gap-2">
-                @foreach($post->tags as $tag)
+                @foreach($article->tags as $tag)
                     <a
                         href="{{ route('blog.tag', $tag->slug) }}"
                         class="neon-border rounded-full bg-primary/5 px-3 py-1 text-sm text-primary transition-all hover:bg-primary/10"
@@ -95,7 +98,7 @@
             <div class="flex gap-2">
                 <!-- Twitter -->
                 <a
-                    href="https://twitter.com/intent/tweet?url={{ urlencode(route('blog.show', $post->slug)) }}&text={{ urlencode($post->title) }}"
+                    href="https://twitter.com/intent/tweet?url={{ urlencode(route('blog.show', $article)) }}&text={{ urlencode($article->title) }}"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="rounded-full bg-primary/10 p-2 text-primary transition-all hover:bg-primary/20"
@@ -107,7 +110,7 @@
 
                 <!-- Facebook -->
                 <a
-                    href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('blog.show', $post->slug)) }}"
+                    href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('blog.show', $article)) }}"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="rounded-full bg-primary/10 p-2 text-primary transition-all hover:bg-primary/20"
@@ -119,7 +122,7 @@
 
                 <!-- WhatsApp -->
                 <a
-                    href="https://wa.me/?text={{ urlencode($post->title . ' ' . route('blog.show', $post->slug)) }}"
+                    href="https://wa.me/?text={{ urlencode($article->title . ' ' . route('blog.show', $article)) }}"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="rounded-full bg-primary/10 p-2 text-primary transition-all hover:bg-primary/20"
@@ -131,7 +134,7 @@
 
                 <!-- Copy Link -->
                 <button
-                    onclick="navigator.clipboard.writeText('{{ route('blog.show', $post->slug) }}').then(() => alert('Enlace copiado!'))"
+                    onclick="navigator.clipboard.writeText('{{ route('blog.show', $article) }}').then(() => alert('Enlace copiado!'))"
                     class="rounded-full bg-primary/10 p-2 text-primary transition-all hover:bg-primary/20"
                 >
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog\Article;
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
 use App\Models\BlogTag;
@@ -23,23 +24,22 @@ class BlogController extends Controller
      */
     public function index() : View|Application|Factory
     {
-        $posts = BlogPost::with(['category', 'tags'])
-            ->published()
+        $articles = Article::query()->published()
             ->latest('published_at')
             ->paginate(9);
 
         return view('blog.index', [
-            'posts' => $posts,
+            'articles' => $articles,
         ]);
     }
 
     /**
      * Display the specified blog post.
      */
-    public function show(BlogPost $post) : View
+    public function show(Article $article) : View
     {
         return view('blog.show', [
-            'post' => $post,
+            'article' => $article,
         ]);
     }
 
