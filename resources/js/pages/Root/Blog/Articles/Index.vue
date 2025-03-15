@@ -6,6 +6,7 @@ import { Head, Link } from '@inertiajs/vue3';
 import NeonBorders from '@/components/theme/NeonBorders.vue';
 import NeonEffects from '@/components/theme/NeonEffects.vue';
 import { PropType } from 'vue';
+import { Article } from '@/types/article';
 
 defineProps({
     articles: Array as PropType<Article[]>,

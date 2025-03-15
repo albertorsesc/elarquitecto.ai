@@ -8,6 +8,7 @@ import GlassContainer from '@/components/theme/GlassContainer.vue';
 import NeonBorders from '@/components/theme/NeonBorders.vue';
 import type { BreadcrumbItemType } from '@/types';
 import { provide, ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 
 interface Props {
     breadcrumbs?: BreadcrumbItemType[];
@@ -22,6 +23,8 @@ const isFooterExpanded = ref(false);
 
 // Provide the footer state to child components
 provide('isFooterExpanded', isFooterExpanded);
+
+const isAuth = usePage().props.auth;
 </script>
 
 <template>
@@ -36,7 +39,7 @@ provide('isFooterExpanded', isFooterExpanded);
                 padding="none"
                 class="h-full w-full"
             >
-                <AppSidebar />
+                <AppSidebar v-if="isAuth" />
             </GlassContainer>
 
             <!-- Animated border for sidebar -->
@@ -54,7 +57,7 @@ provide('isFooterExpanded', isFooterExpanded);
                 padding="none"
                 class="border-b border-white/10 w-full"
             >
-                <AppSidebarHeader :breadcrumbs="breadcrumbs" />
+                <AppSidebarHeader :breadcrumbs="breadcrumbs" v-if="isAuth" />
 
                 <!-- Animated border for header -->
                 <NeonBorders position="bottom" color="gradient" :opacity="0.2" />

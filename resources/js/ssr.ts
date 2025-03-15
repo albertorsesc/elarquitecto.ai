@@ -4,6 +4,13 @@ import { renderToString } from '@vue/server-renderer';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createSSRApp, h } from 'vue';
 import { route as ziggyRoute } from 'ziggy-js';
+import type { SharedData } from './types';
+
+declare global {
+    interface Window {
+        route: typeof ziggyRoute;
+    }
+}
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -18,19 +25,26 @@ createServer((page) =>
 
             // Configure Ziggy for SSR...
             const ziggyConfig = {
-                ...page.props.ziggy,
-                location: new URL(page.props.ziggy.location),
+                ...(page.props as unknown as SharedData).ziggy,
+                location: new URL((page.props as unknown as SharedData).ziggy.location),
             };
 
             // Create route function...
-            const route = (name: string, params?: any, absolute?: boolean) => ziggyRoute(name, params, absolute, ziggyConfig);
+            const route = function(...args: any[]) {
+                if (args.length === 0) {
+                    return ziggyRoute(undefined, undefined, undefined, ziggyConfig);
+                }
+
+                const [name, params, absolute] = args;
+                return ziggyRoute(name, params, absolute, ziggyConfig);
+            };
 
             // Make route function available globally...
-            app.config.globalProperties.route = route;
+            app.config.globalProperties.route = route as typeof ziggyRoute;
 
             // Make route function available globally for SSR...
             if (typeof window === 'undefined') {
-                global.route = route;
+                (global as any).route = route;
             }
 
             app.use(plugin);

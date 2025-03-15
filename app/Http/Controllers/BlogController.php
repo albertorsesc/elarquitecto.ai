@@ -22,13 +22,14 @@ class BlogController extends Controller
     /**
      * Display a listing of the blog posts.
      */
-    public function index() : View|Application|Factory
+    public function index() : Response
     {
         $articles = Article::query()->published()
+            ->with(['author'])
             ->latest('published_at')
             ->paginate(9);
 
-        return view('blog.index', [
+        return Inertia::render('Blog/Index', [
             'articles' => $articles,
         ]);
     }
@@ -36,67 +37,92 @@ class BlogController extends Controller
     /**
      * Display the specified blog post.
      */
-    public function show(Article $article) : View
+    public function show(Article $article): Response
     {
-        return view('blog.show', [
-            'article' => $article,
+        return Inertia::render('Blog/Show', [
+            'article' => $article->load(['author']),
+            'breadcrumbs' => [
+                [
+                    'title' => 'Home',
+                    'href' => route('home')
+                ],
+                [
+                    'title' => 'Blog',
+                    'href' => route('blog.index')
+                ],
+                [
+                    'title' => $article->title,
+                    'href' => route('blog.show', $article)
+                ]
+            ],
+            'meta' => [
+                'title' => $article->title,
+                'description' => $article->excerpt,
+                'ogImage' => $article->image ? asset('storage/' . $article->image) : null,
+            ],
         ]);
     }
 
     /**
      * Display posts by category.
      */
-    public function category(BlogCategory $category): View
+    public function category(BlogCategory $category): Response
     {
-        $posts = BlogPost::with(['category', 'tags'])
+        $articles = Article::query()
             ->published()
-            ->where('category_id', $category->id)
+            ->whereHas('category', fn($q) => $q->where('id', $category->id))
+            ->with(['author', 'category', 'tags'])
             ->latest('published_at')
             ->paginate(9);
 
-        return view('blog.category', [
+        return Inertia::render('Blog/Index', [
+            'articles' => $articles,
             'category' => $category,
-            'posts' => $posts,
+            'title' => "Category: {$category->name}",
         ]);
     }
 
     /**
      * Display posts by tag.
      */
-    public function tag(BlogTag $tag): View
+    public function tag(BlogTag $tag): Response
     {
-        $posts = $tag->posts()
-            ->with(['category', 'tags'])
+        $articles = Article::query()
             ->published()
+            ->whereHas('tags', fn($q) => $q->where('id', $tag->id))
+            ->with(['author', 'category', 'tags'])
             ->latest('published_at')
             ->paginate(9);
 
-        return view('blog.tag', [
+        return Inertia::render('Blog/Index', [
+            'articles' => $articles,
             'tag' => $tag,
-            'posts' => $posts,
+            'title' => "Tag: {$tag->name}",
         ]);
     }
 
     /**
      * Search for posts.
      */
-    public function search(Request $request): View
+    public function search(Request $request): Response
     {
         $query = $request->input('q');
 
-        $posts = BlogPost::with(['category', 'tags'])
+        $articles = Article::query()
             ->published()
             ->where(function ($queryBuilder) use ($query) {
                 $queryBuilder->where('title', 'like', "%{$query}%")
                     ->orWhere('content', 'like', "%{$query}%")
                     ->orWhere('excerpt', 'like', "%{$query}%");
             })
+            ->with(['author', 'category', 'tags'])
             ->latest('published_at')
             ->paginate(9);
 
-        return view('blog.search', [
-            'query' => $query,
-            'posts' => $posts,
+        return Inertia::render('Blog/Index', [
+            'articles' => $articles,
+            'search' => $query,
+            'title' => "Search: {$query}",
         ]);
     }
 
@@ -231,7 +257,7 @@ class BlogController extends Controller
      */
     public function destroyCategory(BlogCategory $category) : RedirectResponse
     {
-        BlogPost::where('category_id', $category->id)
+        Article::where('category_id', $category->id)
             ->update(['category_id' => null]);
 
         $category->delete();

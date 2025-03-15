@@ -32,6 +32,11 @@ const rootNavItems: NavItem[] = [
         icon: FileText,
     },
     {
+        title: 'Prompts',
+        href: route('root.prompts.index'),
+        icon: Settings,
+    },
+    {
         title: 'Categories',
         href: '#',
         icon: Settings,

@@ -4,6 +4,7 @@ import ColorPalette from '@/components/landing/ColorPalette.vue';
 import HeroSection from '@/components/landing/HeroSection.vue';
 import SectionCards from '@/components/landing/SectionCards.vue';
 import TimelineSection from '@/components/landing/TimelineSection.vue';
+import FloatingNeonLines from '@/components/theme/FloatingNeonLines.vue';
 import type { PageProps as InertiaPageProps } from '@inertiajs/core';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -143,7 +144,7 @@ const sections = [
   <Head>
     <title>El Arquitecto A.I. - Conocimiento de IA en Español</title>
     <meta name="description" content="Aprende sobre Inteligencia Artificial en español con El Arquitecto A.I. Blog, tutoriales, prompts y más." />
-    </Head>
+  </Head>
 
   <div class="min-h-screen bg-background text-foreground">
     <!-- Music Player removed as it's now persistent -->
@@ -322,80 +323,104 @@ const sections = [
       </div>
     </div>
 
-    <main class="relative">
-      <!-- Floating neon lines for desktop -->
-      <div class="pointer-events-none fixed inset-0 hidden sm:block">
-        <!-- Horizontal lines -->
-        <div class="absolute left-0 top-1/3 h-[1px] w-1/4 animate-neon-slide-right bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-20"></div>
-        <div class="absolute right-0 top-2/3 h-[1px] w-1/4 animate-neon-slide-left bg-gradient-to-r from-transparent via-primary to-transparent opacity-20"></div>
-        <!-- Vertical lines -->
-        <div class="absolute left-1/3 top-0 h-1/4 w-[1px] animate-neon-slide-down bg-gradient-to-b from-transparent via-secondary to-transparent opacity-20"></div>
-        <div class="absolute right-2/3 top-0 h-1/4 w-[1px] animate-neon-slide-down-delayed bg-gradient-to-b from-transparent via-accent to-transparent opacity-20"></div>
-      </div>
-
-      <!-- Hero Section -->
-      <HeroSection
-        title="El Arquitecto A.I."
-        subtitle="Descubre el poder de la Inteligencia Artificial en español"
-        logo-src="/logo.png"
-      />
-
-      <!-- Timeline Section -->
-      <div class="relative">
-        <TimelineSection :items="timelineItems" />
-        <!-- Section corner accents -->
-        <div class="absolute left-0 top-0 h-8 w-8">
-          <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
-          <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-primary via-transparent to-transparent"></div>
-        </div>
-        <div class="absolute right-0 top-0 h-8 w-8">
-          <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
-          <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
+    <!-- Main Content with Side Panels -->
+    <div class="flex justify-between w-full">
+      <!-- Left Side Panel -->
+      <div class="side-panel left-panel w-[240px] relative">
+        <!-- Background Effects -->
+        <FloatingNeonLines variant="dense" :opacity="0.15" />
+        <div class="relative z-10 p-4 h-full flex items-center justify-center text-center text-gray-400">
+          <p>Left Panel Content</p>
         </div>
       </div>
 
-      <!-- Blog Carousel -->
-      <div class="relative">
-        <BlogCarousel :posts="blogPosts" />
-        <!-- Section corner accents -->
-        <div class="absolute left-0 top-0 h-8 w-8">
-          <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-secondary via-transparent to-transparent"></div>
-          <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-secondary via-transparent to-transparent"></div>
-        </div>
-        <div class="absolute right-0 top-0 h-8 w-8">
-          <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-accent via-transparent to-transparent"></div>
-          <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-accent via-transparent to-transparent"></div>
-        </div>
+      <!-- Main Content -->
+      <div class="flex-1">
+        <main class="relative">
+          <!-- Floating neon lines for desktop -->
+          <div class="pointer-events-none fixed inset-0 hidden sm:block">
+            <!-- Horizontal lines -->
+            <div class="absolute left-0 top-1/3 h-[1px] w-1/4 animate-neon-slide-right bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-20"></div>
+            <div class="absolute right-0 top-2/3 h-[1px] w-1/4 animate-neon-slide-left bg-gradient-to-r from-transparent via-primary to-transparent opacity-20"></div>
+            <!-- Vertical lines -->
+            <div class="absolute left-1/3 top-0 h-1/4 w-[1px] animate-neon-slide-down bg-gradient-to-b from-transparent via-secondary to-transparent opacity-20"></div>
+            <div class="absolute right-2/3 top-0 h-1/4 w-[1px] animate-neon-slide-down-delayed bg-gradient-to-b from-transparent via-accent to-transparent opacity-20"></div>
+          </div>
+
+          <!-- Hero Section -->
+          <HeroSection
+            title="El Arquitecto A.I."
+            subtitle="Descubre el poder de la Inteligencia Artificial en español"
+            logo-src="/logo.png"
+          />
+
+          <!-- Timeline Section -->
+          <div class="relative">
+            <TimelineSection :items="timelineItems" />
+            <!-- Section corner accents -->
+            <div class="absolute left-0 top-0 h-8 w-8">
+              <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
+              <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-primary via-transparent to-transparent"></div>
+            </div>
+            <div class="absolute right-0 top-0 h-8 w-8">
+              <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
+              <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
+            </div>
+          </div>
+
+          <!-- Blog Carousel -->
+          <div class="relative">
+            <BlogCarousel :posts="blogPosts" />
+            <!-- Section corner accents -->
+            <div class="absolute left-0 top-0 h-8 w-8">
+              <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-secondary via-transparent to-transparent"></div>
+              <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-secondary via-transparent to-transparent"></div>
+            </div>
+            <div class="absolute right-0 top-0 h-8 w-8">
+              <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-accent via-transparent to-transparent"></div>
+              <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-accent via-transparent to-transparent"></div>
+            </div>
+          </div>
+
+          <!-- Section Cards -->
+          <div class="relative">
+            <SectionCards :sections="sections" />
+            <!-- Section corner accents -->
+            <div class="absolute left-0 top-0 h-8 w-8">
+              <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
+              <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-primary via-transparent to-transparent"></div>
+            </div>
+            <div class="absolute right-0 top-0 h-8 w-8">
+              <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
+              <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
+            </div>
+          </div>
+
+          <!-- Color Palette -->
+          <div class="relative">
+            <ColorPalette />
+            <!-- Section corner accents -->
+            <div class="absolute left-0 top-0 h-8 w-8">
+              <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-secondary via-transparent to-transparent"></div>
+              <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-secondary via-transparent to-transparent"></div>
+            </div>
+            <div class="absolute right-0 top-0 h-8 w-8">
+              <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-accent via-transparent to-transparent"></div>
+              <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-accent via-transparent to-transparent"></div>
+            </div>
+          </div>
+        </main>
       </div>
 
-      <!-- Section Cards -->
-      <div class="relative">
-        <SectionCards :sections="sections" />
-        <!-- Section corner accents -->
-        <div class="absolute left-0 top-0 h-8 w-8">
-          <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
-          <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-primary via-transparent to-transparent"></div>
-        </div>
-        <div class="absolute right-0 top-0 h-8 w-8">
-          <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
-          <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
+      <!-- Right Side Panel -->
+      <div class="side-panel right-panel w-[240px] relative">
+        <!-- Background Effects -->
+        <FloatingNeonLines variant="dense" :opacity="0.15" />
+        <div class="relative z-10 p-4 h-full flex items-center justify-center text-center text-gray-400">
+          <p>Right Panel Content</p>
         </div>
       </div>
-
-      <!-- Color Palette -->
-      <div class="relative">
-        <ColorPalette />
-        <!-- Section corner accents -->
-        <div class="absolute left-0 top-0 h-8 w-8">
-          <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-secondary via-transparent to-transparent"></div>
-          <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-secondary via-transparent to-transparent"></div>
-        </div>
-        <div class="absolute right-0 top-0 h-8 w-8">
-          <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-accent via-transparent to-transparent"></div>
-          <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-accent via-transparent to-transparent"></div>
-        </div>
-      </div>
-    </main>
+    </div>
 
     <!-- Footer -->
     <footer class="relative border-t border-white/10 bg-background/90 py-8">
@@ -407,7 +432,7 @@ const sections = [
         <p>&copy; 2024 El Arquitecto A.I. Todos los derechos reservados.</p>
       </div>
     </footer>
-    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -418,5 +443,23 @@ const sections = [
 
 .animate-glow {
   animation: glow 3s infinite;
+}
+
+.side-panel {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background-color: rgba(18, 18, 18, 0.8);
+  backdrop-filter: blur(8px);
+  border-radius: 0.5rem;
+  margin: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 1280px) {
+  .side-panel {
+    display: none;
+  }
 }
 </style>

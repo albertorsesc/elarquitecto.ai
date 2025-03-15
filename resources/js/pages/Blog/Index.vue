@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import FloatingNeonLines from '@/components/theme/FloatingNeonLines.vue';
-import FormInput from '@/components/theme/FormInput.vue';
 import GlassContainer from '@/components/theme/GlassContainer.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head, Link, router } from '@inertiajs/vue3';
-import { ref, watch } from 'vue';
+import { Head, router, Link } from '@inertiajs/vue3';
+import { ref, watch, PropType } from 'vue';
+import NeonBorders from '@/components/theme/NeonBorders.vue';
+import NeonEffects from '@/components/theme/NeonEffects.vue';
+import { Article } from '@/types/article';
 
 const props = defineProps({
-    posts: Object,
+    articles: Object as PropType<Article[]>,
     filters: Object,
 });
 
@@ -27,28 +29,28 @@ watch(search, (value) => {
     }
 });
 
-const deletePost = (postId: number) => {
-    if (confirm('Are you sure you want to delete this post?')) {
-        router.delete(route('blog.destroy', postId));
+const getImageUrl = (image: string) => {
+    if (! image) {
+        return 'https://images.unsplash.com/photo-1735825764451-d2186b7f4bf9?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
     }
+
+    if (image.includes('http')) {
+        return image;
+    }
+
+    return `/storage/${image}`;
 };
 </script>
 
 <template>
-    <Head title="Manage Blog Posts" />
+    <Head title="Manage Blog articles" />
 
     <AppLayout>
         <template #header>
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold leading-tight text-glow text-foreground">
-                    Manage Blog Posts
+                    Blog
                 </h2>
-                <Link
-                    :href="route('blog.create')"
-                    class="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                >
-                    Create New Post
-                </Link>
             </div>
         </template>
 
@@ -57,137 +59,119 @@ const deletePost = (postId: number) => {
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <GlassContainer
-                    variant="dark"
-                    :withBorders="true"
-                    :withCorners="true"
-                    rounded="xl"
-                    padding="lg"
-                >
-                    <!-- Search -->
-                    <div class="mb-6">
-                        <FormInput
-                            v-model="search"
-                            placeholder="Search posts..."
-                        />
-                    </div>
+                <div class="flex h-full flex-1 flex-col gap-4">
+                    <GlassContainer
+                        variant="dark"
+                        :withBorders="true"
+                        :withCorners="true"
+                        rounded="xl"
+                        padding="none"
+                        class="relative min-h-[60vh] flex-1 md:min-h-min"
+                    >
+                        <!-- Animated corner accents -->
+                        <NeonBorders/>
+                        <NeonEffects/>
 
-                    <!-- Posts Table -->
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-white/10">
-                            <thead class="bg-background/50">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-foreground/70">
-                                        Title
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-foreground/70">
-                                        Category
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-foreground/70">
-                                        Status
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-foreground/70">
-                                        Date
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-foreground/70">
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-white/10 bg-background/30">
-                                <tr v-for="post in posts?.data" :key="post.id">
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm font-medium text-foreground">{{ post.title }}</div>
-                                        <div class="text-sm text-foreground/60">{{ post.excerpt ? post.excerpt.substring(0, 50) + '...' : '' }}</div>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-foreground">{{ post.category ? post.category.name : 'Uncategorized' }}</div>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <span
-                                            :class="[
-                                                'inline-flex rounded-full px-2 text-xs font-semibold leading-5',
-                                                post.published
-                                                    ? 'bg-green-900/30 text-green-400 border border-green-500/30'
-                                                    : 'bg-yellow-900/30 text-yellow-400 border border-yellow-500/30'
-                                            ]"
-                                        >
-                                            {{ post.published ? 'Published' : 'Draft' }}
-                                        </span>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-foreground/60">
-                                        {{ post.published_at ? new Date(post.published_at).toLocaleDateString() : 'Not published' }}
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm font-medium">
-                                        <div class="flex space-x-3">
-                                            <Link
-                                                :href="route('blog.show', post.slug)"
-                                                target="_blank"
-                                                class="text-indigo-400 hover:text-indigo-300"
-                                            >
-                                                View
-                                            </Link>
-                                            <Link
-                                                :href="route('blog.edit', post.id)"
-                                                class="text-blue-400 hover:text-blue-300"
-                                            >
-                                                Edit
-                                            </Link>
-                                            <button
-                                                type="button"
-                                                class="text-red-400 hover:text-red-300"
-                                                @click="deletePost(post.id)"
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr v-if="!posts?.data?.length">
-                                    <td colspan="5" class="px-6 py-4 text-center text-sm text-foreground/60">
-                                        No posts found.
-                                        <Link :href="route('blog.create')" class="text-primary hover:underline">Create your first post</Link>.
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                        <div class="absolute left-0 top-0 h-12 w-12 animate-pulse-slow">
+                            <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
+                            <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-primary via-transparent to-transparent"></div>
+                        </div>
+                        <div class="absolute right-0 top-0 h-12 w-12 animate-pulse-slow">
+                            <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
+                            <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
+                        </div>
+                        <div class="absolute bottom-0 left-0 h-12 w-12 animate-pulse-slow">
+                            <div class="absolute bottom-0 left-0 h-full w-[1px] animate-glow bg-gradient-to-t from-secondary via-transparent to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 h-[1px] w-full animate-glow bg-gradient-to-r from-secondary via-transparent to-transparent"></div>
+                        </div>
+                        <div class="absolute bottom-0 right-0 h-12 w-12 animate-pulse-slow">
+                            <div class="absolute bottom-0 right-0 h-full w-[1px] animate-glow bg-gradient-to-t from-accent via-transparent to-transparent"></div>
+                            <div class="absolute bottom-0 right-0 h-[1px] w-full animate-glow bg-gradient-to-l from-accent via-transparent to-transparent"></div>
+                        </div>
 
-                    <!-- Pagination -->
-                    <div class="mt-6">
-                        <div class="flex items-center justify-between">
-                            <div class="text-sm text-foreground/60">
-                                Showing {{ posts?.from || 0 }} to {{ posts?.to || 0 }} of {{ posts?.total || 0 }} results
-                            </div>
-                            <div class="flex space-x-2">
-                                <template v-for="(link, i) in posts?.links" :key="i">
-                                    <Link
-                                        v-if="link.url"
-                                        :href="link.url"
-                                        class="rounded px-4 py-2 text-sm"
-                                        :class="[
-                                            link.active
-                                                ? 'bg-primary text-white'
-                                                : 'bg-background/50 text-foreground border border-white/10 hover:bg-background/80'
-                                        ]"
-                                    >
-                                        <span v-if="link.label.includes('Previous')">&laquo; Previous</span>
-                                        <span v-else-if="link.label.includes('Next')">Next &raquo;</span>
-                                        <span v-else>{{ link.label }}</span>
-                                    </Link>
-                                    <span
-                                        v-else
-                                        class="rounded px-4 py-2 text-sm bg-background/50 text-foreground/50 border border-white/10 opacity-50 cursor-not-allowed"
-                                    >
-                                        <span v-if="link.label.includes('Previous')">&laquo; Previous</span>
-                                        <span v-else-if="link.label.includes('Next')">Next &raquo;</span>
-                                        <span v-else>{{ link.label }}</span>
-                                    </span>
-                                </template>
+                        <!-- Sliding neon lines inside the container -->
+                        <div class="pointer-events-none absolute -inset-1">
+                            <!-- Top edge -->
+                            <div class="absolute left-0 top-0 h-[2px] w-full animate-neon-slide-right-slow bg-gradient-to-r from-transparent via-primary to-transparent opacity-30"></div>
+                            <!-- Right edge -->
+                            <div class="absolute right-0 top-0 h-full w-[2px] animate-neon-slide-down-slow bg-gradient-to-b from-transparent via-secondary to-transparent opacity-30"></div>
+                            <!-- Bottom edge -->
+                            <div class="absolute bottom-0 left-0 h-[2px] w-full animate-neon-slide-left-slow bg-gradient-to-r from-transparent via-accent to-transparent opacity-30"></div>
+                            <!-- Left edge -->
+                            <div class="absolute left-0 top-0 h-full w-[2px] animate-neon-slide-up-slow bg-gradient-to-b from-transparent via-cyan-400 to-transparent opacity-30"></div>
+                        </div>
+
+                        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 p-4">
+                            <div
+                                v-for="article in props.articles.data"
+                                :key="article.id"
+                                class="group relative overflow-hidden rounded-xl border border-white/10 bg-background/50 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:shadow-[0_0_30px_rgba(0,0,0,0.3)] shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
+                            >
+                                <!-- Image container with effects -->
+                                <div class="relative aspect-[16/9] overflow-hidden">
+                                    <!-- Cyberpunk overlay effect -->
+                                    <div class="absolute inset-0 z-10 bg-gradient-to-t from-background via-transparent to-transparent opacity-60"></div>
+                                    <div class="absolute inset-0 z-10 bg-gradient-to-l from-primary/20 via-transparent to-secondary/20 opacity-30 mix-blend-overlay"></div>
+
+                                    <!-- Glitch effect lines -->
+                                    <div class="absolute inset-0 z-20 overflow-hidden opacity-0 mix-blend-screen transition-opacity duration-300 group-hover:opacity-30">
+                                        <div class="absolute inset-x-0 top-1/4 h-[1px] animate-glitch-line-1 bg-cyan-400"></div>
+                                        <div class="absolute inset-x-0 top-1/3 h-[1px] animate-glitch-line-2 bg-primary"></div>
+                                        <div class="absolute inset-x-0 top-1/2 h-[1px] animate-glitch-line-3 bg-accent"></div>
+                                    </div>
+
+                                    <!-- Image with hover zoom -->
+                                    <img
+                                        :src="getImageUrl(article.image)"
+                                        :alt="article.title"
+                                        class="h-full w-full object-cover transition-transform duration-700 will-change-transform group-hover:scale-110"
+                                    />
+
+                                    <!-- Scanline effect -->
+                                    <div class="absolute inset-0 z-30 bg-scanline opacity-10"></div>
+
+                                    <!-- Category badge -->
+                                    <!--                            <span class="absolute bottom-4 left-4 z-20 rounded bg-background/80 px-2 py-1 text-xs font-medium text-primary backdrop-blur-sm transition-colors duration-300 group-hover:bg-primary group-hover:text-white">
+                                                                  {{ post.category }}
+                                                                </span>-->
+                                </div>
+
+                                <div class="relative p-4">
+                                    <!-- Content -->
+                                    <h3 class="mb-2 text-lg font-semibold text-foreground transition-colors duration-300 group-hover:text-glow-multi">
+                                        {{ article.title }}
+                                    </h3>
+                                    <p class="text-sm text-foreground/70">
+                                        {{ article.excerpt }}
+                                    </p>
+
+                                    <!-- Hover effect overlay -->
+                                    <div class="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                                </div>
+
+                                <!-- Neon border effects -->
+                                <div class="pointer-events-none absolute inset-0 rounded-xl">
+                                    <!-- Multi-colored sliding neon lights -->
+                                    <div class="absolute -inset-1 opacity-30 group-hover:opacity-100">
+                                        <!-- Top edge -->
+                                        <div class="absolute left-0 top-0 h-[2px] w-full animate-neon-slide-right-color bg-gradient-to-r from-transparent via-[#FF1CF7] to-transparent"></div>
+                                        <!-- Right edge -->
+                                        <div class="absolute right-0 top-0 h-full w-[2px] animate-neon-slide-down-color bg-gradient-to-b from-transparent via-[#00FFE1] to-transparent"></div>
+                                        <!-- Bottom edge -->
+                                        <div class="absolute bottom-0 left-0 h-[2px] w-full animate-neon-slide-left-color bg-gradient-to-r from-transparent via-[#01FF88] to-transparent"></div>
+                                        <!-- Left edge -->
+                                        <div class="absolute left-0 top-0 h-full w-[2px] animate-neon-slide-up-color bg-gradient-to-b from-transparent via-[#5B6EF7] to-transparent"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Link overlay -->
+                                <Link :href="route('blog.show', article)" class="absolute inset-0">
+                                    <span class="sr-only">Leer más sobre {{ article.title }}</span>
+                                </Link>
                             </div>
                         </div>
-                    </div>
-                </GlassContainer>
+                    </GlassContainer>
+                </div>
             </div>
         </div>
     </AppLayout>
