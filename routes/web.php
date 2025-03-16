@@ -2,12 +2,17 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PromptController as PublicPromptController;
+use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\TimelineController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
+
+// Subscriber Routes
+Route::post('/subscribe', [SubscribeController::class, 'post'])->name('subscribe.post');
+Route::get('/subscribe/{hash}', [SubscribeController::class, 'verify'])->name('subscribe.confirm');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');

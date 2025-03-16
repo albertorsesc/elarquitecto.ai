@@ -5,9 +5,13 @@ import HeroSection from '@/components/landing/HeroSection.vue';
 import SectionCards from '@/components/landing/SectionCards.vue';
 import TimelineSection from '@/components/landing/TimelineSection.vue';
 import { TimelineItem } from '@/types/timeline-item';
+// @ts-expect-error - Heroicons types not available
+import { CheckCircleIcon } from '@heroicons/vue/24/outline';
 import type { PageProps as InertiaPageProps } from '@inertiajs/core';
 import { Head, Link, usePage } from '@inertiajs/vue3';
-import { ref } from 'vue';
+// @ts-expect-error - GSAP types not available
+import gsap from 'gsap';
+import { computed, ref } from 'vue';
 
 interface User {
   id: number;
@@ -24,6 +28,87 @@ interface PageProps extends InertiaPageProps {
 const page = usePage<PageProps>();
 const isSearchActive = ref(false);
 const searchQuery = ref('');
+const showNotification = ref(true);
+
+// Add flash message computed property
+const flashMessage = computed(() => {
+  const flash = page.props.flash as { success?: string };
+  return flash?.success;
+});
+
+// Add randomPosition function to determine where the notification appears
+const positions = [
+  'top-5 left-5', // top-left
+  'top-5 right-5', // top-right
+  'top-20 left-1/2 -translate-x-1/2', // top-center
+  'bottom-5 left-5', // bottom-left
+  'bottom-5 right-5', // bottom-right
+  'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2', // center
+];
+
+const randomPosition = ref(positions[Math.floor(Math.random() * positions.length)]);
+
+// Transition methods for the cyberpunk notification
+const beforeEnter = (el: Element) => {
+  // Reset position for each notification
+  randomPosition.value = positions[Math.floor(Math.random() * positions.length)];
+
+  gsap.set(el, {
+    opacity: 0,
+    scale: 0.8,
+    rotation: Math.random() > 0.5 ? 2 : -2, // Random slight rotation
+    y: -20
+  });
+};
+
+const enter = (el: Element, done: () => void) => {
+  // Create more intense glitch effect during entrance
+  const glitchTimeline = gsap.timeline({ repeat: 5, repeatDelay: 0.1 });
+  glitchTimeline.to(el, { x: -8, duration: 0.03, opacity: 0.8 })
+    .to(el, { x: 8, duration: 0.03, opacity: 1 })
+    .to(el, { x: -5, duration: 0.03, opacity: 0.9 })
+    .to(el, { x: 0, duration: 0.03, opacity: 1 });
+
+  // Main animation
+  gsap.to(el, {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    duration: 0.6,
+    ease: 'back.out(1.7)',
+    onComplete: done
+  });
+
+  // Random color shift glitches
+  const colorShift = gsap.timeline({ repeat: 8, repeatDelay: 0.3 });
+  colorShift.to(el, {
+    filter: 'hue-rotate(90deg)',
+    duration: 0.05
+  })
+  .to(el, {
+    filter: 'hue-rotate(0deg)',
+    duration: 0.05
+  });
+};
+
+const afterEnter = () => {
+  // Auto-dismiss after 5 seconds
+  setTimeout(() => {
+    showNotification.value = false;
+  }, 5000);
+};
+
+const leave = (el: Element, done: () => void) => {
+  gsap.to(el, {
+    opacity: 0,
+    y: -50,
+    x: gsap.utils.random(-20, 20),
+    scale: 0.9,
+    duration: 0.5,
+    ease: 'power2.in',
+    onComplete: done
+  });
+};
 
 function activateSearch() {
   isSearchActive.value = true;
@@ -220,6 +305,79 @@ const sections = [
         </div>
             </nav>
         </header>
+
+    <!-- Flash Message Alert with Enhanced Cyberpunk Animation -->
+    <div v-if="flashMessage" :class="[randomPosition, 'fixed z-50']">
+      <transition name="cyber-alert" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter" @leave="leave">
+        <div v-if="showNotification" class="relative overflow-hidden rounded-lg border border-green-500 bg-black/80 p-4 shadow-lg shadow-green-500/20 backdrop-blur-sm max-w-md">
+          <!-- Digital noise overlay -->
+          <div class="absolute inset-0 bg-noise opacity-40 mix-blend-overlay"></div>
+
+          <!-- Scan line effect -->
+          <div class="absolute inset-0 bg-scanlines opacity-30"></div>
+
+          <!-- Glitch overlay -->
+          <div class="absolute inset-0 bg-gradient-to-r from-green-500/10 to-blue-500/10 animate-pulse opacity-30"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-red-500/5 to-purple-500/5 animate-pulse opacity-20" style="animation-delay: 0.5s;"></div>
+          <div class="absolute inset-0 bg-green-500/5 animate-glitchOverlay"></div>
+
+          <!-- Corner accents -->
+          <div class="absolute top-0 left-0 h-3 w-3 border-t border-l border-green-500 animate-pulse"></div>
+          <div class="absolute top-0 right-0 h-3 w-3 border-t border-r border-green-500 animate-pulse"></div>
+          <div class="absolute bottom-0 left-0 h-3 w-3 border-b border-l border-green-500 animate-pulse"></div>
+          <div class="absolute bottom-0 right-0 h-3 w-3 border-b border-r border-green-500 animate-pulse"></div>
+
+          <!-- Sliding neon lights -->
+          <div class="absolute top-0 h-px w-full bg-gradient-to-r from-transparent via-green-500 to-transparent animate-slide-right"></div>
+          <div class="absolute bottom-0 h-px w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent animate-slide-left"></div>
+          <div class="absolute left-0 w-px h-full bg-gradient-to-b from-transparent via-green-500 to-transparent animate-slide-down"></div>
+          <div class="absolute right-0 w-px h-full bg-gradient-to-b from-transparent via-cyan-500 to-transparent animate-slide-up"></div>
+
+          <div class="relative flex items-start">
+            <!-- Success icon with multiple animated rings -->
+            <div class="relative mr-3 flex-shrink-0">
+              <div class="h-10 w-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                <CheckCircleIcon class="h-6 w-6 text-green-500 animate-bounce-subtle" />
+              </div>
+              <div class="absolute inset-0 rounded-full border border-green-500 animate-ping-slow"></div>
+              <div class="absolute inset-0 rounded-full border border-cyan-500 animate-ping-slow-delayed"></div>
+              <div class="absolute inset-0 rounded-full border border-green-500/50 animate-glitch"></div>
+            </div>
+
+            <div class="ml-3 flex-1">
+              <!-- Text with glitch effect -->
+              <div class="relative">
+                <!-- Base text -->
+                <p class="text-sm font-medium text-green-500 animate-cyber-text-flicker">
+                  {{ flashMessage }}
+                </p>
+
+                <!-- Glitch text layers -->
+                <p class="absolute inset-0 text-sm font-medium text-red-500/30 animate-glitch" style="animation-delay: 0.05s;">
+                  {{ flashMessage }}
+                </p>
+                <p class="absolute inset-0 text-sm font-medium text-blue-500/30 animate-glitch2" style="animation-delay: 0.1s;">
+                  {{ flashMessage }}
+                </p>
+                <p class="absolute inset-0 text-sm font-medium text-green-500/30 animate-rgb-shift">
+                  {{ flashMessage }}
+                </p>
+                <p class="absolute inset-0 text-sm font-medium text-white/20 animate-clip-glitch">
+                  {{ flashMessage }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Data stream effect -->
+            <div class="absolute -bottom-2 -left-2 -right-2 h-8 overflow-hidden opacity-20">
+              <div class="animate-slide-left whitespace-nowrap font-mono text-xs text-green-500">
+                01001001 10101010 11001100 10101010 01001001 10101010 11001100 10101010 01001001 10101010 11001100
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </div>
 
     <!-- Spotlight Search Overlay -->
     <div
@@ -467,5 +625,256 @@ const sections = [
   .side-panel {
     display: none;
   }
+}
+
+/* Cyberpunk notification animations */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  10% {
+    transform: translate(-5px, 5px);
+  }
+  20% {
+    transform: translate(-15px, 10px);
+    opacity: 0.8;
+  }
+  30% {
+    transform: translate(15px, -10px);
+    opacity: 0.6;
+  }
+  40% {
+    transform: translate(-5px, -5px);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(5px, 5px);
+    opacity: 1;
+  }
+  60% {
+    transform: translate(10px, -5px);
+  }
+  70% {
+    transform: translate(-10px, 10px);
+    opacity: 0.9;
+  }
+  80% {
+    transform: translate(5px, -10px);
+    opacity: 0.8;
+  }
+  90% {
+    transform: translate(-5px, 5px);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes glitch2 {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(10px, 2px);
+  }
+  40% {
+    transform: translate(-10px, -5px);
+  }
+  60% {
+    transform: translate(5px, 3px);
+  }
+  80% {
+    transform: translate(-5px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes glitchOverlay {
+  0%, 100% { opacity: 0; }
+  10% { opacity: 0.1; }
+  11% { opacity: 0.3; }
+  12% { opacity: 0; }
+  20% { opacity: 0; }
+  21% { opacity: 0.2; }
+  22% { opacity: 0; }
+  50% { opacity: 0; }
+  51% { opacity: 0.3; }
+  52% { opacity: 0; }
+  80% { opacity: 0; }
+  81% { opacity: 0.4; }
+  82% { opacity: 0; }
+  90% { opacity: 0.2; }
+  91% { opacity: 0; }
+}
+
+.cyberpunk-notification {
+  animation: glitch 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation-delay: 0.5s;
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+}
+
+.animate-glitch-overlay {
+  animation: glitchOverlay 4s infinite;
+}
+
+/* Enhanced cyberpunk animations */
+@keyframes ping-slow {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.2); opacity: 0.5; }
+}
+
+@keyframes ping-slow-delayed {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.15); opacity: 0.3; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes cyber-text-flicker {
+  0%, 100% { opacity: 1; }
+  8% { opacity: 0.8; }
+  9% { opacity: 0.1; }
+  10% { opacity: 0.8; }
+  20% { opacity: 1; }
+  40% { opacity: 0.7; }
+  42% { opacity: 0.1; }
+  43% { opacity: 0.7; }
+  50% { opacity: 0.9; }
+  60% { opacity: 1; }
+  70% { opacity: 0.8; }
+  80% { opacity: 0.7; }
+  81% { opacity: 0.1; }
+  82% { opacity: 0.7; }
+  90% { opacity: 0.9; }
+  95% { opacity: 0.3; }
+  96% { opacity: 0.9; }
+}
+
+@keyframes data-stream {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100px; }
+}
+
+.animate-ping-slow {
+  animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.animate-ping-slow-delayed {
+  animation: ping-slow-delayed 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+  animation-delay: 1.5s;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s infinite;
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2s ease-in-out infinite;
+}
+
+.cyber-text {
+  animation: cyber-text-flicker 5s infinite;
+  text-shadow: 0 0 5px rgba(0, 255, 170, 0.7), 0 0 10px rgba(0, 255, 170, 0.5);
+}
+
+.cyber-text-glitch {
+  animation: glitch 0.3s infinite;
+  animation-play-state: paused;
+}
+
+.cyber-text-glitch:hover {
+  animation-play-state: running;
+}
+
+/* Scan lines effect */
+.scan-lines {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+  background-size: 100% 4px;
+  z-index: 2;
+}
+
+/* Digital noise effect */
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Data stream effect */
+.data-stream {
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(0, 255, 170, 0.2) 10%,
+    rgba(0, 255, 170, 0.5) 50%,
+    rgba(0, 255, 170, 0.2) 90%,
+    transparent 100%
+  );
+  background-size: 1px 100px;
+  animation: data-stream 2s linear infinite;
+}
+
+.data-stream-reverse {
+  background: linear-gradient(to top,
+    transparent 0%,
+    rgba(124, 58, 237, 0.2) 10%,
+    rgba(124, 58, 237, 0.5) 50%,
+    rgba(124, 58, 237, 0.2) 90%,
+    transparent 100%
+  );
+  background-size: 1px 100px;
+  animation: data-stream 3s linear infinite;
+}
+
+/* Glitch shadow effect */
+.glitch-shadow {
+  box-shadow: inset 0 0 10px rgba(0, 255, 170, 0.5), inset 0 0 20px rgba(124, 58, 237, 0.3);
+}
+
+/* Transition classes */
+.cyber-alert-enter-active,
+.cyber-alert-leave-active {
+  transition: all 0.5s ease;
+}
+
+.cyber-alert-enter-from,
+.cyber-alert-leave-to {
+  opacity: 0;
+  transform: translateY(-30px) scale(0.9);
+}
+
+@keyframes rgb-shift {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(1px, 1px); }
+  40% { transform: translate(-1px, -1px); }
+  60% { transform: translate(1px, -1px); }
+  80% { transform: translate(-1px, 1px); }
+}
+
+@keyframes clip-glitch {
+  0%, 100% { clip-path: inset(0 0 0 0); }
+  10% { clip-path: inset(10% 0 0 10%); }
+  20% { clip-path: inset(0 10% 10% 0); }
+  30% { clip-path: inset(0 0 5% 0); }
+  40% { clip-path: inset(0 0 0 5%); }
+  50% { clip-path: inset(5% 5% 0 0); }
+  60% { clip-path: inset(0 0 5% 5%); }
+  70% { clip-path: inset(5% 0 0 0); }
+  80% { clip-path: inset(0 5% 0 0); }
+  90% { clip-path: inset(0 0 0 0); }
 }
 </style>

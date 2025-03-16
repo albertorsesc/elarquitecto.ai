@@ -1,9 +1,38 @@
 <script setup lang="ts">
+import { useForm, usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
+
 defineProps<{
   title: string;
   subtitle: string;
   logoSrc?: string;
 }>();
+
+const page = usePage();
+const form = useForm({
+  email: '',
+});
+
+const isSubmitting = ref(false);
+
+const subscribe = () => {
+  isSubmitting.value = true;
+  form.post(route('subscribe.post'), {
+    preserveScroll: true,
+    onSuccess: () => {
+      // Set success message in the global flash store
+      const currentFlash = page.props.flash as Record<string, unknown>;
+      page.props.flash = {
+        ...currentFlash,
+        success: 'Gracias por suscribirte! Por favor revisa tu correo para verificar tu suscripción.'
+      };
+      form.reset('email');
+    },
+    onFinish: () => {
+      isSubmitting.value = false;
+    }
+  });
+};
 </script>
 
 <template>
@@ -68,16 +97,30 @@ defineProps<{
           </p>
 
           <!-- Subscription form -->
-          <div class="mt-8 flex justify-center sm:mt-10">
+          <form @submit.prevent="subscribe" class="mt-8 flex justify-center sm:mt-10">
             <div class="group relative w-full max-w-2xl">
               <input
+                v-model="form.email"
                 type="email"
                 placeholder="Tu correo electrónico"
                 class="relative z-10 w-full rounded-xl border border-white/10 bg-background/50 py-3 pl-4 pr-36 text-sm text-foreground placeholder:text-foreground/50 focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all duration-300"
+                :class="{ 'border-red-500': form.errors.email }"
+                required
               />
-              <button class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-lg bg-primary px-4 py-1.5 text-sm font-semibold text-white transition-all hover:bg-primary/80 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)]">
-                Suscribirse
+              <button
+                type="submit"
+                class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-lg bg-primary px-4 py-1.5 text-sm font-semibold text-white transition-all hover:bg-primary/80 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)]"
+                :disabled="isSubmitting"
+              >
+                <span v-if="isSubmitting">Enviando...</span>
+                <span v-else>Suscribirse</span>
               </button>
+
+              <!-- Error message -->
+              <div v-if="form.errors.email" class="absolute -bottom-6 left-0 text-sm text-red-400">
+                {{ form.errors.email }}
+              </div>
+
               <!-- Animated border effect -->
               <div class="absolute bottom-0 left-0 h-[1px] w-0 bg-gradient-to-r from-primary via-cyan-400 to-secondary transition-all duration-300 group-focus-within:w-full"></div>
 
@@ -103,7 +146,7 @@ defineProps<{
                 <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
               </div>
             </div>
-          </div>
+          </form>
 
           <!-- Cyberpunk-styled buttons -->
           <div class="mt-6 flex flex-wrap justify-center gap-3 sm:mt-8 sm:gap-4">
