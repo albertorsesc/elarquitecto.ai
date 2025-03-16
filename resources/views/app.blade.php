@@ -41,7 +41,7 @@
         <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
         @routes
-        @vite(['resources/js/app.ts'])
+        @vite(['resources/js/app.ts', 'resources/css/theme.css', 'resources/css/app.css'])
         @inertiaHead
     </head>
     <body class="font-sans antialiased">

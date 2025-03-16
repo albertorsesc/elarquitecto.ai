@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TimelineRequest;
 use App\Models\Timeline;
 use App\Models\Tag;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class TimelineController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @public
      */
-    public function index()
+    public function index() : Response
     {
         $timelines = Timeline::with(['author', 'tags'])->latest()->paginate(10);
 
@@ -24,8 +27,9 @@ class TimelineController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     * @root
      */
-    public function create()
+    public function create() : Response
     {
         $tags = Tag::select('id', 'name')->get();
 
@@ -36,8 +40,9 @@ class TimelineController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * @root
      */
-    public function store(TimelineRequest $request)
+    public function store(TimelineRequest $request) : RedirectResponse
     {
         $timeline = Timeline::create($request->validated());
 
@@ -51,8 +56,9 @@ class TimelineController extends Controller
 
     /**
      * Display the specified resource.
+     * @public
      */
-    public function show(Timeline $timeline)
+    public function show(Timeline $timeline) : Response
     {
         $timeline->load('author', 'tags');
 
@@ -63,8 +69,9 @@ class TimelineController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     * @root
      */
-    public function edit(Timeline $timeline)
+    public function edit(Timeline $timeline) : Response
     {
         $timeline->load('tags');
         $tags = Tag::select('id', 'name')->get();
@@ -77,8 +84,9 @@ class TimelineController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * @root
      */
-    public function update(TimelineRequest $request, Timeline $timeline)
+    public function update(TimelineRequest $request, Timeline $timeline) : RedirectResponse
     {
         $timeline->update($request->validated());
 
@@ -92,8 +100,9 @@ class TimelineController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * @root
      */
-    public function destroy(Timeline $timeline)
+    public function destroy(Timeline $timeline) : RedirectResponse
     {
         $timeline->delete();
 

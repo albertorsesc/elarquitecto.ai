@@ -107,3 +107,240 @@
   mask-composite: exclude;
   pointer-events: none;
 }
+
+/* Timeline Components */
+@keyframes neonPulse {
+  0%, 100% {
+    opacity: 0.8;
+    box-shadow:
+      0 0 10px rgba(var(--color-primary-rgb), 0.5),
+      0 0 20px rgba(var(--color-primary-rgb), 0.3),
+      0 0 30px rgba(var(--color-primary-rgb), 0.1);
+  }
+  50% {
+    opacity: 1;
+    box-shadow:
+      0 0 15px rgba(var(--color-primary-rgb), 0.7),
+      0 0 25px rgba(var(--color-primary-rgb), 0.5),
+      0 0 35px rgba(var(--color-primary-rgb), 0.3);
+  }
+}
+
+@keyframes dotPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0 rgba(var(--color-primary-rgb), 0.4),
+      0 0 0 0 rgba(var(--color-primary-rgb), 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 0 4px rgba(var(--color-primary-rgb), 0.4),
+      0 0 0 8px rgba(var(--color-primary-rgb), 0.2);
+  }
+}
+
+@keyframes innerDotPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes neonColorCycle {
+  0%, 100% {
+    box-shadow:
+      0 0 15px rgba(var(--color-primary-rgb), 0.3),
+      0 0 30px rgba(var(--color-primary-rgb), 0.2);
+  }
+  33% {
+    box-shadow:
+      0 0 15px rgba(var(--color-secondary-rgb), 0.3),
+      0 0 30px rgba(var(--color-secondary-rgb), 0.2);
+  }
+  66% {
+    box-shadow:
+      0 0 15px rgba(var(--color-accent-rgb), 0.3),
+      0 0 30px rgba(var(--color-accent-rgb), 0.2);
+  }
+}
+
+/* Timeline Item Card */
+.timeline-item {
+  @apply relative flex flex-row mb-8 items-start;
+}
+
+.timeline-item-right {
+  @apply flex-row-reverse;
+}
+
+.timeline-date {
+  @apply w-[calc(50%-1rem)] pr-5 text-right flex justify-end items-center relative top-4;
+}
+
+.timeline-item-right .timeline-date {
+  @apply pr-0 pl-5 text-left justify-start;
+}
+
+.date-text {
+  @apply inline-block text-[rgb(var(--color-cyan-400-rgb,56,189,248))] text-xs font-semibold py-1 px-2 bg-primary/10 rounded-full border border-primary/20 shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)] transition-all duration-300;
+}
+
+.timeline-content {
+  @apply relative w-[calc(50%-1rem)] pl-5;
+}
+
+.timeline-item-right .timeline-content {
+  @apply pl-0 pr-5;
+}
+
+.timeline-dot {
+  @apply absolute -left-[9px] top-4 h-4 w-4 rounded-full border-2 border-[rgb(var(--color-cyan-400-rgb,56,189,248))] bg-black/50 z-[2] transition-all duration-300;
+  animation: dotPulse 3s infinite;
+}
+
+.timeline-item-right .timeline-dot {
+  @apply left-auto -right-[9px];
+}
+
+@keyframes dotPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0 rgba(var(--color-primary-rgb), 0.4),
+      0 0 0 0 rgba(var(--color-primary-rgb), 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 0 3px rgba(var(--color-primary-rgb), 0.4),
+      0 0 0 6px rgba(var(--color-primary-rgb), 0.2);
+  }
+}
+
+.timeline-dot-inner {
+  @apply absolute inset-[2px] rounded-full bg-[rgb(var(--color-cyan-400-rgb,56,189,248))] transition-all duration-300;
+  animation: innerDotPulse 3s infinite;
+}
+
+@keyframes innerDotPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* This class is directly applied to the GlassContainer component */
+.glass-container-neon {
+  @apply rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-all duration-300 scale-95 max-w-md;
+  animation: neonColorCycle 10s infinite;
+}
+
+@keyframes neonColorCycle {
+  0%, 100% {
+    box-shadow:
+      0 4px 15px rgba(var(--color-primary-rgb), 0.3),
+      0 8px 30px rgba(var(--color-primary-rgb), 0.2);
+  }
+  33% {
+    box-shadow:
+      0 4px 15px rgba(var(--color-secondary-rgb), 0.3),
+      0 8px 30px rgba(var(--color-secondary-rgb), 0.2);
+  }
+  66% {
+    box-shadow:
+      0 4px 15px rgba(var(--color-accent-rgb), 0.3),
+      0 8px 30px rgba(var(--color-accent-rgb), 0.2);
+  }
+}
+
+/* Add a subtle glow to the timeline items on hover */
+.timeline-item:hover .glass-container-neon {
+  @apply shadow-[0_8px_25px_rgba(var(--color-primary-rgb),0.5),0_12px_40px_rgba(var(--color-primary-rgb),0.3)] scale-100 -translate-y-1;
+}
+
+.timeline-item:hover .timeline-dot {
+  @apply scale-125;
+}
+
+.timeline-item:hover .date-text {
+  @apply bg-primary/20 shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.3)];
+}
+
+/* Compact variant */
+.timeline-item-compact .timeline-content {
+  @apply pl-4;
+}
+
+.timeline-item-compact.timeline-item-right .timeline-content {
+  @apply pr-4 pl-0;
+}
+
+.timeline-item-compact .timeline-date {
+  @apply top-2;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .timeline-item,
+  .timeline-item-right {
+    @apply flex-col ml-4 mb-6;
+  }
+
+  .timeline-date,
+  .timeline-item-right .timeline-date {
+    @apply w-full p-0 pb-1 pl-6 text-left justify-start top-0;
+  }
+
+  .timeline-content,
+  .timeline-item-right .timeline-content {
+    @apply w-[calc(100%-1.5rem)] pl-6 pr-0;
+  }
+
+  .timeline-dot,
+  .timeline-item-right .timeline-dot {
+    @apply -left-[9px] right-auto top-6;
+  }
+}
+
+/* Timeline Container */
+.timeline-container {
+  @apply relative max-w-3xl mx-auto w-full px-3 shadow-[0_0_20px_rgba(var(--color-primary-rgb),0.05)];
+}
+
+.timeline-scroll-container {
+  @apply p-5 px-3 rounded-xl backdrop-blur-sm;
+  background: linear-gradient(
+    to bottom,
+    rgba(var(--color-primary-rgb), 0.04),
+    rgba(var(--color-secondary-rgb), 0.03),
+    rgba(var(--color-accent-rgb), 0.04)
+  );
+}
+
+.timeline-line {
+  @apply absolute left-1/2 top-0 bottom-0 w-0.5 z-0 transform -translate-x-1/2;
+  background: linear-gradient(to bottom,
+    rgba(var(--color-primary-rgb), 0.9),
+    rgba(var(--color-secondary-rgb), 0.9),
+    rgba(var(--color-accent-rgb), 0.9),
+    rgba(var(--color-primary-rgb), 0.9)
+  );
+  box-shadow:
+    0 0 10px rgba(var(--color-primary-rgb), 0.7),
+    0 0 20px rgba(var(--color-primary-rgb), 0.5),
+    0 0 30px rgba(var(--color-primary-rgb), 0.3);
+  animation: neonPulse 3s infinite;
+}
+
+.timeline-items {
+  @apply relative z-[1] space-y-6;
+}
+
+/* Timeline Container Responsive */
+@media (max-width: 768px) {
+  .timeline-line {
+    @apply left-4;
+  }
+
+  .timeline-container {
+    @apply px-2;
+  }
+
+  .timeline-scroll-container {
+    @apply py-5 px-2;
+  }
+}

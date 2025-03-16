@@ -29,7 +29,7 @@ class TimelineTest extends TestCase
         ]);
 
         // post timeline post
-        $this->post(route('timeline.store'), [
+        $this->post(route('root.timeline.store'), [
             ...$post->toArray(),
             'tags' => [...$tags->pluck('id')->toArray()],
         ])->assertRedirect(route('timeline.index'));
@@ -59,10 +59,9 @@ class TimelineTest extends TestCase
      */
     public function root_user_can_visit_create_timeline_post()
     {
-        // Auth as Root user
         $this->actingAs($this->rootUser());
 
-        $this->get(route('timeline.create'))
+        $this->get(route('root.timeline.create'))
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page->component('Timeline/Create')
             );

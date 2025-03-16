@@ -1,101 +1,21 @@
 <?php
 
-use App\Http\Controllers\Root\Blog\ArticleController;
-use App\Http\Controllers\Root\Blog\Articles\Actions\PublishArticleController;
-use App\Http\Middleware\VerifyRootUserMiddleware;
-use App\Http\Requests\TimelineRequest;
-use App\Models\Tag;
-use App\Models\Timeline;
-use App\Models\Prompts\Prompt;
-use Illuminate\Http\Request;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PromptController as PublicPromptController;
+use App\Http\Controllers\TimelineController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use App\Http\Controllers\BlogController;
-use App\Http\Controllers\Root\Prompts\PromptController;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome');
-})->name('home');
+Route::get('/', [WelcomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('timeline', function () {
-        return Inertia::render('Timeline/Index', [
-            'timelines' => Timeline::all(),
-        ]);
-    })->name('timeline.index');
+    Route::get('timeline', [TimelineController::class, 'index'])->name('timeline.index');
 
-    Route::get('prompts', function () {
-        return Inertia::render('Prompts/Index', [
-            'prompts' => Prompt::with('author:id,name')->get(),
-        ]);
-    })->name('prompts.index');
-
-    Route::get('prompts/{prompt}', function (Prompt $prompt) {
-        return Inertia::render('Prompts/Show', [
-            'prompt' => $prompt,
-        ]);
-    })->name('prompts.show');
-
-    Route::get('timeline/create', function () {
-        $tags = Tag::select('id', 'name')->get();
-        return Inertia::render('Timeline/Create', [
-            'tags' => $tags
-        ]);
-    })->name('timeline.create');
-
-    Route::post('timeline', function (TimelineRequest $request) {
-        $timeline = Timeline::create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'excerpt' => $request->input('excerpt'),
-            'content' => $request->input('content'),
-        ]);
-
-        if ($request->has('tags')) {
-            $timeline->tags()->sync($request->input('tags'));
-        }
-
-        return to_route('timeline.index');
-    })->name('timeline.store');
-
-    // Root routes
-    Route::middleware(VerifyRootUserMiddleware::class)->prefix('root')->name('root.')->group(function () {
-        Route::get('/prompts', [PromptController::class, 'index'])->name('prompts.index');
-        Route::get('/prompts/create', [PromptController::class, 'create'])->name('prompts.create');
-        Route::post('/prompts', [PromptController::class, 'store'])->name('prompts.store');
-        Route::get('/prompts/{prompt}', [PromptController::class, 'show'])->name('prompts.show');
-        Route::get('/prompts/{prompt}/edit', [PromptController::class, 'edit'])->name('prompts.edit');
-        Route::put('/prompts/{prompt}', [PromptController::class, 'update'])->name('prompts.update');
-        Route::delete('/prompts/{prompt}', [PromptController::class, 'destroy'])->name('prompts.destroy');
-
-        Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
-        Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
-        Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
-        Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
-        Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
-        Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
-        Route::put('/articles/{article}/publish', PublishArticleController::class)->name('articles.publish');
-
-        Route::get('/blog/categories', [BlogController::class, 'categories'])->name('blog.categories');
-        Route::post('/blog/categories', [BlogController::class, 'storeCategory'])->name('blog.categories.store');
-        Route::delete('/blog/categories/{category}', [BlogController::class, 'destroyCategory'])->name('blog.categories.destroy');
-        Route::post('/blog/tags', [BlogController::class, 'storeTag'])->name('blog.tags.store');
-        Route::delete('/blog/tags/{tag}', [BlogController::class, 'destroyTag'])->name('blog.tags.destroy');
-
-        Route::post('tags', function (Request $request) {
-            $request->validate([
-                'name' => 'required|string|max:20|unique:tags,name',
-            ]);
-
-            Tag::create($request->only('name'));
-
-            return back();
-        })->name('tags.store');
-    });
+    Route::get('prompts', [PublicPromptController::class, 'index'])->name('prompts.index');
+    Route::get('prompts/{prompt}', [PublicPromptController::class, 'show'])->name('prompts.show');
 });
 
 // Spotify routes
@@ -129,5 +49,6 @@ Route::get('/blog/search', [BlogController::class, 'search'])->name('blog.search
 // Route::get('/blog/tag/{tag}', [BlogController::class, 'tag'])->name('blog.tag');
 // Route::get('/blog/{article}', [BlogController::class, 'show'])->name('blog.show');
 
+require __DIR__.'/root.php';
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

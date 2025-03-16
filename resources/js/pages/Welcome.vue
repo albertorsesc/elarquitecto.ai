@@ -4,7 +4,7 @@ import ColorPalette from '@/components/landing/ColorPalette.vue';
 import HeroSection from '@/components/landing/HeroSection.vue';
 import SectionCards from '@/components/landing/SectionCards.vue';
 import TimelineSection from '@/components/landing/TimelineSection.vue';
-import FloatingNeonLines from '@/components/theme/FloatingNeonLines.vue';
+import { TimelineItem } from '@/types/timeline-item';
 import type { PageProps as InertiaPageProps } from '@inertiajs/core';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -46,29 +46,18 @@ function handleEscape(event: KeyboardEvent) {
   }
 }
 
-// Sample data
-const timelineItems = [
-  {
-    date: '2023',
-    title: 'Origen de El Arquitecto A.I.',
-    description: 'Nace la idea de crear una plataforma para compartir conocimiento sobre IA en español.'
-  },
-  {
-    date: '2024',
-    title: 'Lanzamiento Oficial',
-    description: 'Inicio de nuestra misión para compartir conocimiento sobre IA en Latinoamérica.'
-  },
-  {
-    date: '2024',
-    title: 'Comunidad en Crecimiento',
-    description: 'Alcanzamos miles de seguidores en nuestras redes sociales.'
-  },
-  {
-    date: '2024',
-    title: 'Expansión de Contenido',
-    description: 'Ampliamos nuestras secciones para incluir prompts, herramientas y más recursos.'
-  }
-];
+// Define props for the Welcome component
+const props = defineProps<{
+  items: {
+    data: TimelineItem[];
+    links: {
+      first: string;
+      last: string;
+      prev: string | null;
+      next: string | null;
+    };
+  };
+}>();
 
 const blogPosts = [
   {
@@ -326,13 +315,12 @@ const sections = [
     <!-- Main Content with Side Panels -->
     <div class="flex justify-between w-full">
       <!-- Left Side Panel -->
-      <div class="side-panel left-panel w-[240px] relative">
-        <!-- Background Effects -->
+      <!-- <div class="side-panel left-panel w-[240px] relative">
         <FloatingNeonLines variant="dense" :opacity="0.15" />
         <div class="relative z-10 p-4 h-full flex items-center justify-center text-center text-gray-400">
-          <p>Left Panel Content</p>
+          <iframe src="https://www.retrogames.cc/embed/9254-ms-pacman-champion-edition-super-zola-pac-gal.html" width="240" height="240" frameborder="no" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" scrolling="no"></iframe>
         </div>
-      </div>
+      </div> -->
 
       <!-- Main Content -->
       <div class="flex-1">
@@ -356,7 +344,8 @@ const sections = [
 
           <!-- Timeline Section -->
           <div class="relative">
-            <TimelineSection :items="timelineItems" />
+            <TimelineSection :items="props.items.data" />
+
             <!-- Section corner accents -->
             <div class="absolute left-0 top-0 h-8 w-8">
               <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
@@ -409,17 +398,34 @@ const sections = [
               <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-accent via-transparent to-transparent"></div>
             </div>
           </div>
+
+          <!-- Retro Games Section -->
+          <div class="relative py-12">
+            <h2 class="mb-8 text-center text-3xl font-bold text-foreground">
+              Juegos Retro
+              <div class="mt-2 h-1 w-24 bg-gradient-to-r from-primary via-cyan-400 to-secondary mx-auto"></div>
+            </h2>
+
+            <!-- Section corner accents -->
+            <div class="absolute left-0 top-0 h-8 w-8">
+              <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
+              <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-primary via-transparent to-transparent"></div>
+            </div>
+            <div class="absolute right-0 top-0 h-8 w-8">
+              <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
+              <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
+            </div>
+          </div>
         </main>
       </div>
 
       <!-- Right Side Panel -->
-      <div class="side-panel right-panel w-[240px] relative">
-        <!-- Background Effects -->
+      <!-- <div class="side-panel right-panel w-[240px] relative">
         <FloatingNeonLines variant="dense" :opacity="0.15" />
         <div class="relative z-10 p-4 h-full flex items-center justify-center text-center text-gray-400">
           <p>Right Panel Content</p>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <!-- Footer -->

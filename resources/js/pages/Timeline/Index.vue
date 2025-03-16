@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import Button from '@/components/theme/Button.vue';
-import GlassContainer from '@/components/theme/GlassContainer.vue';
-import NeonBorders from '@/components/theme/NeonBorders.vue';
-import NeonCorners from '@/components/theme/NeonCorners.vue';
-import NeonScrollbar from '@/components/theme/NeonScrollbar.vue';
+import TimelineContainer from '@/components/theme/TimelineContainer.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { format, formatDistanceToNow } from 'date-fns';
-import { es } from 'date-fns/locale';
 import { onMounted, ref } from 'vue';
 
 interface TimelineItem {
@@ -55,23 +50,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/timeline',
     },
 ];
-
-const formatDate = (date: string) => {
-    try {
-        return formatDistanceToNow(new Date(date), { addSuffix: true, locale: es });
-    } catch (error) {
-        console.error('Error formatting date:', error);
-        return date;
-    }
-};
-
-const formatDateShort = (date: string) => {
-    try {
-        return format(new Date(date), 'dd MMM yyyy', { locale: es });
-    } catch {
-        return date.split('T')[0];
-    }
-};
 </script>
 
 <template>
@@ -84,91 +62,13 @@ const formatDateShort = (date: string) => {
             </div>
 
             <!-- Timeline Container -->
-            <div v-if="timelineData.length > 0" class="timeline-container">
-                <!-- Background effect -->
-                <div class="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent">
-                    <div class="cyberpunk-grid-bg absolute inset-0 opacity-10"></div>
-                </div>
-
-                <!-- Timeline wrapper with fixed height and scrolling -->
-                <NeonScrollbar height="70vh" class="timeline-scroll-container" :colorCycle="true">
-                    <div class="relative pb-10">
-                        <!-- Timeline line -->
-                        <div class="timeline-line"></div>
-
-                        <!-- Timeline items -->
-                        <div class="timeline-items">
-                            <div v-for="(timeline, index) in timelineData" :key="timeline.id"
-                                class="timeline-item"
-                                :class="{ 'timeline-item-even': index % 2 !== 0 }">
-
-                                <!-- Date -->
-                                <div class="timeline-date">
-                                    <span class="date-text">{{ formatDateShort(timeline.created_at) }}</span>
-                                </div>
-
-                                <!-- Content -->
-                                <div class="timeline-content">
-                                    <GlassContainer
-                                        variant="dark"
-                                        withBorders
-                                        withCorners
-                                        rounded="xl"
-                                        padding="md"
-                                        class="relative glass-container-neon"
-                                    >
-                                        <NeonCorners position="all" color="primary" size="md" class="absolute -inset-1" />
-                                        <NeonBorders position="all" color="primary" :opacity="0.3" class="absolute -inset-1" />
-
-                                        <div class="p-4">
-                                            <!-- Relative time -->
-                                            <div class="mb-3">
-                                                <p class="text-xs text-gray-400">{{ formatDate(timeline.created_at) }}</p>
-                                            </div>
-
-                                            <!-- Content -->
-                                            <h2 class="text-xl font-bold text-white mb-2">{{ timeline.title }}</h2>
-                                            <p class="text-sm text-gray-300 mb-4">{{ timeline.excerpt }}</p>
-                                            <div class="text-sm text-gray-300 mb-4">{{ timeline.description }}</div>
-
-                                            <!-- Tags -->
-                                            <div v-if="timeline.tags && timeline.tags.length > 0" class="flex flex-wrap gap-2 mt-4">
-                                                <span
-                                                    v-for="tag in timeline.tags"
-                                                    :key="tag.id"
-                                                    class="px-2 py-1 text-xs rounded-full bg-primary/20 text-primary border border-primary/30"
-                                                >
-                                                    #{{ tag.name }}
-                                                </span>
-                                            </div>
-
-                                            <!-- Actions -->
-                                            <div class="flex justify-between mt-4 pt-4 border-t border-gray-700">
-                                                <Button
-                                                    :to="`/timeline/${timeline.id}`"
-                                                    text="View Details"
-                                                    variant="secondary"
-                                                    size="sm"
-                                                />
-                                                <Button
-                                                    :to="`/timeline/${timeline.id}/edit`"
-                                                    text="Edit"
-                                                    variant="secondary"
-                                                    size="sm"
-                                                />
-                                            </div>
-                                        </div>
-                                    </GlassContainer>
-
-                                    <!-- Timeline dot -->
-                                    <div class="timeline-dot">
-                                        <div class="timeline-dot-inner"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </NeonScrollbar>
+            <div v-if="timelineData.length > 0">
+                <TimelineContainer
+                    :items="timelineData"
+                    withScrollbar
+                    scrollbarHeight="70vh"
+                    :colorCycle="true"
+                />
 
                 <!-- Pagination -->
                 <div v-if="!Array.isArray(props.timelines) && props.timelines.meta && props.timelines.meta.links" class="mt-8 flex justify-center">
