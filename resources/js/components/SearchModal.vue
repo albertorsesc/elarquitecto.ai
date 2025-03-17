@@ -28,6 +28,14 @@ function handleEscape(event: KeyboardEvent) {
 function clearSearch() {
   searchQuery.value = '';
   searchResults.value = { articles: [] };
+  // Clean up URL if we're on the search page
+  if (window.location.pathname === '/search') {
+    router.visit('/', {
+      preserveState: true,
+      preserveScroll: true,
+      replace: true
+    });
+  }
 }
 
 function deactivateSearch() {
@@ -40,6 +48,14 @@ function deactivateSearch() {
 watch(searchQuery, async (newQuery) => {
   if (newQuery.length < 2) {
     searchResults.value = { articles: [] };
+    // Clean up URL if we're on the search page
+    if (window.location.pathname === '/search') {
+      router.visit('/', {
+        preserveState: true,
+        preserveScroll: true,
+        replace: true
+      });
+    }
     return;
   }
 
@@ -52,6 +68,7 @@ watch(searchQuery, async (newQuery) => {
       preserveState: true,
       preserveScroll: true,
       only: ['searchResults'],
+      replace: true, // Replace the current history entry instead of adding a new one
       onSuccess: (page) => {
         const results = page.props.searchResults as SearchResults;
         searchResults.value = results;
