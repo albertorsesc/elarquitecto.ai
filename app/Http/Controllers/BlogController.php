@@ -27,8 +27,19 @@ class BlogController extends Controller
             ->latest('published_at')
             ->paginate(9);
 
+        // Define SEO data for the blog index page
+        $seoData = [
+            'title' => 'Blog - El Arquitecto A.I.',
+            'description' => 'Artículos sobre IA, tutoriales y mejores prácticas para mantenerte actualizado.',
+            'keywords' => 'inteligencia artificial, IA, blog, artículos, tutoriales',
+            'ogType' => 'blog',
+            'ogImage' => url('/images/blog-og.png'),
+            'canonicalUrl' => route('blog.index'),
+        ];
+
         return Inertia::render('Blog/Index', [
             'articles' => $articles,
+            'seo' => $seoData,
         ]);
     }
 
@@ -37,6 +48,24 @@ class BlogController extends Controller
      */
     public function show(Article $article): Response
     {
+        // Format image URL if it exists
+        $imageUrl = null;
+        if (!empty($article->image)) {
+            $imageUrl = url('storage/' . $article->image);
+        } else {
+            $imageUrl = url('/images/blog-og.png');
+        }
+
+        // Define SEO data for the article page
+        $seoData = [
+            'title' => $article->title,
+            'description' => $article->excerpt ?: Str::limit(strip_tags($article->content), 160),
+            'keywords' => 'inteligencia artificial, IA, blog, ' . $article->title,
+            'ogType' => 'article',
+            'ogImage' => $imageUrl,
+            'canonicalUrl' => route('blog.show', $article),
+        ];
+
         return Inertia::render('Blog/Show', [
             'article' => $article->load(['author']),
             'breadcrumbs' => [
@@ -53,11 +82,7 @@ class BlogController extends Controller
                     'href' => route('blog.show', $article),
                 ],
             ],
-            'meta' => [
-                'title' => $article->title,
-                'description' => $article->excerpt,
-                'ogImage' => $article->image ? asset('storage/'.$article->image) : null,
-            ],
+            'seo' => $seoData,
         ]);
     }
 

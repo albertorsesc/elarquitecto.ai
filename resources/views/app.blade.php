@@ -31,10 +31,65 @@
             }
         </style>
 
-        <title inertia>{{ config('app.name', 'El Arquitecto A.I.') }}</title>
+        @if(isset($page['props']['seo']))
+            {{-- Use the SEO data from Inertia props --}}
+            @php
+                $seo = $page['props']['seo'];
+                $title = $seo['title'] ?? config('app.name');
+                $description = $seo['description'] ?? 'Democratizando I.A. para el beneficio de Latinoamérica';
+                $keywords = $seo['keywords'] ?? 'inteligencia artificial, IA, machine learning, español, Latinoamérica';
+                $ogType = $seo['ogType'] ?? 'website';
+                $ogImage = $seo['ogImage'] ?? asset('logo.png');
+                $ogUrl = $seo['canonicalUrl'] ?? url()->current();
+                $twitterCard = $seo['twitterCard'] ?? 'summary_large_image';
+            @endphp
 
-        <!-- Fallback SEO meta tags - these will only be visible if Inertia Head hasn't loaded yet -->
-        <meta name="description" content="Democratizando I.A. para el beneficio de Latinoamérica">
+            <title>{{ $title }}</title>
+
+            <!-- SEO Meta Tags -->
+            <meta name="description" content="{{ $description }}">
+            <meta name="keywords" content="{{ $keywords }}">
+            <link rel="canonical" href="{{ $ogUrl }}">
+
+            <!-- Open Graph / Facebook -->
+            <meta property="og:type" content="{{ $ogType }}">
+            <meta property="og:url" content="{{ $ogUrl }}">
+            <meta property="og:title" content="{{ $title }}">
+            <meta property="og:description" content="{{ $description }}">
+            <meta property="og:image" content="{{ $ogImage }}">
+            <meta property="og:site_name" content="El Arquitecto A.I.">
+            <meta property="og:locale" content="es_ES">
+
+            <!-- Twitter -->
+            <meta name="twitter:card" content="{{ $twitterCard }}">
+            <meta name="twitter:url" content="{{ $ogUrl }}">
+            <meta name="twitter:title" content="{{ $title }}">
+            <meta name="twitter:description" content="{{ $description }}">
+            <meta name="twitter:image" content="{{ $ogImage }}">
+            <meta name="twitter:site" content="@elarquitectoai">
+        @else
+            {{-- Fallback SEO data --}}
+            <title inertia>{{ config('app.name', 'El Arquitecto A.I.') }}</title>
+            <meta name="description" content="Democratizando I.A. para el beneficio de Latinoamérica">
+            <meta name="keywords" content="inteligencia artificial, IA, machine learning, español, Latinoamérica">
+
+            <!-- Open Graph / Facebook -->
+            <meta property="og:type" content="website">
+            <meta property="og:url" content="{{ url()->current() }}">
+            <meta property="og:title" content="{{ config('app.name', 'El Arquitecto A.I.') }}">
+            <meta property="og:description" content="Democratizando I.A. para el beneficio de Latinoamérica">
+            <meta property="og:image" content="{{ asset('logo.png') }}">
+            <meta property="og:site_name" content="El Arquitecto A.I.">
+            <meta property="og:locale" content="es_ES">
+
+            <!-- Twitter -->
+            <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:url" content="{{ url()->current() }}">
+            <meta name="twitter:title" content="{{ config('app.name', 'El Arquitecto A.I.') }}">
+            <meta name="twitter:description" content="Democratizando I.A. para el beneficio de Latinoamérica">
+            <meta name="twitter:image" content="{{ asset('logo.png') }}">
+            <meta name="twitter:site" content="@elarquitectoai">
+        @endif
 
         <!-- Favicon -->
         <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">

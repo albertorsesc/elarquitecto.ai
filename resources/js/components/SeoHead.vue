@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head, usePage } from '@inertiajs/vue3';
+import { onMounted } from 'vue';
 
 const props = withDefaults(defineProps<{
   title?: string;
@@ -19,6 +20,16 @@ const props = withDefaults(defineProps<{
   twitterCard: 'summary_large_image'
 });
 
+// Debug received props
+onMounted(() => {
+  console.log('SeoHead component mounted with props:', {
+    title: props.title,
+    description: props.description,
+    canonicalUrl: props.canonicalUrl,
+    ogImage: props.ogImage
+  });
+});
+
 // Type the page object with the expected structure
 const page = usePage<{
   ziggy: {
@@ -26,7 +37,7 @@ const page = usePage<{
   };
 }>();
 
-// Make sure we have a string title and include branding if needed
+// Make sure we have a string title with branding
 const fullTitle = typeof props.title === 'string' && props.title.includes('El Arquitecto A.I.')
   ? props.title
   : `${props.title || 'Página'} - El Arquitecto A.I.`;
@@ -54,30 +65,22 @@ const currentPageUrl = props.canonicalUrl || page.props.ziggy.location;
 const safeDescription = typeof props.description === 'string' && props.description.trim().length > 0
   ? props.description.slice(0, 160)
   : 'Democratizando I.A. para el beneficio de Latinoamérica';
+
+console.log('SeoHead rendering with:', {
+  fullTitle,
+  safeDescription,
+  absoluteImageUrl,
+  currentPageUrl
+});
 </script>
 
 <template>
-  <Head>
+  <!--
+    We only update the title element through the Head component
+    since the rest of the meta tags are server-rendered with the same data
+    This avoids conflicts and ensures search engines see the correct tags
+  -->
+  <Head title-only>
     <title>{{ fullTitle }}</title>
-    <meta name="description" :content="safeDescription" />
-    <meta name="keywords" :content="keywords" />
-    <link rel="canonical" :href="currentPageUrl" />
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" :content="ogType" />
-    <meta property="og:url" :content="currentPageUrl" />
-    <meta property="og:title" :content="fullTitle" />
-    <meta property="og:description" :content="safeDescription" />
-    <meta property="og:image" :content="absoluteImageUrl" />
-    <meta property="og:site_name" content="El Arquitecto A.I." />
-    <meta property="og:locale" content="es_ES" />
-
-    <!-- Twitter -->
-    <meta property="twitter:card" :content="twitterCard" />
-    <meta property="twitter:url" :content="currentPageUrl" />
-    <meta property="twitter:title" :content="fullTitle" />
-    <meta property="twitter:description" :content="safeDescription" />
-    <meta property="twitter:image" :content="absoluteImageUrl" />
-    <meta name="twitter:site" content="@elarquitectoai" />
   </Head>
 </template>

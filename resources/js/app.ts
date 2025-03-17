@@ -1,6 +1,6 @@
 import '../css/app.css';
 
-import { createInertiaApp } from '@inertiajs/vue3';
+import { createInertiaApp, Head } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createPinia } from 'pinia';
 import type { DefineComponent } from 'vue';
@@ -50,11 +50,26 @@ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
+        console.log('Inertia app setup with props:', {
+            hasProps: !!props,
+            hasSeoData: props?.initialPage?.props?.seo ? true : false,
+        });
+
         const app = createApp({ render: () => h(App, props) });
         app.use(plugin);
         app.use(ZiggyVue);
         app.use(pinia); // Use the pre-created Pinia instance
+
+        // Register the Head component globally with a different name to avoid HTML collision
+        app.component('InertiaHead', Head);
+
+        console.log('Mounting Inertia app to element:', el);
+
         app.mount(el);
+
+        console.log('Inertia app mounted successfully');
+
+        return app;
     },
     progress: {
         color: '#4B5563',

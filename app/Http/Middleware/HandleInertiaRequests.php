@@ -39,9 +39,8 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
-        // Add SEO data and JSON-LD
-        $seoData = $this->getSeoData($request);
-        $jsonLd = $this->getJsonLd($request, $seoData);
+        // Let's no longer rely on the middleware to generate SEO data
+        // Instead we'll directly set it in our controllers for more precise control
 
         return [
             ...parent::share($request),
@@ -62,8 +61,6 @@ class HandleInertiaRequests extends Middleware
                 'warning' => $request->session()->get('warning'),
                 'info' => $request->session()->get('info'),
             ],
-            'seo' => $seoData,
-            'jsonLd' => $jsonLd,
         ];
     }
 
