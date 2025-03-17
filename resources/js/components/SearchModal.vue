@@ -3,6 +3,11 @@ import { Article } from '@/types/article';
 import { router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 
+interface SearchResults {
+  articles: Article[];
+  // Add other resource types here as needed
+}
+
 defineProps<{
   isActive: boolean;
 }>();
@@ -11,7 +16,7 @@ const emit = defineEmits(['close']);
 
 const searchQuery = ref('');
 const isLoading = ref(false);
-const searchResults = ref<Article[]>([]);
+const searchResults = ref<SearchResults>({ articles: [] });
 
 function handleEscape(event: KeyboardEvent) {
   if (event.key === 'Escape') {
@@ -22,7 +27,7 @@ function handleEscape(event: KeyboardEvent) {
 
 function clearSearch() {
   searchQuery.value = '';
-  searchResults.value = [];
+  searchResults.value = { articles: [] };
 }
 
 function deactivateSearch() {
@@ -34,7 +39,7 @@ function deactivateSearch() {
 // Perform search when query changes
 watch(searchQuery, async (newQuery) => {
   if (newQuery.length < 2) {
-    searchResults.value = [];
+    searchResults.value = { articles: [] };
     return;
   }
 
@@ -46,10 +51,10 @@ watch(searchQuery, async (newQuery) => {
       method: 'get',
       preserveState: true,
       preserveScroll: true,
-      only: ['articles'],
+      only: ['searchResults'],
       onSuccess: (page) => {
-        const articles = page.props.articles as Article[];
-        searchResults.value = articles || [];
+        const results = page.props.searchResults as SearchResults;
+        searchResults.value = results;
         isLoading.value = false;
       },
       onFinish: () => {
@@ -58,7 +63,7 @@ watch(searchQuery, async (newQuery) => {
     });
   } catch (error) {
     console.error('Search error:', error);
-    searchResults.value = [];
+    searchResults.value = { articles: [] };
     isLoading.value = false;
   }
 }, { deep: false });
@@ -66,6 +71,14 @@ watch(searchQuery, async (newQuery) => {
 function goToArticle(slug: string) {
   router.visit(`/blog/${slug}`);
   emit('close');
+}
+
+function hasResults(): boolean {
+  return Object.values(searchResults.value).some(results => results.length > 0);
+}
+
+function getTotalResults(): number {
+  return Object.values(searchResults.value).reduce((total, results) => total + results.length, 0);
 }
 </script>
 
@@ -154,18 +167,30 @@ function goToArticle(slug: string) {
           </div>
 
           <!-- Results -->
-          <div v-else-if="searchResults.length > 0" class="space-y-4">
-            <h3 class="mb-2 text-sm font-medium text-foreground/70">Resultados ({{ searchResults.length }})</h3>
-            <div v-for="article in searchResults" :key="article.id"
-                 class="group cursor-pointer rounded-lg border border-white/5 bg-white/5 p-3 transition-all hover:border-primary/30 hover:bg-white/10"
-                 @click="goToArticle(article.slug)">
-              <h4 class="font-medium text-foreground group-hover:text-primary">{{ article.title }}</h4>
-              <p v-if="article.excerpt" class="mt-1 text-sm text-foreground/70 line-clamp-2">{{ article.excerpt }}</p>
-              <div class="mt-2 flex items-center text-xs text-foreground/50">
-                <span v-if="article.author">{{ article.author.name }}</span>
-                <span v-if="article.published_at" class="ml-2">· {{ new Date(article.published_at).toLocaleDateString() }}</span>
+          <div v-else-if="hasResults()" class="space-y-6">
+            <h3 class="mb-4 text-sm font-medium text-foreground/70">Resultados ({{ getTotalResults() }})</h3>
+
+            <!-- Articles Section -->
+            <div v-if="searchResults.articles?.length > 0" class="space-y-4">
+              <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2 2 0 00-.586-1.414l-4.5-4.5A2 2 0 0015.5 3H14m5 16v-2a2 2 0 00-2-2H7a2 2 0 00-2 2v2m14 0h2.5a2 2 0 002-2V9.5a2 2 0 00-.586-1.414l-4.5-4.5A2 2 0 0015.5 3H14" />
+                </svg>
+                <h4 class="text-sm font-medium text-primary">Artículos ({{ searchResults.articles.length }})</h4>
+              </div>
+              <div v-for="article in searchResults.articles" :key="article.id"
+                   class="group cursor-pointer rounded-lg border border-white/5 bg-white/5 p-3 transition-all hover:border-primary/30 hover:bg-white/10"
+                   @click="goToArticle(article.slug)">
+                <h4 class="font-medium text-foreground group-hover:text-primary">{{ article.title }}</h4>
+                <p v-if="article.excerpt" class="mt-1 text-sm text-foreground/70 line-clamp-2">{{ article.excerpt }}</p>
+                <div class="mt-2 flex items-center text-xs text-foreground/50">
+                  <span v-if="article.author">{{ article.author.name }}</span>
+                  <span v-if="article.published_at" class="ml-2">· {{ new Date(article.published_at).toLocaleDateString() }}</span>
+                </div>
               </div>
             </div>
+
+            <!-- Add other resource type sections here -->
           </div>
 
           <!-- No results -->
