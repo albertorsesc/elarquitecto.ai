@@ -205,13 +205,14 @@ const sections = [
         El Arquitecto A.I. - Democratizando I.A. para el beneficio de Latinoamérica
     </title>
     <meta name="description" content="Aprende sobre Inteligencia Artificial en español con El Arquitecto A.I. Blog, tutoriales, prompts y más." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   </Head>
 
-  <div class="min-h-screen bg-background text-foreground">
+  <div class="min-h-screen bg-background text-foreground overflow-x-hidden">
     <!-- Music Player removed as it's now persistent -->
 
     <!-- Navigation -->
-    <header class="fixed top-0 z-50 w-full">
+    <header class="sticky top-0 z-50 w-full">
       <nav class="glass-effect relative border-b border-white/10 bg-background/70 px-2 py-3 backdrop-blur-xl sm:py-4">
         <!-- Animated top border -->
         <div class="absolute inset-x-0 top-0 h-[1px]">
@@ -294,7 +295,7 @@ const sections = [
         </header>
 
     <!-- Flash Message Alert with Enhanced Cyberpunk Animation -->
-    <div v-if="flashMessage" :class="[randomPosition, 'fixed z-50']">
+    <div v-if="flashMessage" :class="[randomPosition, 'absolute z-50']">
       <transition name="cyber-alert" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter" @leave="leave">
         <div v-if="showNotification" class="relative overflow-hidden rounded-lg border border-green-500 bg-black/80 p-4 shadow-lg shadow-green-500/20 backdrop-blur-sm max-w-md">
           <!-- Digital noise overlay -->
@@ -369,7 +370,7 @@ const sections = [
     <!-- Spotlight Search Overlay -->
     <div
       v-if="isSearchActive"
-      class="fixed inset-0 z-[60] flex items-start justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300"
+      class="absolute inset-0 z-[60] flex items-start justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300"
       :class="isSearchActive ? 'opacity-100' : 'opacity-0 pointer-events-none'"
       @click="deactivateSearch"
     >
@@ -458,28 +459,10 @@ const sections = [
     </div>
 
     <!-- Main Content with Side Panels -->
-    <div class="flex justify-between w-full">
-      <!-- Left Side Panel -->
-      <!-- <div class="side-panel left-panel w-[240px] relative">
-        <FloatingNeonLines variant="dense" :opacity="0.15" />
-        <div class="relative z-10 p-4 h-full flex items-center justify-center text-center text-gray-400">
-          <iframe src="https://www.retrogames.cc/embed/9254-ms-pacman-champion-edition-super-zola-pac-gal.html" width="240" height="240" frameborder="no" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" scrolling="no"></iframe>
-        </div>
-      </div> -->
-
+    <div class="w-full">
       <!-- Main Content -->
-      <div class="flex-1">
-        <main class="relative">
-          <!-- Floating neon lines for desktop -->
-          <div class="pointer-events-none fixed inset-0 hidden sm:block">
-            <!-- Horizontal lines -->
-            <div class="absolute left-0 top-1/3 h-[1px] w-1/4 animate-neon-slide-right bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-20"></div>
-            <div class="absolute right-0 top-2/3 h-[1px] w-1/4 animate-neon-slide-left bg-gradient-to-r from-transparent via-primary to-transparent opacity-20"></div>
-            <!-- Vertical lines -->
-            <div class="absolute left-1/3 top-0 h-1/4 w-[1px] animate-neon-slide-down bg-gradient-to-b from-transparent via-secondary to-transparent opacity-20"></div>
-            <div class="absolute right-2/3 top-0 h-1/4 w-[1px] animate-neon-slide-down-delayed bg-gradient-to-b from-transparent via-accent to-transparent opacity-20"></div>
-          </div>
-
+      <div class="w-full mx-auto">
+        <main class="relative w-full">
           <!-- Hero Section -->
           <HeroSection
             title="El Arquitecto A.I."
@@ -549,7 +532,7 @@ const sections = [
             </div>
 
             <!-- Grid container for games -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto px-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-full sm:max-w-4xl mx-auto px-2 sm:px-4">
               <!-- Ms Pacman -->
               <RetroGame
                 title="Ms. Pac-Man"
@@ -580,33 +563,25 @@ const sections = [
             </div>
           </div>
 
-            <!-- Color Palette -->
-            <div class="relative">
-                <ColorPalette />
-                <!-- Section corner accents -->
-                <div class="absolute left-0 top-0 h-8 w-8">
-                    <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-secondary via-transparent to-transparent"></div>
-                    <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-secondary via-transparent to-transparent"></div>
-                </div>
-                <div class="absolute right-0 top-0 h-8 w-8">
-                    <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-accent via-transparent to-transparent"></div>
-                    <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-accent via-transparent to-transparent"></div>
-                </div>
+          <!-- Color Palette -->
+          <div class="relative">
+            <ColorPalette />
+            <!-- Section corner accents -->
+            <div class="absolute left-0 top-0 h-8 w-8">
+              <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-secondary via-transparent to-transparent"></div>
+              <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-secondary via-transparent to-transparent"></div>
             </div>
+            <div class="absolute right-0 top-0 h-8 w-8">
+              <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-accent via-transparent to-transparent"></div>
+              <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-accent via-transparent to-transparent"></div>
+            </div>
+          </div>
         </main>
       </div>
-
-      <!-- Right Side Panel -->
-      <!-- <div class="side-panel right-panel w-[240px] relative">
-        <FloatingNeonLines variant="dense" :opacity="0.15" />
-        <div class="relative z-10 p-4 h-full flex items-center justify-center text-center text-gray-400">
-          <p>Right Panel Content</p>
-        </div>
-      </div> -->
     </div>
 
     <!-- Footer -->
-    <footer class="relative border-t border-white/10 bg-background/90 py-8">
+    <footer class="relative border-t border-white/10 bg-background/90 py-8 w-full">
       <!-- Animated bottom border -->
       <div class="absolute inset-x-0 bottom-0 h-[1px]">
         <div class="absolute inset-0 animate-neon-slide-left bg-gradient-to-r from-transparent via-primary to-transparent opacity-30"></div>

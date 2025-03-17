@@ -19,14 +19,17 @@ defineProps<{
         ]"
       ></div>
     </div>
-    <iframe
-      :src="src"
-      class="w-full h-[400px] rounded-md"
-      frameborder="no"
-      allowfullscreen="true"
-      webkitallowfullscreen="true"
-      mozallowfullscreen="true"
-      scrolling="no"
-    ></iframe>
+    <div class="w-full overflow-hidden rounded-md">
+      <iframe
+        :src="src"
+        class="w-full h-[250px] sm:h-[300px] md:h-[400px] rounded-md"
+        frameborder="no"
+        allowfullscreen="true"
+        webkitallowfullscreen="true"
+        mozallowfullscreen="true"
+        scrolling="no"
+        loading="lazy"
+      ></iframe>
+    </div>
   </div>
 </template>

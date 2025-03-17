@@ -36,7 +36,7 @@ const subscribe = () => {
 </script>
 
 <template>
-  <section class="relative min-h-[80vh] w-full overflow-hidden pt-20 sm:pt-24">
+  <section class="relative min-h-[80vh] w-full overflow-hidden pt-20 sm:pt-10">
     <!-- Cyberpunk background with gradient -->
     <div class="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20">
       <div class="cyberpunk-grid-bg absolute inset-0 opacity-20"></div>
@@ -54,8 +54,8 @@ const subscribe = () => {
     </div>
 
     <!-- Glass container -->
-    <div class="mx-auto max-w-6xl px-4 py-12 sm:py-20">
-      <div class="glass-effect relative overflow-hidden rounded-2xl border border-white/10 bg-background/70 p-4 shadow-[0_0_15px_rgba(0,0,0,0.2)] backdrop-blur-xl transition-all duration-300 hover:shadow-[0_0_30px_rgba(124,58,237,0.3)] sm:p-8">
+    <div class="mx-auto max-w-6xl px-4 py-12 sm:py-20 flex items-center justify-center min-h-[60vh]">
+      <div class="glass-effect relative overflow-hidden rounded-2xl border border-white/10 bg-background/70 p-4 shadow-[0_0_15px_rgba(0,0,0,0.2)] backdrop-blur-xl transition-all duration-300 hover:shadow-[0_0_30px_rgba(124,58,237,0.3)] sm:p-8 w-full">
         <!-- Animated corner accents -->
         <div class="absolute left-0 top-0 h-12 w-12 animate-pulse-slow">
           <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
