@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(Timeline::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Tag::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
-            
+
             $table->unique(['timeline_id', 'tag_id']);
         });
     }

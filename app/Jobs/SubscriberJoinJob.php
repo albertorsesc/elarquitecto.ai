@@ -14,20 +14,21 @@ use Illuminate\Support\Facades\Mail;
 
 class SubscriberJoinJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
-    public function __construct(public Subscriber $subscriber)
-    {
-    }
+    public function __construct(public Subscriber $subscriber) {}
 
     public function handle(): void
     {
         Mail::to($this->subscriber->email)
             ->send(new NewSubscriber($this->subscriber));
     }
-    
+
     public function failed(?\Throwable $exception): void
     {
-//        Notification::send(config('app.users.root'), new SubscriberJoinFailed($this->subscriber));
+        //        Notification::send(config('app.users.root'), new SubscriberJoinFailed($this->subscriber));
     }
 }

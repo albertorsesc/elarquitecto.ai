@@ -7,9 +7,6 @@ use App\Models\BlogCategory;
 use App\Models\BlogPost;
 use App\Models\BlogTag;
 use App\Models\Tag;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -22,7 +19,7 @@ class BlogController extends Controller
     /**
      * Display a listing of the blog posts.
      */
-    public function index() : Response
+    public function index(): Response
     {
         $articles = Article::query()
             ->published()
@@ -45,21 +42,21 @@ class BlogController extends Controller
             'breadcrumbs' => [
                 [
                     'title' => 'Home',
-                    'href' => route('home')
+                    'href' => route('home'),
                 ],
                 [
                     'title' => 'Blog',
-                    'href' => route('blog.index')
+                    'href' => route('blog.index'),
                 ],
                 [
                     'title' => $article->title,
-                    'href' => route('blog.show', $article)
-                ]
+                    'href' => route('blog.show', $article),
+                ],
             ],
             'meta' => [
                 'title' => $article->title,
                 'description' => $article->excerpt,
-                'ogImage' => $article->image ? asset('storage/' . $article->image) : null,
+                'ogImage' => $article->image ? asset('storage/'.$article->image) : null,
             ],
         ]);
     }
@@ -71,7 +68,7 @@ class BlogController extends Controller
     {
         $articles = Article::query()
             ->published()
-            ->whereHas('category', fn($q) => $q->where('id', $category->id))
+            ->whereHas('category', fn ($q) => $q->where('id', $category->id))
             ->with(['author', 'category', 'tags'])
             ->latest('published_at')
             ->paginate(9);
@@ -90,7 +87,7 @@ class BlogController extends Controller
     {
         $articles = Article::query()
             ->published()
-            ->whereHas('tags', fn($q) => $q->where('id', $tag->id))
+            ->whereHas('tags', fn ($q) => $q->where('id', $tag->id))
             ->with(['author', 'category', 'tags'])
             ->latest('published_at')
             ->paginate(9);
@@ -130,7 +127,7 @@ class BlogController extends Controller
     /**
      * Display a listing of the blog posts for management.
      */
-    public function manage(Request $request) : Response
+    public function manage(Request $request): Response
     {
         $filters = $request->only('search');
 
@@ -157,7 +154,7 @@ class BlogController extends Controller
     /**
      * Show the form for creating a new blog post.
      */
-    public function create() : Response
+    public function create(): Response
     {
         $categories = BlogCategory::all();
         $tags = BlogTag::all();
@@ -171,7 +168,7 @@ class BlogController extends Controller
     /**
      * Store a newly created blog post in storage.
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -223,7 +220,7 @@ class BlogController extends Controller
     /**
      * Display the categories and tags management page.
      */
-    public function categories() : Response
+    public function categories(): Response
     {
         $categories = BlogCategory::withCount('posts')->get();
         $tags = BlogTag::withCount('posts')->get();
@@ -237,7 +234,7 @@ class BlogController extends Controller
     /**
      * Store a newly created category in storage.
      */
-    public function storeCategory(Request $request) : RedirectResponse
+    public function storeCategory(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:blog_categories,name',
@@ -256,7 +253,7 @@ class BlogController extends Controller
     /**
      * Remove the specified category from storage.
      */
-    public function destroyCategory(BlogCategory $category) : RedirectResponse
+    public function destroyCategory(BlogCategory $category): RedirectResponse
     {
         Article::where('category_id', $category->id)
             ->update(['category_id' => null]);
@@ -270,7 +267,7 @@ class BlogController extends Controller
     /**
      * Store a newly created tag in storage.
      */
-    public function storeTag(Request $request) : RedirectResponse
+    public function storeTag(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:blog_tags,name',
@@ -287,7 +284,7 @@ class BlogController extends Controller
     /**
      * Remove the specified tag from storage.
      */
-    public function destroyTag(Tag $tag) : RedirectResponse
+    public function destroyTag(Tag $tag): RedirectResponse
     {
         $tag->posts()->detach();
         $tag->delete();

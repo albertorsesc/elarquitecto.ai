@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Timeline;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -23,7 +22,7 @@ class TagsTest extends TestCase
             'name' => 'agentes',
         ]);
 
-//        $response->assertRedirect(route('tags.index'));
+        //        $response->assertRedirect(route('tags.index'));
         $this->assertDatabaseHas('tags', [
             'name' => 'agentes',
         ]);

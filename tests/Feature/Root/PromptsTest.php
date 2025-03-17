@@ -5,7 +5,6 @@ namespace Tests\Feature\Root;
 use App\Models\Prompts\Prompt;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
@@ -15,8 +14,9 @@ class PromptsTest extends TestCase
 
     /**
      * @test
+     *
      * @throws \Throwable
-    */
+     */
     public function unauthorized_user_cannot_access_root_prompt_pages()
     {
         $this->actingAs(User::factory()->create());
@@ -31,7 +31,8 @@ class PromptsTest extends TestCase
         $response->assertRedirect(route('dashboard'));
 
         $prompt = $this->create(Prompt::class);
-        $response = $this->post(route('root.prompts.store', $prompt->toArray()),
+        $response = $this->post(
+            route('root.prompts.store', $prompt->toArray()),
             $this->make(Prompt::class)->toArray()
         );
         $response->assertRedirect(route('dashboard'));
@@ -45,8 +46,9 @@ class PromptsTest extends TestCase
 
     /**
      * @test
+     *
      * @throws \Throwable
-    */
+     */
     public function authorized_user_can_view_prompts_index()
     {
         $this->signInAsRoot();
@@ -56,16 +58,18 @@ class PromptsTest extends TestCase
         $response = $this->get(route('root.prompts.index'));
 
         $response->assertOk();
-        $response->assertInertia(fn(AssertableInertia $page) => $page
-            ->component('Root/Prompts/Index')
-            ->has('prompts')
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Root/Prompts/Index')
+                ->has('prompts')
         );
     }
 
     /**
      * @test
+     *
      * @throws \Throwable
-    */
+     */
     public function authorized_user_can_store_a_prompt()
     {
         $this->signInAsRoot();
@@ -84,8 +88,9 @@ class PromptsTest extends TestCase
 
     /**
      * @test
+     *
      * @throws \Throwable
-    */
+     */
     public function authorized_user_can_view_a_prompt()
     {
         $this->signInAsRoot();
@@ -95,16 +100,18 @@ class PromptsTest extends TestCase
         $response = $this->get(route('root.prompts.show', $prompt));
 
         $response->assertOk();
-        $response->assertInertia(fn(AssertableInertia $page) => $page
-            ->component('Root/Prompts/Show')
-            ->has('prompt')
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Root/Prompts/Show')
+                ->has('prompt')
         );
     }
 
     /**
      * @test
+     *
      * @throws \Throwable
-    */
+     */
     public function authorized_user_can_view_create_prompt_page()
     {
         $this->signInAsRoot();
@@ -112,15 +119,17 @@ class PromptsTest extends TestCase
         $response = $this->get(route('root.prompts.create'));
 
         $response->assertOk();
-        $response->assertInertia(fn(AssertableInertia $page) => $page
-            ->component('Root/Prompts/Create')
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Root/Prompts/Create')
         );
     }
 
     /**
      * @test
+     *
      * @throws \Throwable
-    */
+     */
     public function authorized_user_can_edit_a_prompt()
     {
         $this->signInAsRoot();
@@ -130,16 +139,18 @@ class PromptsTest extends TestCase
         $response = $this->get(route('root.prompts.edit', $prompt));
 
         $response->assertOk();
-        $response->assertInertia(fn(AssertableInertia $page) => $page
-            ->component('Root/Prompts/Edit')
-            ->has('prompt')
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Root/Prompts/Edit')
+                ->has('prompt')
         );
     }
 
     /**
      * @test
+     *
      * @throws \Throwable
-    */
+     */
     public function authorized_user_can_update_a_prompt()
     {
         $this->signInAsRoot();
@@ -160,8 +171,9 @@ class PromptsTest extends TestCase
 
     /**
      * @test
+     *
      * @throws \Throwable
-    */
+     */
     public function authorized_user_can_delete_a_prompt()
     {
         $this->signInAsRoot();

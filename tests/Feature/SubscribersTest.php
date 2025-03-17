@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Jobs\SubscriberJoinJob;
-use App\Mail\NewSubscriber;
 use App\Models\Subscriber;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -16,7 +15,7 @@ class SubscribersTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         Mail::fake();

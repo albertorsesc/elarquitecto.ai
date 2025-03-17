@@ -17,9 +17,15 @@ return new class extends Migration
             $table->foreignIdFor(User::class, 'author_id')->constrained('users');
             $table->string('title');
             $table->string('slug')->unique();
-            $table->fullText('description');
-            $table->fullText('excerpt');
-            $table->fullText('content');
+            if (config('database.default') === 'sqlite') {
+                $table->text('description');
+                $table->text('excerpt');
+                $table->text('content');
+            } else {
+                $table->fullText('description');
+                $table->fullText('excerpt');
+                $table->fullText('content');
+            }
             $table->timestamps();
         });
     }

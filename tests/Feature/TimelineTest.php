@@ -8,7 +8,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
-use Throwable;
 
 class TimelineTest extends TestCase
 {
@@ -42,12 +41,12 @@ class TimelineTest extends TestCase
             'excerpt' => $post->excerpt,
             'content' => $post->content,
         ]);
-        
+
         $this->assertDatabaseHas('timeline_tags', [
             'timeline_id' => Timeline::first()->id,
             'tag_id' => $tags->first()->id,
         ]);
-        
+
         $this->assertDatabaseHas('timeline_tags', [
             'timeline_id' => Timeline::first()->id,
             'tag_id' => $tags->last()->id,
@@ -63,7 +62,8 @@ class TimelineTest extends TestCase
 
         $this->get(route('root.timeline.create'))
             ->assertOk()
-            ->assertInertia(fn (Assert $page) => $page->component('Timeline/Create')
+            ->assertInertia(
+                fn (Assert $page) => $page->component('Timeline/Create')
             );
     }
 }

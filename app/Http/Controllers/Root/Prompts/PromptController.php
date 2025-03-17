@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Root\Prompts;
 
 use App\Http\Controllers\Controller;
+use App\Models\Prompts\Prompt;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\Prompts\Prompt;
 
 class PromptController extends Controller
 {

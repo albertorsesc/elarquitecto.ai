@@ -30,7 +30,7 @@ class BlogPost extends Model
         'published_at' => 'datetime',
     ];
 
-    protected static function boot() : void
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -38,13 +38,13 @@ class BlogPost extends Model
             if (empty($post->slug)) {
                 $post->slug = Str::slug($post->title);
             }
-            if ($post->published && !$post->published_at) {
+            if ($post->published && ! $post->published_at) {
                 $post->published_at = now();
             }
         });
 
         static::updating(function ($post) {
-            if ($post->isDirty('published') && $post->published && !$post->published_at) {
+            if ($post->isDirty('published') && $post->published && ! $post->published_at) {
                 $post->published_at = now();
             }
         });
@@ -56,12 +56,12 @@ class BlogPost extends Model
         });
     }
 
-    public function category() : BelongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo(BlogCategory::class, 'category_id');
     }
 
-    public function tags() : BelongsToMany
+    public function tags(): BelongsToMany
     {
         return $this->belongsToMany(BlogTag::class, 'blog_post_tag');
     }

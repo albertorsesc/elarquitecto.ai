@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TimelineRequest;
-use App\Models\Timeline;
 use App\Models\Tag;
+use App\Models\Timeline;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -14,35 +13,38 @@ class TimelineController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
      * @public
      */
-    public function index() : Response
+    public function index(): Response
     {
         $timelines = Timeline::with(['author', 'tags'])->latest()->paginate(10);
 
         return Inertia::render('Timeline/Index', [
-            'timelines' => $timelines
+            'timelines' => $timelines,
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
+     *
      * @root
      */
-    public function create() : Response
+    public function create(): Response
     {
         $tags = Tag::select('id', 'name')->get();
 
         return Inertia::render('Timeline/Create', [
-            'tags' => $tags
+            'tags' => $tags,
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
+     *
      * @root
      */
-    public function store(TimelineRequest $request) : RedirectResponse
+    public function store(TimelineRequest $request): RedirectResponse
     {
         $timeline = Timeline::create($request->validated());
 
@@ -56,37 +58,40 @@ class TimelineController extends Controller
 
     /**
      * Display the specified resource.
+     *
      * @public
      */
-    public function show(Timeline $timeline) : Response
+    public function show(Timeline $timeline): Response
     {
         $timeline->load('author', 'tags');
 
         return Inertia::render('Timeline/Show', [
-            'timeline' => $timeline
+            'timeline' => $timeline,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
+     *
      * @root
      */
-    public function edit(Timeline $timeline) : Response
+    public function edit(Timeline $timeline): Response
     {
         $timeline->load('tags');
         $tags = Tag::select('id', 'name')->get();
 
         return Inertia::render('Timeline/Edit', [
             'timeline' => $timeline,
-            'tags' => $tags
+            'tags' => $tags,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
+     *
      * @root
      */
-    public function update(TimelineRequest $request, Timeline $timeline) : RedirectResponse
+    public function update(TimelineRequest $request, Timeline $timeline): RedirectResponse
     {
         $timeline->update($request->validated());
 
@@ -100,9 +105,10 @@ class TimelineController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
      * @root
      */
-    public function destroy(Timeline $timeline) : RedirectResponse
+    public function destroy(Timeline $timeline): RedirectResponse
     {
         $timeline->delete();
 

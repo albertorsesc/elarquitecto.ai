@@ -8,12 +8,12 @@ use Illuminate\Http\RedirectResponse;
 
 class PublishArticleController extends Controller
 {
-    public function __invoke(Article $article) : RedirectResponse
+    public function __invoke(Article $article): RedirectResponse
     {
         $article->update([
             'published_at' => now(),
         ]);
-        
+
         return to_route('root.articles.index');
     }
 }

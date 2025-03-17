@@ -7,12 +7,11 @@ use App\Jobs\SubscriberJoinJob;
 use App\Models\Subscriber;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 
 class SubscribeController extends Controller
 {
-    public function post(NewsletterRequest $request) : RedirectResponse
+    public function post(NewsletterRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
@@ -26,13 +25,13 @@ class SubscribeController extends Controller
         return redirect()->back()->with('success', '');
     }
 
-    public function verify(string $hash) : Application|Redirector|RedirectResponse
+    public function verify(string $hash): Application|Redirector|RedirectResponse
     {
         $subscriber = Subscriber::where('hash', $hash)->firstOrFail();
 
         $subscriber->update([
             'hash' => null,
-            'verified_at' => now()
+            'verified_at' => now(),
         ]);
 
         return redirect('/')

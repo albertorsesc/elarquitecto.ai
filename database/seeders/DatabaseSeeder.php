@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\Tag;
+use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -37,7 +37,6 @@ class DatabaseSeeder extends Seeder
         Tag::create([
             'name' => 'Natural Language Processing',
         ]);
-
 
     }
 }

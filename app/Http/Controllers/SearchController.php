@@ -18,7 +18,7 @@ class SearchController extends Controller
                 'results' => [
                     'articles' => [],
                     // Add other resource types here as needed
-                ]
+                ],
             ]);
         }
 
@@ -55,7 +55,7 @@ class SearchController extends Controller
         return Inertia::render('Welcome', [
             'articles' => $welcomeArticles,
             'items' => $timelineItems,
-            'searchResults' => $results
+            'searchResults' => $results,
         ]);
     }
 }

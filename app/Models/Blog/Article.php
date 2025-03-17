@@ -16,6 +16,7 @@ class Article extends Model
 {
     /** @use HasFactory<\Database\Factories\Blog\ArticleFactory> */
     use HasFactory;
+
     use Searchable;
 
     protected $fillable = [
@@ -45,7 +46,7 @@ class Article extends Model
             $article->author_id = Auth::id();
             $article->slug = Str::slug($article->title);
             if (Article::query()->where('slug', $article->slug)->exists()) {
-                $article->slug .= '-' . uniqid();
+                $article->slug .= '-'.uniqid();
             }
 
             if (request()->hasFile('image')) {
@@ -74,16 +75,16 @@ class Article extends Model
         });
     }
 
-    public function author() : BelongsTo
+    public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
     }
-    
+
     public function scopePublished(Builder $query): Builder
     {
         return $query->whereNotNull('published_at');
     }
-    
+
     /**
      * Get the name of the index associated with the model.
      */
@@ -91,7 +92,7 @@ class Article extends Model
     {
         return 'articles_index';
     }
-    
+
     /**
      * Get the indexable data array for the model.
      *
@@ -104,15 +105,15 @@ class Article extends Model
             'title' => $this->title,
             'excerpt' => $this->excerpt,
         ];
-        
+
         return $array;
     }
-    
+
     /**
      * Determine if the model should be searchable.
      */
     public function shouldBeSearchable(): bool
     {
-        return !! $this->published_at;
+        return (bool) $this->published_at;
     }
 }

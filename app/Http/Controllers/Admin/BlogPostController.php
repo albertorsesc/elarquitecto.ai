@@ -116,7 +116,7 @@ class BlogPostController extends Controller
         }
 
         // Set published_at if published and not already set
-        if (($validated['published'] ?? false) && !$post->published_at && !$post->published) {
+        if (($validated['published'] ?? false) && ! $post->published_at && ! $post->published) {
             $validated['published_at'] = now();
         }
 
