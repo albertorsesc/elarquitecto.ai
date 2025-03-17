@@ -26,7 +26,7 @@ createServer((page) =>
             // Configure Ziggy for SSR...
             const ziggyConfig = {
                 ...(page.props as unknown as SharedData).ziggy,
-                location: new URL((page.props as unknown as SharedData).ziggy.location),
+                location: new URL((page.props as unknown as SharedData).ziggy.url),
             };
 
             // Create route function...
