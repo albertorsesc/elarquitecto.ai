@@ -11,7 +11,8 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
-                'resources/js/app.ts'
+                'resources/js/app.ts',
+                'resources/css/theme.css'
             ],
             ssr: 'resources/js/ssr.ts',
             refresh: true,
