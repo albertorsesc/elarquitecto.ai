@@ -16,10 +16,10 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class, 'author_id')->constrained('users');
             $table->string('name');
-            if (config('database.default') === 'sqlite') {
-                $table->text('description');
-                $table->text('content');
-            } else {
+            $table->text('description');
+            $table->text('content');
+            
+            if (config('database.default') === 'mysql') {
                 $table->fullText('description');
                 $table->fullText('content');
             }
