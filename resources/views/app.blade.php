@@ -33,12 +33,35 @@
 
         <title inertia>{{ config('app.name', 'El Arquitecto A.I.') }}</title>
 
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        <!-- Fallback SEO meta tags - these will only be visible if Inertia Head hasn't loaded yet -->
+        <meta name="description" content="Democratizando I.A. para el beneficio de Latinoamérica">
 
         <!-- Favicon -->
         <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
         <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+
+        <!-- JSON-LD Structured Data -->
+        @if(isset($page['props']['jsonLd']))
+            @if(is_array($page['props']['jsonLd']))
+                @if(isset($page['props']['jsonLd']['@context']))
+                    <!-- Single schema -->
+                    <script type="application/ld+json">
+                        {!! json_encode($page['props']['jsonLd']) !!}
+                    </script>
+                @else
+                    <!-- Multiple schemas -->
+                    @foreach($page['props']['jsonLd'] as $type => $schema)
+                        @if(is_array($schema))
+                            <script type="application/ld+json">
+                                {!! json_encode($schema) !!}
+                            </script>
+                        @endif
+                    @endforeach
+                @endif
+            @endif
+        @endif
 
         @routes
         @vite(['resources/js/app.ts', 'resources/css/theme.css', 'resources/css/app.css'])

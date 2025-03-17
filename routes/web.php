@@ -4,10 +4,14 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PromptController as PublicPromptController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\TimelineController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
+
+// SEO Routes
+Route::get('sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
 

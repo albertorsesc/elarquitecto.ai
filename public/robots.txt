@@ -1,2 +1,14 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Disallow protected routes
+Disallow: /admin/
+Disallow: /root/
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /login
+Disallow: /register
+Disallow: /password/
+
+# Sitemap location
+Sitemap: https://elarquitectoai.ai/sitemap.xml

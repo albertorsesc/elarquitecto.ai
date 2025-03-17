@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('description');
             $table->text('excerpt');
             $table->text('content');
-            
+
             if (config('database.default') === 'mysql') {
                 $table->fullText('description');
                 $table->fullText('excerpt');

@@ -6,11 +6,12 @@ import SectionCards from '@/components/landing/SectionCards.vue';
 import TimelineSection from '@/components/landing/TimelineSection.vue';
 import RetroGame from '@/components/RetroGame.vue';
 import SearchModal from '@/components/SearchModal.vue';
+import SeoHead from '@/components/SeoHead.vue';
 import { Article } from '@/types/article';
 import { TimelineItem } from '@/types/timeline-item';
 import { CheckCircleIcon } from '@heroicons/vue/24/outline';
 import type { PageProps as InertiaPageProps } from '@inertiajs/core';
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import gsap from 'gsap';
 import { computed, ref } from 'vue';
 
@@ -23,6 +24,15 @@ interface User {
 interface PageProps extends InertiaPageProps {
   auth: {
     user: User | null;
+  };
+  seo: {
+    title: string;
+    description: string;
+    keywords: string;
+    canonicalUrl: string;
+    ogType: string;
+    ogImage: string;
+    twitterCard: string;
   };
 }
 
@@ -198,16 +208,13 @@ const sections = [
     link: '/community'
   }
 ];
+
+// Access SEO data from shared props
+const seo = page.props.seo;
 </script>
 
 <template>
-  <Head>
-    <title>
-        El Arquitecto A.I. - Democratizando I.A. para el beneficio de Latinoamérica
-    </title>
-    <meta name="description" content="Aprende sobre Inteligencia Artificial en español con El Arquitecto A.I. Blog, tutoriales, prompts y más." />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  </Head>
+  <SeoHead v-bind="seo" />
 
   <div class="min-h-screen bg-background text-foreground overflow-x-hidden">
     <!-- Music Player removed as it's now persistent -->

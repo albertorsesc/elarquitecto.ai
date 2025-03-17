@@ -1,12 +1,13 @@
 <script setup lang="ts">
+import SeoHead from '@/components/SeoHead.vue';
 import FloatingNeonLines from '@/components/theme/FloatingNeonLines.vue';
 import GlassContainer from '@/components/theme/GlassContainer.vue';
-import AppLayout from '@/layouts/AppLayout.vue';
-import { Head, router, Link } from '@inertiajs/vue3';
-import { ref, watch, PropType } from 'vue';
 import NeonBorders from '@/components/theme/NeonBorders.vue';
 import NeonEffects from '@/components/theme/NeonEffects.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 import { Article } from '@/types/article';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import { PropType, ref, watch } from 'vue';
 
 const props = defineProps({
     articles: Object as PropType<Article[]>,
@@ -40,10 +41,24 @@ const getImageUrl = (image: string) => {
 
     return `/storage/${image}`;
 };
+
+// Access SEO data from shared props
+const page = usePage<{
+  seo: {
+    title: string;
+    description: string;
+    keywords: string;
+    canonicalUrl: string;
+    ogType: string;
+    ogImage: string;
+    twitterCard: string;
+  };
+}>();
+const seo = page.props.seo;
 </script>
 
 <template>
-    <Head title="Manage Blog articles" />
+    <SeoHead v-bind="seo" />
 
     <AppLayout>
         <template #header>

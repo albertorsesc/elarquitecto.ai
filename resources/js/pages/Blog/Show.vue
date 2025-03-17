@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SeoHead from '@/components/SeoHead.vue';
 import GlassContainer from '@/components/theme/GlassContainer.vue';
 import NeonBorders from '@/components/theme/NeonBorders.vue';
 import NeonEffects from '@/components/theme/NeonEffects.vue';
@@ -6,7 +7,7 @@ import { useAssetUrl } from '@/composables/useAssetUrl';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import type { Article } from '@/types/article';
-import { Head, Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { MdPreview } from 'md-editor-v3';
 import 'md-editor-v3/lib/preview.css';
 import { computed, nextTick, onBeforeUnmount, onMounted, PropType, ref } from 'vue';
@@ -165,20 +166,24 @@ const onPreviewReady = () => {
         }
     });
 };
+
+// Access SEO data from shared props
+const page = usePage<{
+  seo: {
+    title: string;
+    description: string;
+    keywords: string;
+    canonicalUrl: string;
+    ogType: string;
+    ogImage: string;
+    twitterCard: string;
+  };
+}>();
+const seo = page.props.seo;
 </script>
 
 <template>
-    <Head>
-        <title>{{ meta.title }}</title>
-        <meta name="description" :content="meta.description">
-        <meta property="og:title" :content="meta.title">
-        <meta property="og:description" :content="meta.description">
-        <meta v-if="meta.ogImage" property="og:image" :content="meta.ogImage">
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" :content="meta.title">
-        <meta name="twitter:description" :content="meta.description">
-        <meta v-if="meta.ogImage" name="twitter:image" :content="meta.ogImage">
-    </Head>
+    <SeoHead v-bind="seo" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex flex-col gap-4 h-full">

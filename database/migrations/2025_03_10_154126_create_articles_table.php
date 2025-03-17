@@ -19,12 +19,12 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('content');
             $table->text('excerpt');
-            
+
             if (config('database.default') === 'mysql') {
                 $table->fullText('content');
                 $table->fullText('excerpt');
             }
-            
+
             $table->dateTime('published_at')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();

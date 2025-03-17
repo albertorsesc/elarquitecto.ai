@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import SeoHead from '@/components/SeoHead.vue';
 import FloatingNeonLines from '@/components/theme/FloatingNeonLines.vue';
 import GlassContainer from '@/components/theme/GlassContainer.vue';
 import NeonBorders from '@/components/theme/NeonBorders.vue';
 import NeonEffects from '@/components/theme/NeonEffects.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Prompt } from '@/types/prompt';
-import { Head, router, Link } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import { PropType, ref, watch } from 'vue';
 
 const props = defineProps({
@@ -14,6 +15,20 @@ const props = defineProps({
 });
 
 const search = ref(props.filters?.search || '');
+
+// Access SEO data from shared props
+const page = usePage<{
+  seo: {
+    title: string;
+    description: string;
+    keywords: string;
+    canonicalUrl: string;
+    ogType: string;
+    ogImage: string;
+    twitterCard: string;
+  };
+}>();
+const seo = page.props.seo;
 
 watch(search, (value) => {
     if (value === null) {
@@ -31,7 +46,7 @@ watch(search, (value) => {
 </script>
 
 <template>
-    <Head title="Prompts" />
+    <SeoHead v-bind="seo" />
 
     <AppLayout>
         <template #header>
