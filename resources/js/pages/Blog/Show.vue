@@ -225,7 +225,7 @@ const onPreviewReady = () => {
                         </header>
 
                         <!-- Article Image -->
-                        <div v-if="articleImageUrl" class="relative w-full aspect-[21/9] mb-8 rounded-lg overflow-hidden">
+                        <div v-if="articleImageUrl" class="relative w-full aspect-[18/5] mb-8 rounded-lg overflow-hidden">
                             <img
                                 :src="articleImageUrl"
                                 :alt="article?.title || ''"

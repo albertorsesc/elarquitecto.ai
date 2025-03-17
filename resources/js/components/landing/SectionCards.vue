@@ -13,6 +13,11 @@ interface Section {
 defineProps<{
   sections: Section[];
 }>();
+
+const enabledSections = [
+    'Blog',
+    'Prompts',
+];
 </script>
 
 <template>
@@ -66,6 +71,7 @@ defineProps<{
           <!-- Content -->
           <h3 class="relative z-10 mb-2 text-lg font-semibold text-foreground transition-colors duration-300 group-hover:text-glow-multi">
             {{ section.title }}
+              <span v-if="! enabledSections.includes(section.title)" class="text-xs text-gray-400 ml-3">Próximamente</span>
           </h3>
           <p class="relative z-10 text-sm text-foreground/70">
             {{ section.description }}
@@ -75,7 +81,7 @@ defineProps<{
           <div class="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
 
           <!-- Link overlay -->
-          <Link :href="section.link" class="absolute inset-0">
+          <Link v-if="enabledSections.includes(section.title)" :href="section.link" class="absolute inset-0">
             <span class="sr-only">Ir a {{ section.title }}</span>
           </Link>
         </div>

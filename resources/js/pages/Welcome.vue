@@ -4,12 +4,12 @@ import ColorPalette from '@/components/landing/ColorPalette.vue';
 import HeroSection from '@/components/landing/HeroSection.vue';
 import SectionCards from '@/components/landing/SectionCards.vue';
 import TimelineSection from '@/components/landing/TimelineSection.vue';
+import RetroGame from '@/components/RetroGame.vue';
+import { Article } from '@/types/article';
 import { TimelineItem } from '@/types/timeline-item';
-// @ts-expect-error - Heroicons types not available
 import { CheckCircleIcon } from '@heroicons/vue/24/outline';
 import type { PageProps as InertiaPageProps } from '@inertiajs/core';
 import { Head, Link, usePage } from '@inertiajs/vue3';
-// @ts-expect-error - GSAP types not available
 import gsap from 'gsap';
 import { computed, ref } from 'vue';
 
@@ -133,6 +133,15 @@ function handleEscape(event: KeyboardEvent) {
 
 // Define props for the Welcome component
 const props = defineProps<{
+    articles: {
+        data: Article[];
+        links: {
+            first: string;
+            last: string;
+            prev: string | null;
+            next: string | null;
+        };
+    },
   items: {
     data: TimelineItem[];
     links: {
@@ -143,30 +152,6 @@ const props = defineProps<{
     };
   };
 }>();
-
-const blogPosts = [
-  {
-    id: 1,
-    title: 'Introducción a la IA',
-    excerpt: 'Descubre los conceptos básicos de la Inteligencia Artificial y cómo está cambiando el mundo.',
-    image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    category: 'Fundamentos'
-  },
-  {
-    id: 2,
-    title: 'Prompts Efectivos',
-    excerpt: 'Aprende a crear prompts que generen resultados precisos con modelos de lenguaje avanzados.',
-    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    category: 'Técnicas'
-  },
-  {
-    id: 3,
-    title: 'IA en Latinoamérica',
-    excerpt: 'Análisis del estado actual de la Inteligencia Artificial en los países latinoamericanos.',
-    image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    category: 'Tendencias'
-  }
-];
 
 const sections = [
   {
@@ -216,7 +201,9 @@ const sections = [
 
 <template>
   <Head>
-    <title>El Arquitecto A.I. - Conocimiento de IA en Español</title>
+    <title>
+        El Arquitecto A.I. - Democratizando I.A. para el beneficio de Latinoamérica
+    </title>
     <meta name="description" content="Aprende sobre Inteligencia Artificial en español con El Arquitecto A.I. Blog, tutoriales, prompts y más." />
   </Head>
 
@@ -517,7 +504,8 @@ const sections = [
 
           <!-- Blog Carousel -->
           <div class="relative">
-            <BlogCarousel :posts="blogPosts" />
+            <BlogCarousel :articles="articles" />
+
             <!-- Section corner accents -->
             <div class="absolute left-0 top-0 h-8 w-8">
               <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-secondary via-transparent to-transparent"></div>
@@ -543,25 +531,11 @@ const sections = [
             </div>
           </div>
 
-          <!-- Color Palette -->
-          <div class="relative">
-            <ColorPalette />
-            <!-- Section corner accents -->
-            <div class="absolute left-0 top-0 h-8 w-8">
-              <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-secondary via-transparent to-transparent"></div>
-              <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-secondary via-transparent to-transparent"></div>
-            </div>
-            <div class="absolute right-0 top-0 h-8 w-8">
-              <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-accent via-transparent to-transparent"></div>
-              <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-accent via-transparent to-transparent"></div>
-            </div>
-          </div>
-
           <!-- Retro Games Section -->
-          <div class="relative py-12">
+          <div class="relative py-8">
             <h2 class="mb-8 text-center text-3xl font-bold text-foreground">
               Juegos Retro
-              <div class="mt-2 h-1 w-24 bg-gradient-to-r from-primary via-cyan-400 to-secondary mx-auto"></div>
+              <span class="mt-2 h-1 w-24 bg-gradient-to-r from-primary via-cyan-400 to-secondary mx-auto"></span>
             </h2>
 
             <!-- Section corner accents -->
@@ -573,7 +547,52 @@ const sections = [
               <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
               <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
             </div>
+
+            <!-- Grid container for games -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto px-4">
+              <!-- Ms Pacman -->
+              <RetroGame
+                title="Ms. Pac-Man"
+                color="primary"
+                src="https://www.retrogames.cc/embed/9254-ms-pacman-champion-edition-super-zola-pac-gal.html"
+              />
+
+              <!-- Prince of Persia -->
+              <RetroGame
+                title="Prince of Persia"
+                color="secondary"
+                src="https://www.retrogames.cc/embed/21597-prince-of-persia-usa.html"
+              />
+
+              <!-- Sonic the Hedgehog -->
+              <RetroGame
+                title="Sonic the Hedgehog"
+                color="accent"
+                src="https://www.retrogames.cc/embed/30899-sonic-the-hedgehog-usa-europe.html"
+              />
+
+              <!-- Mario -->
+              <RetroGame
+                title="Mario Bros"
+                color="cyan"
+                src="https://www.retrogames.cc/embed/41973-yet-another-smw-hack.html"
+              />
+            </div>
           </div>
+
+            <!-- Color Palette -->
+            <div class="relative">
+                <ColorPalette />
+                <!-- Section corner accents -->
+                <div class="absolute left-0 top-0 h-8 w-8">
+                    <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-secondary via-transparent to-transparent"></div>
+                    <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-secondary via-transparent to-transparent"></div>
+                </div>
+                <div class="absolute right-0 top-0 h-8 w-8">
+                    <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-accent via-transparent to-transparent"></div>
+                    <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-accent via-transparent to-transparent"></div>
+                </div>
+            </div>
         </main>
       </div>
 
@@ -593,7 +612,11 @@ const sections = [
         <div class="absolute inset-0 animate-neon-slide-left bg-gradient-to-r from-transparent via-primary to-transparent opacity-30"></div>
       </div>
       <div class="mx-auto max-w-6xl px-4 text-center text-foreground/60">
-        <p>&copy; 2024 El Arquitecto A.I. Todos los derechos reservados.</p>
+        <p>
+          {{ new Date().getFullYear() }} &bull;
+          El Arquitecto A.I. &bull;
+          Democratizando I.A. para el beneficio de Latinoamérica
+        </p>
       </div>
     </footer>
   </div>

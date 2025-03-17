@@ -24,7 +24,8 @@ class BlogController extends Controller
      */
     public function index() : Response
     {
-        $articles = Article::query()->published()
+        $articles = Article::query()
+            ->published()
             ->with(['author'])
             ->latest('published_at')
             ->paginate(9);

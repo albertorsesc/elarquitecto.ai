@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-
-interface BlogPost {
-  id: number;
-  title: string;
-  excerpt: string;
-  image: string;
-  category: string;
-}
+import { Article } from '@/types/article';
 
 defineProps<{
-  posts: BlogPost[];
+  articles: {
+      data: Article[];
+      links: {
+          first: string;
+          last: string;
+          prev: string | null;
+          next: string | null;
+      };
+  }
 }>();
 
 // Function to handle image loading errors
@@ -29,8 +30,8 @@ function handleImageError(event: Event) {
 
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <div
-          v-for="post in posts"
-          :key="post.id"
+          v-for="article in articles.data"
+          :key="article.id"
           class="group relative overflow-hidden rounded-xl border border-white/10 bg-background/50 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:shadow-[0_0_30px_rgba(0,0,0,0.3)] shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
         >
           <!-- Image container with effects -->
@@ -48,8 +49,8 @@ function handleImageError(event: Event) {
 
             <!-- Image with hover zoom -->
             <img
-              :src="post.image"
-              :alt="post.title"
+              :src="article.image"
+              :alt="article.title"
               class="h-full w-full object-cover transition-transform duration-700 will-change-transform group-hover:scale-110"
               @error="handleImageError"
             />
@@ -59,17 +60,17 @@ function handleImageError(event: Event) {
 
             <!-- Category badge -->
             <span class="absolute bottom-4 left-4 z-20 rounded bg-background/80 px-2 py-1 text-xs font-medium text-primary backdrop-blur-sm transition-colors duration-300 group-hover:bg-primary group-hover:text-white">
-              {{ post.category }}
+              {{ article.category }}
             </span>
           </div>
 
           <div class="relative p-4">
             <!-- Content -->
             <h3 class="mb-2 text-lg font-semibold text-foreground transition-colors duration-300 group-hover:text-glow-multi">
-              {{ post.title }}
+              {{ article.title }}
             </h3>
             <p class="text-sm text-foreground/70">
-              {{ post.excerpt }}
+              {{ article.excerpt }}
             </p>
 
             <!-- Hover effect overlay -->
@@ -92,8 +93,8 @@ function handleImageError(event: Event) {
           </div>
 
           <!-- Link overlay -->
-          <Link :href="'/blog/' + post.id" class="absolute inset-0">
-            <span class="sr-only">Leer más sobre {{ post.title }}</span>
+          <Link :href="'/blog/' + article.id" class="absolute inset-0">
+            <span class="sr-only">Leer más sobre {{ article.title }}</span>
           </Link>
         </div>
       </div>

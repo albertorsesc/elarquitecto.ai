@@ -49,6 +49,7 @@ if (app()->environment('local')) {
 
 // Blog Routes
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{article}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/blog/search', [BlogController::class, 'search'])->name('blog.search');
 // Route::get('/blog/category/{category}', [BlogController::class, 'category'])->name('blog.category');
 // Route::get('/blog/tag/{tag}', [BlogController::class, 'tag'])->name('blog.tag');
