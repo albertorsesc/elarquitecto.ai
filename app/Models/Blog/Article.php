@@ -10,11 +10,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 
 class Article extends Model
 {
     /** @use HasFactory<\Database\Factories\Blog\ArticleFactory> */
     use HasFactory;
+    use Searchable;
 
     protected $fillable = [
         'title',
@@ -80,5 +82,37 @@ class Article extends Model
     public function scopePublished(Builder $query): Builder
     {
         return $query->whereNotNull('published_at');
+    }
+    
+    /**
+     * Get the name of the index associated with the model.
+     */
+    public function searchableAs(): string
+    {
+        return 'articles_index';
+    }
+    
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array<string, mixed>
+     */
+    public function toSearchableArray(): array
+    {
+        $array = [
+            'id' => $this->id,
+            'title' => $this->title,
+            'excerpt' => $this->excerpt,
+        ];
+        
+        return $array;
+    }
+    
+    /**
+     * Determine if the model should be searchable.
+     */
+    public function shouldBeSearchable(): bool
+    {
+        return !! $this->published_at;
     }
 }

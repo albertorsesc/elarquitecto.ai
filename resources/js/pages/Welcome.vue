@@ -5,6 +5,7 @@ import HeroSection from '@/components/landing/HeroSection.vue';
 import SectionCards from '@/components/landing/SectionCards.vue';
 import TimelineSection from '@/components/landing/TimelineSection.vue';
 import RetroGame from '@/components/RetroGame.vue';
+import SearchModal from '@/components/SearchModal.vue';
 import { Article } from '@/types/article';
 import { TimelineItem } from '@/types/timeline-item';
 import { CheckCircleIcon } from '@heroicons/vue/24/outline';
@@ -211,6 +212,12 @@ const sections = [
   <div class="min-h-screen bg-background text-foreground overflow-x-hidden">
     <!-- Music Player removed as it's now persistent -->
 
+    <!-- Search Modal -->
+    <SearchModal
+      :is-active="isSearchActive"
+      @close="isSearchActive = false"
+    />
+
     <!-- Navigation -->
     <header class="sticky top-0 z-50 w-full">
       <nav class="glass-effect relative border-b border-white/10 bg-background/70 px-2 py-3 backdrop-blur-xl sm:py-4">
@@ -365,97 +372,6 @@ const sections = [
           </div>
         </div>
       </transition>
-    </div>
-
-    <!-- Spotlight Search Overlay -->
-    <div
-      v-if="isSearchActive"
-      class="absolute inset-0 z-[60] flex items-start justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300"
-      :class="isSearchActive ? 'opacity-100' : 'opacity-0 pointer-events-none'"
-      @click="deactivateSearch"
-    >
-      <div
-        class="mt-20 w-full max-w-2xl transform px-4 transition-all duration-300"
-        :class="isSearchActive ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'"
-        @click.stop
-      >
-        <div class="glass-effect relative overflow-hidden rounded-xl border border-white/20 bg-background/80 shadow-[0_0_30px_rgba(124,58,237,0.3)]">
-          <!-- Animated corner accents -->
-          <div class="absolute left-0 top-0 h-12 w-12 animate-pulse-slow">
-            <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
-            <div class="absolute left-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-r from-primary via-transparent to-transparent"></div>
-          </div>
-          <div class="absolute right-0 top-0 h-12 w-12 animate-pulse-slow">
-            <div class="absolute right-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-cyan-400 via-transparent to-transparent"></div>
-            <div class="absolute right-0 top-0 h-[1px] w-full animate-glow bg-gradient-to-l from-cyan-400 via-transparent to-transparent"></div>
-          </div>
-          <div class="absolute bottom-0 left-0 h-12 w-12 animate-pulse-slow">
-            <div class="absolute bottom-0 left-0 h-full w-[1px] animate-glow bg-gradient-to-t from-secondary via-transparent to-transparent"></div>
-            <div class="absolute bottom-0 left-0 h-[1px] w-full animate-glow bg-gradient-to-r from-secondary via-transparent to-transparent"></div>
-          </div>
-          <div class="absolute bottom-0 right-0 h-12 w-12 animate-pulse-slow">
-            <div class="absolute bottom-0 right-0 h-full w-[1px] animate-glow bg-gradient-to-t from-accent via-transparent to-transparent"></div>
-            <div class="absolute bottom-0 right-0 h-[1px] w-full animate-glow bg-gradient-to-l from-accent via-transparent to-transparent"></div>
-          </div>
-
-          <!-- Sliding neon lights -->
-          <div class="pointer-events-none absolute -inset-1">
-            <!-- Top edge -->
-            <div class="absolute left-0 top-0 h-[2px] w-full animate-neon-slide-right-slow bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
-            <!-- Right edge -->
-            <div class="absolute right-0 top-0 h-full w-[2px] animate-neon-slide-down-slow bg-gradient-to-b from-transparent via-secondary to-transparent opacity-50"></div>
-            <!-- Bottom edge -->
-            <div class="absolute bottom-0 left-0 h-[2px] w-full animate-neon-slide-left-slow bg-gradient-to-r from-transparent via-accent to-transparent opacity-50"></div>
-            <!-- Left edge -->
-            <div class="absolute left-0 top-0 h-full w-[2px] animate-neon-slide-up-slow bg-gradient-to-b from-transparent via-cyan-400 to-transparent opacity-50"></div>
-          </div>
-
-          <!-- Search Input -->
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 z-10 flex items-center pl-4">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-cyan-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                                    </svg>
-                </div>
-            <input
-              id="spotlight-search"
-              v-model="searchQuery"
-              type="text"
-              placeholder="Buscar en El Arquitecto A.I..."
-              class="relative z-10 w-full border-b border-white/10 bg-transparent py-4 pl-12 pr-4 text-lg text-foreground placeholder:text-foreground/50 focus:outline-none"
-              @keydown="handleEscape"
-              @blur="deactivateSearch"
-            />
-            <div v-if="searchQuery" class="absolute inset-y-0 right-0 z-10 flex items-center pr-4">
-              <button
-                class="rounded-full p-1 text-foreground/50 hover:bg-white/10 hover:text-foreground"
-                @click="searchQuery = ''"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                    </svg>
-              </button>
-            </div>
-            <!-- Animated border effect -->
-            <div class="absolute bottom-0 left-0 h-[1px] w-full bg-gradient-to-r from-primary via-cyan-400 to-secondary opacity-50"></div>
-          </div>
-
-          <!-- Search Results (placeholder) -->
-          <div v-if="searchQuery" class="max-h-[60vh] overflow-y-auto p-4">
-            <div class="p-4 text-center">
-              <div class="relative mx-auto mb-4 h-8 w-8">
-                <div class="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-cyan-400 opacity-70"></div>
-              </div>
-              <p class="text-sm text-foreground/70">Buscando "<span class="text-cyan-400">{{ searchQuery }}</span>"...</p>
-              <p class="mt-2 text-xs text-foreground/50">Presiona <span class="rounded border border-white/20 bg-white/5 px-1.5 py-0.5 text-[10px] font-mono">ESC</span> para cerrar</p>
-            </div>
-          </div>
-          <div v-else class="p-6 text-center">
-            <p class="text-sm text-foreground/70">Comienza a escribir para buscar</p>
-            <p class="mt-2 text-xs text-foreground/50">Presiona <span class="rounded border border-white/20 bg-white/5 px-1.5 py-0.5 text-[10px] font-mono">ESC</span> para cerrar</p>
-                </div>
-        </div>
-      </div>
     </div>
 
     <!-- Main Content with Side Panels -->

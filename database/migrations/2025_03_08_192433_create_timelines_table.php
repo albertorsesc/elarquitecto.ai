@@ -17,9 +17,9 @@ return new class extends Migration
             $table->foreignIdFor(User::class, 'author_id')->constrained('users');
             $table->string('title');
             $table->string('slug')->unique();
-            $table->string('description');
-            $table->string('excerpt');
-            $table->text('content');
+            $table->fullText('description');
+            $table->fullText('excerpt');
+            $table->fullText('content');
             $table->timestamps();
         });
     }
