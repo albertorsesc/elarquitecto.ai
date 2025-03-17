@@ -382,7 +382,7 @@ const sections = [
           <!-- Hero Section -->
           <HeroSection
             title="El Arquitecto A.I."
-            subtitle="Descubre el poder de la Inteligencia Artificial en español"
+            subtitle="Democtratizando I.A. para el beneficio de Latinoamérica"
             logo-src="/logo.png"
           />
 

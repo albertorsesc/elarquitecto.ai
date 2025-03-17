@@ -149,7 +149,7 @@ const subscribe = () => {
           </form>
 
           <!-- Cyberpunk-styled buttons -->
-          <div class="mt-6 flex flex-wrap justify-center gap-3 sm:mt-8 sm:gap-4">
+<!--          <div class="mt-6 flex flex-wrap justify-center gap-3 sm:mt-8 sm:gap-4">
             <button class="neon-border group relative rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-primary/80 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-6 sm:py-3">
               <span class="relative z-10">Explorar</span>
               <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary via-secondary to-accent opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
@@ -158,7 +158,7 @@ const subscribe = () => {
               <span class="relative z-10">Más Info</span>
               <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
             </button>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>
