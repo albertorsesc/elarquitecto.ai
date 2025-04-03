@@ -4,7 +4,7 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Calendar, FileText, Folder, LayoutGrid, Settings } from 'lucide-vue-next';
+import { FileText, GithubIcon, Settings, MessageSquareText, Newspaper } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const page = usePage();
@@ -14,15 +14,25 @@ const isRootUser = auth?.is_root;
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
-        href: '/dashboard',
-        icon: LayoutGrid,
+        title: 'Blog',
+        href: route('blog.index'),
+        icon: Newspaper,
     },
     {
-        title: 'Timeline',
-        href: '/timeline',
-        icon: Calendar,
-    },
+        title: 'Prompts',
+        href: route('prompts.index'),
+        icon: MessageSquareText,
+    }
+    // {
+    //     title: 'Dashboard',
+    //     href: '/dashboard',
+    //     icon: LayoutGrid,
+    // },
+    // {
+    //     title: 'Timeline',
+    //     href: '/timeline',
+    //     icon: Calendar,
+    // },
 ];
 
 const rootNavItems: NavItem[] = [
@@ -45,14 +55,9 @@ const rootNavItems: NavItem[] = [
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
+        title: 'Github',
+        href: 'https://github.com/albertorsesc/elarquitecto.ai',
+        icon: GithubIcon,
     },
 ];
 </script>

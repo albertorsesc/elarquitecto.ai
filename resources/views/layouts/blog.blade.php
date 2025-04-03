@@ -97,12 +97,12 @@
                                 Dashboard
                             </a>
                         @else
-                            <a href="{{ route('login') }}" class="px-1 text-xs text-foreground/80 transition-colors hover:text-primary sm:px-2 sm:text-sm">
-                                Iniciar
-                            </a>
-                            <a href="{{ route('register') }}" class="neon-border rounded bg-primary px-2 py-1 text-xs font-semibold text-white transition-all hover:bg-primary/80 sm:px-3 sm:py-1.5 sm:text-sm">
-                                Registrarse
-                            </a>
+{{--                            <a href="{{ route('login') }}" class="px-1 text-xs text-foreground/80 transition-colors hover:text-primary sm:px-2 sm:text-sm">--}}
+{{--                                Iniciar--}}
+{{--                            </a>--}}
+{{--                            <a href="{{ route('register') }}" class="neon-border rounded bg-primary px-2 py-1 text-xs font-semibold text-white transition-all hover:bg-primary/80 sm:px-3 sm:py-1.5 sm:text-sm">--}}
+{{--                                Registrarse--}}
+{{--                            </a>--}}
                         @endauth
                     </div>
 

@@ -1,3 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
 How to build newsletter subscriber system on Laravel 10
 Newsletter section is one of the important parts to interact with visitor. In todays article, I will show you how to build a newsletter system on laravel 10.
 

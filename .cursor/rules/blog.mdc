@@ -1,3 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
 # LATAM AI Knowledge Blog: Feature Development Sequence
 
 ## Stage 1: Core Blog Functionality
@@ -165,7 +170,7 @@ tags:
     - LLM
     - CoT Prompting
 ---
-![autoreason-deep-dive-into-automatic-reasoning-decomposition-for-llms.webp](../images/autoreason-deep-dive-into-automatic-reasoning-decomposition-for-llms.webp)
+![autoreason-deep-dive-into-automatic-reasoning-decomposition-for-llms.webp](mdc:../images/autoreason-deep-dive-into-automatic-reasoning-decomposition-for-llms.webp)
 
 The rise of Large Language Models (LLMs) has been nothing short of revolutionary.  These models, trained on vast amounts of text data, can generate human-quality text, translate languages, and answer questions with impressive accuracy.  However, when it comes to complex reasoning tasks, even the most advanced LLMs can falter.
 
@@ -204,7 +209,7 @@ To implement _AUTOREASON_, you'll need:
 
 - **Access to LLMs**: Access to powerful LLMs like `gpt-4` is necessary, which can be obtained through OpenAI's API.
 - **Prompt Engineering**: Crafting effective prompts for both rationale generation and final answer generation is crucial. The prompt templates provided in the paper's appendix can be a useful starting point.
-- **Code Availability**: The source code for the _AUTOREASON_ study is publicly available on [GitHub](https://github.com/miralab-ai/autoreason), providing a foundation for implementation. (As of the time of writing this article the code has not been uploaded, but it is expected to be released soon.)
+- **Code Availability**: The source code for the _AUTOREASON_ study is publicly available on [GitHub](mdc:https:/github.com/miralab-ai/autoreason), providing a foundation for implementation. (As of the time of writing this article the code has not been uploaded, but it is expected to be released soon.)
 
 ### Example of a Prompt for AUTOREASON
 
@@ -257,7 +262,7 @@ _AUTOREASON_ is a groundbreaking approach to improving the reasoning capabilitie
 
 The public availability of the research code and the insights gained from the study provide a solid foundation for future research and development. As we continue to explore and refine techniques like _AUTOREASON_, we move closer to the goal of creating truly intelligent AI systems capable of human-like reasoning.
 
-You can read the full paper on _AUTOREASON_ [here](https://arxiv.org/pdf/2412.06975).
+You can read the full paper on _AUTOREASON_ [here](mdc:https:/arxiv.org/pdf/2412.06975).
 
 A special thanks to the authors of the paper, _**Arda Sevinc**_ and _**Abdurrahman Gumus**_, for their valuable contribution to the field of AI.
 

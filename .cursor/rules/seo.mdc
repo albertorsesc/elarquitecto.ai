@@ -1,3 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
 # SEO Implementation Checklist for Inertia.js Application
 
 ## 1. Create the SeoHead Component

@@ -170,7 +170,7 @@ const onPreviewReady = () => {
         <div class="flex justify-end items-center pb-2">
             <div class="flex justify-between items-center gap-x-8">
                 <Link
-                    :href="route('root.prompts.index')"
+                    :href="route('prompts.index')"
                     class="neon-border rounded bg-primary/10 px-2 py-1 text-xs font-semibold text-primary transition-all hover:bg-primary/20 sm:px-3 sm:py-1.5 sm:text-sm"
                 >
                     Regresar a los prompts
@@ -227,7 +227,7 @@ const onPreviewReady = () => {
                             :modelValue="prompt!.content"
                             :style="previewStyle"
                             previewTheme="github"
-                            theme="light"
+                            theme="dark"
                             language="es-ES"
                             @onReadyPreview="onPreviewReady"
                         />

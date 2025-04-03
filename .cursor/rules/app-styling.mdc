@@ -1,3 +1,8 @@
+---
+description: 
+globs: *.vue,*.blade.php
+alwaysApply: false
+---
 # El Arquitecto A.I. Styling Guide
 
 This document outlines the styling system used throughout the El Arquitecto A.I. application. The system is designed to provide a consistent, modern, and engaging user interface with a focus on dark mode aesthetics inspired by cyberpunk and neon visual language.

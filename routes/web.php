@@ -26,10 +26,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('timeline', [TimelineController::class, 'index'])->name('timeline.index');
-
-    Route::get('prompts', [PublicPromptController::class, 'index'])->name('prompts.index');
-    Route::get('prompts/{prompt}', [PublicPromptController::class, 'show'])->name('prompts.show');
 });
+
+Route::get('prompts', [PublicPromptController::class, 'index'])->name('prompts.index');
+Route::get('prompts/{prompt}', [PublicPromptController::class, 'show'])->name('prompts.show');
+
+// Blog Routes
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{article}', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/blog/search', [BlogController::class, 'search'])->name('blog.search');
+// Route::get('/blog/category/{category}', [BlogController::class, 'category'])->name('blog.category');
+// Route::get('/blog/tag/{tag}', [BlogController::class, 'tag'])->name('blog.tag');
+// Route::get('/blog/{article}', [BlogController::class, 'show'])->name('blog.show');
 
 // Spotify routes
 Route::get('/spotify/login', [App\Http\Controllers\SpotifyController::class, 'login'])->name('spotify.login');
@@ -54,14 +62,6 @@ if (app()->environment('local')) {
         ]);
     })->name('spotify.debug');
 }
-
-// Blog Routes
-Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
-Route::get('/blog/{article}', [BlogController::class, 'show'])->name('blog.show');
-Route::get('/blog/search', [BlogController::class, 'search'])->name('blog.search');
-// Route::get('/blog/category/{category}', [BlogController::class, 'category'])->name('blog.category');
-// Route::get('/blog/tag/{tag}', [BlogController::class, 'tag'])->name('blog.tag');
-// Route::get('/blog/{article}', [BlogController::class, 'show'])->name('blog.show');
 
 require __DIR__.'/root.php';
 require __DIR__.'/settings.php';

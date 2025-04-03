@@ -16,7 +16,7 @@ defineProps<{
 
     <div class="mx-auto max-w-6xl px-4">
       <h2 class="text-glow-light mb-8 text-center text-2xl font-bold text-secondary sm:mb-12 sm:text-3xl md:text-4xl">
-        Línea de Tiempo
+        Novedades
       </h2>
 
       <TimelineContainer
