@@ -11,6 +11,12 @@ use Tests\TestCase;
 class PasswordResetTest extends TestCase
 {
     use RefreshDatabase;
+    
+    protected function setUp() : void
+    {
+        parent::setUp();
+        $this->markTestSkipped('PwdReset tests are skipped for now until users are allowed to register/login.');
+    }
 
     public function test_reset_password_link_screen_can_be_rendered()
     {

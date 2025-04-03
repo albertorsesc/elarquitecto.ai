@@ -174,7 +174,7 @@ const submit = () => {
                                 </Button>
                             </div>
 
-                            <div class="mt-6 text-center text-sm text-foreground/60">
+<!--                            <div class="mt-6 text-center text-sm text-foreground/60">
                                 Don't have an account?
                                 <TextLink
                                     :href="route('register')"
@@ -183,7 +183,7 @@ const submit = () => {
                                 >
                                     Sign up
                                 </TextLink>
-                            </div>
+                            </div>-->
                         </form>
                     </div>
                 </div>

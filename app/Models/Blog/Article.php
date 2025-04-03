@@ -46,7 +46,7 @@ class Article extends Model
             $article->author_id = Auth::id();
             $article->slug = Str::slug($article->title);
             if (Article::query()->where('slug', $article->slug)->exists()) {
-                $article->slug .= '-'.uniqid();
+                $article->slug .= '-' . uniqid();
             }
 
             if (request()->hasFile('image')) {

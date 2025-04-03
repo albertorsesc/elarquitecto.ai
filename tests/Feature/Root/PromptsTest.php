@@ -12,12 +12,7 @@ class PromptsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     *
-     * @throws \Throwable
-     */
-    public function unauthorized_user_cannot_access_root_prompt_pages()
+    public function test_unauthorized_user_cannot_access_root_prompt_pages()
     {
         $this->actingAs(User::factory()->create());
 
@@ -44,12 +39,7 @@ class PromptsTest extends TestCase
         $response->assertRedirect(route('dashboard'));
     }
 
-    /**
-     * @test
-     *
-     * @throws \Throwable
-     */
-    public function authorized_user_can_view_prompts_index()
+    public function test_authorized_user_can_view_prompts_index()
     {
         $this->signInAsRoot();
 
@@ -65,12 +55,7 @@ class PromptsTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     *
-     * @throws \Throwable
-     */
-    public function authorized_user_can_store_a_prompt()
+    public function test_authorized_user_can_store_a_prompt()
     {
         $this->signInAsRoot();
 
@@ -86,12 +71,7 @@ class PromptsTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     *
-     * @throws \Throwable
-     */
-    public function authorized_user_can_view_a_prompt()
+    public function test_authorized_user_can_view_a_prompt()
     {
         $this->signInAsRoot();
 
@@ -107,12 +87,7 @@ class PromptsTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     *
-     * @throws \Throwable
-     */
-    public function authorized_user_can_view_create_prompt_page()
+    public function test_authorized_user_can_view_create_prompt_page()
     {
         $this->signInAsRoot();
 
@@ -125,12 +100,7 @@ class PromptsTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     *
-     * @throws \Throwable
-     */
-    public function authorized_user_can_edit_a_prompt()
+    public function test_authorized_user_can_edit_a_prompt()
     {
         $this->signInAsRoot();
 
@@ -146,12 +116,7 @@ class PromptsTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     *
-     * @throws \Throwable
-     */
-    public function authorized_user_can_update_a_prompt()
+    public function test_authorized_user_can_update_a_prompt()
     {
         $this->signInAsRoot();
 
@@ -169,12 +134,7 @@ class PromptsTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     *
-     * @throws \Throwable
-     */
-    public function authorized_user_can_delete_a_prompt()
+    public function test_authorized_user_can_delete_a_prompt()
     {
         $this->signInAsRoot();
 

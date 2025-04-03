@@ -13,10 +13,7 @@ class TimelineTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     */
-    public function root_user_can_post_timeline_posts()
+    public function test_root_user_can_post_timeline_posts()
     {
         // Auth as Root user
         $this->actingAs($this->rootUser());
@@ -53,10 +50,7 @@ class TimelineTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function root_user_can_visit_create_timeline_post()
+    public function test_root_user_can_visit_create_timeline_post()
     {
         $this->actingAs($this->rootUser());
 

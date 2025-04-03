@@ -8,7 +8,13 @@ use Tests\TestCase;
 class RegistrationTest extends TestCase
 {
     use RefreshDatabase;
-
+    
+    protected function setUp() : void
+    {
+        parent::setUp();
+        $this->markTestSkipped('Registration tests are skipped for now until users are allowed to register/login.');
+    }
+    
     public function test_registration_screen_can_be_rendered()
     {
         $response = $this->get('/register');

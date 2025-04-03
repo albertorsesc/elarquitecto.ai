@@ -12,12 +12,7 @@ class ArticlesTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     *
-     * @throws \Throwable
-     */
-    public function unauthorized_user_cannot_access_root_article_pages()
+    public function test_unauthorized_user_cannot_access_root_article_pages()
     {
         $this->actingAs(User::factory()->create());
 
@@ -44,12 +39,7 @@ class ArticlesTest extends TestCase
         $response->assertRedirect(route('dashboard'));
     }
 
-    /**
-     * @test
-     *
-     * @throws \Throwable
-     */
-    public function authorized_user_can_create_an_article()
+    public function test_authorized_user_can_create_an_article()
     {
         $this->signInAsRoot();
 
@@ -66,12 +56,7 @@ class ArticlesTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     *
-     * @throws \Throwable
-     */
-    public function authorized_user_can_edit_an_article()
+    public function test_authorized_user_can_edit_an_article()
     {
         $this->signInAsRoot();
 
@@ -86,12 +71,7 @@ class ArticlesTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     *
-     * @throws \Throwable
-     */
-    public function authorized_user_can_update_an_article()
+    public function test_authorized_user_can_update_an_article()
     {
         $this->signInAsRoot();
 
@@ -109,12 +89,7 @@ class ArticlesTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     *
-     * @throws \Throwable
-     */
-    public function authorized_user_can_publish_a_draft_article()
+    public function test_authorized_user_can_publish_a_draft_article()
     {
         $this->signInAsRoot();
 

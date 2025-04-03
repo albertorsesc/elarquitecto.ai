@@ -9,12 +9,7 @@ class TagsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     *
-     * @throws \Throwable
-     */
-    public function root_user_can_store_tags()
+    public function test_root_user_can_store_tags()
     {
         $this->actingAs($this->rootUser());
 

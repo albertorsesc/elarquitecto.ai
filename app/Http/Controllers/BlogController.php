@@ -48,7 +48,6 @@ class BlogController extends Controller
      */
     public function show(Article $article): Response
     {
-        // Format image URL if it exists
         $imageUrl = null;
         if (!empty($article->image)) {
             $imageUrl = url('storage/' . $article->image);
