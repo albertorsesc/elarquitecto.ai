@@ -3,6 +3,7 @@
 namespace Tests\Feature\Root;
 
 use App\Models\Blog\Article;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
@@ -43,17 +44,39 @@ class ArticlesTest extends TestCase
     {
         $this->signInAsRoot();
 
+        // Create tags
+        $tags = $this->create(Tag::class, [], 3);
+        $tagIds = $tags->pluck('id')->toArray();
+
         $articleData = $this->make(Article::class, ['author_id' => null]);
 
-        $response = $this->post(route('root.articles.store'), $articleData->toArray());
+        $data = array_merge($articleData->toArray(), [
+            'tags' => $tagIds,
+        ]);
+
+        $response = $this->post(route('root.articles.store'), $data);
 
         $response->assertRedirect();
+
+        // Assert article was created
         $this->assertDatabaseHas('articles', [
             'author_id' => auth()->id(),
             'title' => $articleData->title,
             'content' => $articleData->content,
             'excerpt' => $articleData->excerpt,
         ]);
+
+        // Get the created article
+        $article = Article::where('title', $articleData->title)->first();
+
+        // Assert that tags were attached through the taggables pivot table
+        foreach ($tagIds as $tagId) {
+            $this->assertDatabaseHas('taggables', [
+                'tag_id' => $tagId,
+                'taggable_id' => $article->id,
+                'taggable_type' => Article::class,
+            ]);
+        }
     }
 
     public function test_authorized_user_can_edit_an_article()
@@ -78,8 +101,18 @@ class ArticlesTest extends TestCase
         $article = $this->create(Article::class);
         $articleData = $this->make(Article::class, ['author_id' => null]);
 
-        $response = $this->put(route('root.articles.update', $article), $articleData->toArray());
+        // Create tags
+        $tags = $this->create(Tag::class, [], 3);
+        $tagIds = $tags->pluck('id')->toArray();
+
+        $data = array_merge($articleData->toArray(), [
+            'tags' => $tagIds,
+        ]);
+
+        $response = $this->put(route('root.articles.update', $article), $data);
         $response->assertRedirect();
+
+        // Assert article data was updated
         $this->assertDatabaseHas('articles', [
             'id' => $article->id,
             'title' => $articleData->title,
@@ -87,6 +120,16 @@ class ArticlesTest extends TestCase
             'excerpt' => $articleData->excerpt,
             'author_id' => $article->author_id,
         ]);
+
+        // Assert old tags were detached and new ones were attached
+        // First, ensure the pivot entries exist for each tag
+        foreach ($tagIds as $tagId) {
+            $this->assertDatabaseHas('taggables', [
+                'tag_id' => $tagId,
+                'taggable_id' => $article->id,
+                'taggable_type' => Article::class,
+            ]);
+        }
     }
 
     public function test_authorized_user_can_publish_a_draft_article()
