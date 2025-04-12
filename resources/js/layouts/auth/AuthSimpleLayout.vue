@@ -18,6 +18,11 @@ onMounted(() => {
     <div class="dark flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10 antialiased overflow-x-hidden"
          style="background-image: radial-gradient(circle at 15% 50%, rgb(var(--secondary-rgb)) / 0.15, transparent 25%), radial-gradient(circle at 85% 30%, rgb(var(--accent-rgb)) / 0.15, transparent 25%); background-attachment: fixed; background-size: cover;">
         <div class="glass-effect w-full max-w-sm rounded-xl border border-white/10 p-8 relative shadow-[0_0_30px_rgba(124,58,237,0.3)]">
+            <!-- Center logo with semi-transparency -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+                <img src="/img/logo.png" alt="El Arquitecto A.I. Logo" class="w-full min-w-full min-h-full object-cover opacity-[0.07]" />
+            </div>
+            
             <!-- Animated corner accents -->
             <div class="absolute left-0 top-0 h-12 w-12 animate-pulse-slow">
                 <div class="absolute left-0 top-0 h-full w-[1px] animate-glow bg-gradient-to-b from-primary via-transparent to-transparent"></div>
@@ -57,7 +62,7 @@ onMounted(() => {
                         <span class="sr-only">{{ title }}</span>
                     </Link>
                     <div class="space-y-2 text-center">
-                        <h1 class="text-xl font-medium text-foreground">{{ title }}</h1>
+                        <h1 class="text-2xl font-medium text-foreground">{{ title }}</h1>
                         <p class="text-center text-sm text-foreground/70">{{ description }}</p>
                         <!-- Underscore line similar to welcome blade -->
                         <span class="mt-1 block h-1 w-24 bg-gradient-to-r from-primary via-cyan-400 to-secondary mx-auto"></span>
