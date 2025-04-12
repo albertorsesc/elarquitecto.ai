@@ -50,11 +50,7 @@
             </div>
   
             <!-- Section Cards -->
-            <div class="relative">
-              <x-section-card :sections="$sections ?? []" />
-              <!-- Section corner accents -->
-              <x-corner-accent leftColor="primary" rightColor="cyan-400" />
-            </div>
+            @include('landing.sections')
   
             <!-- Retro Games Section -->
             <div class="relative py-8 hidden">

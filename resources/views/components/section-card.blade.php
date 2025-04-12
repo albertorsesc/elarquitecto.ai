@@ -13,7 +13,7 @@
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       @foreach($sections as $section)
         <div
-          class="group relative overflow-hidden rounded-xl border border-white/10 bg-background/50 p-6 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:shadow-[0_0_30px_rgba(0,0,0,0.3)] shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
+          class="group relative overflow-hidden rounded-xl border border-white/10 bg-background/50 p-6 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:shadow-[0_0_30px_rgba(0,0,0,0.3)] shadow-[0_4px_20px_rgba(0,0,0,0.2)] {{ in_array($section['title'], $enabledSections) ? 'cursor-pointer hover:-translate-y-1' : '' }}"
         >
           <!-- Animated corner accents -->
           <x-color-animated-corners />
