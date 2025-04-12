@@ -18,6 +18,10 @@ return [
         'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
+    'roles' => [
+        'r007' => env('ROOT_USER_EMAIL'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
