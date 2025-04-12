@@ -16,13 +16,17 @@
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/css/theme.css'])
 </head>
 <body class="min-h-screen bg-background text-foreground antialiased overflow-x-hidden">
     @include('landing.header')
 
-    <div class="w-full">
+    <div class="w-full pb-[70px]">
         <!-- Main Content -->
         <div class="w-full mx-auto">
           <main class="relative w-full">
@@ -103,5 +107,8 @@
           </main>
         </div>
       </div>
+      
+    <!-- Footer -->
+    @include('landing.components.footer')
 </body>
 </html>
