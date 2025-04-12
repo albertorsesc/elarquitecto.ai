@@ -15,9 +15,9 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="dark flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10 antialiased overflow-x-hidden"
+    <div class="dark flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10 antialiased overflow-hidden"
          style="background-image: radial-gradient(circle at 15% 50%, rgb(var(--secondary-rgb)) / 0.15, transparent 25%), radial-gradient(circle at 85% 30%, rgb(var(--accent-rgb)) / 0.15, transparent 25%); background-attachment: fixed; background-size: cover;">
-        <div class="auth-glass-card w-full max-w-sm rounded-xl border border-white/10 p-8 relative shadow-[0_0_30px_rgba(124,58,237,0.3)]">
+        <div class="auth-glass-card relative w-full max-w-sm rounded-xl border border-white/10 p-8 shadow-[0_0_30px_rgba(124,58,237,0.3)]">
             <!-- Center logo with semi-transparency -->
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
                 <img src="/img/logo.png" alt="El Arquitecto A.I. Logo" class="w-full min-w-full min-h-full object-cover opacity-[0.07]" />
