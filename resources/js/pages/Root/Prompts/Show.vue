@@ -6,7 +6,7 @@
             <div class="flex items-center justify-between mb-6">
                 <h1 class="text-2xl font-bold text-glow animate-text-glow">Prompt Details</h1>
                 <div class="flex space-x-3">
-                    <CyberLink :href="`/root/prompts/${prompt.id}/edit`" variant="outline" size="md">
+                    <CyberLink :href="route('root.prompts.edit', prompt)" variant="outline" size="md">
                         Edit Prompt
                     </CyberLink>
                     <CyberLink :href="route('root.prompts.index')" variant="outline" size="md">
@@ -162,11 +162,11 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'Prompts',
-        href: '/root/prompts',
+        href: route('root.prompts.index'),
     },
     {
         title: props.prompt.title,
-        href: `/root/prompts/${props.prompt.id}`,
+        href: route('root.prompts.show', props.prompt),
     },
 ];
 

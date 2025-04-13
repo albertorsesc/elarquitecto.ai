@@ -232,15 +232,15 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'Prompts',
-        href: '/root/prompts',
+        href: route('root.prompts.index'),
     },
     {
         title: props.prompt.title,
-        href: route('root.prompts.show', props.prompt.id),
+        href: route('root.prompts.show', props.prompt),
     },
     {
         title: 'Edit',
-        href: route('root.prompts.edit', props.prompt.id),
+        href: route('root.prompts.edit', props.prompt),
     }
 ];
 
