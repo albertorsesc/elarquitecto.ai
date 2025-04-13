@@ -130,7 +130,14 @@ class PromptsTest extends TestCase
      */
     public function test_root_user_can_delete_prompt()
     {
-        // Test implementation
+        $prompt = $this->create(Prompt::class);
+
+        $response = $this->delete(route('root.prompts.destroy', $prompt));
+
+        $response->assertRedirect(route('root.prompts.index'));
+        $response->assertSessionHas('success', 'Prompt deleted successfully');
+
+        $this->assertModelMissing($prompt);
     }
     
     /**
@@ -138,7 +145,24 @@ class PromptsTest extends TestCase
      */
     public function test_root_user_cannot_create_prompt_with_invalid_data()
     {
-        // Test implementation
+        $response = $this->post(route('root.prompts.store'), [
+            'title' => '',
+            'slug' => '',
+            'excerpt' => '',
+            'content' => '',
+            'published_at' => '',
+            'word_count' => '',
+            'target_models' => 'not-an-array',
+        ]);
+
+        $response->assertSessionHasErrors([
+            'title',
+            'slug',
+            'excerpt',
+            'content',
+            'word_count',
+            'target_models',
+        ]);
     }
     
     /**
@@ -146,7 +170,26 @@ class PromptsTest extends TestCase
      */
     public function test_root_user_cannot_update_prompt_with_invalid_data()
     {
-        // Test implementation
+        $prompt = $this->create(Prompt::class);
+
+        $response = $this->put(route('root.prompts.update', $prompt), [
+            'title' => '',
+            'slug' => '',
+            'excerpt' => '',
+            'content' => '',
+            'published_at' => '',
+            'word_count' => '',
+            'target_models' => 'not-an-array',
+        ]);
+
+        $response->assertSessionHasErrors([
+            'title',
+            'slug',
+            'excerpt',
+            'content',
+            'word_count',
+            'target_models',
+        ]);
     }
     
     /**
@@ -154,7 +197,7 @@ class PromptsTest extends TestCase
      */
     public function test_root_user_can_assign_categories_to_prompt()
     {
-        // Test implementation
+        $this->markTestSkipped('Categories functionality not implemented yet');
     }
     
     /**
@@ -162,6 +205,6 @@ class PromptsTest extends TestCase
      */
     public function test_root_user_can_assign_tags_to_prompt()
     {
-        // Test implementation
+        $this->markTestSkipped('Tags functionality not implemented yet');
     }
 }

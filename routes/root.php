@@ -15,4 +15,5 @@ Route::middleware(['auth', 'verified', EnsureRootUser::class . ':r007'])->prefix
     Route::get('prompts/{prompt}', [PromptController::class, 'show'])->name('prompts.show');
     Route::get('prompts/{prompt}/edit', [PromptController::class, 'edit'])->name('prompts.edit');
     Route::put('prompts/{prompt}', [PromptController::class, 'update'])->name('prompts.update');
+    Route::delete('prompts/{prompt}', [PromptController::class, 'destroy'])->name('prompts.destroy');
 });

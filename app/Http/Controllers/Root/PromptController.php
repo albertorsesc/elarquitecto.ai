@@ -48,4 +48,11 @@ class PromptController extends Controller
 
         return redirect()->route('root.prompts.show', $prompt)->with('success', 'Prompt updated successfully');
     }
+
+    public function destroy(Prompt $prompt)
+    {
+        $prompt->delete();
+
+        return redirect()->route('root.prompts.index')->with('success', 'Prompt deleted successfully');
+    }
 }
