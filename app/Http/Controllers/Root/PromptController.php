@@ -19,9 +19,7 @@ class PromptController extends Controller
     public function create()
     {
         return Inertia::render('Root/Prompts/Create', [
-            'models' => collect(config('models.models'))->map(function ($models, $provider) {
-                return $models;
-            }),
+            'models' => collect(config('models.models'))->map(fn ($models, $provider) => $models),
         ]);
     }
 
@@ -43,6 +41,7 @@ class PromptController extends Controller
     {
         return Inertia::render('Root/Prompts/Edit', [
             'prompt' => $prompt,
+            'models' => collect(config('models.models'))->map(fn ($models, $provider) => $models),
         ]); 
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PromptRequest extends FormRequest
 {
@@ -25,9 +26,8 @@ class PromptRequest extends FormRequest
             return $models;
         })->toArray();
         
-        return [
+        $rules = [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255', 'unique:prompts'],
             'excerpt' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
@@ -36,5 +36,18 @@ class PromptRequest extends FormRequest
             'target_models' => ['nullable', 'array'],
             'target_models.*' => ['nullable', 'string', 'in:' . implode(',', $validModels)],
         ];
+
+        // Get the current prompt ID if we're on an update route
+        $promptId = $this->prompt ?? null;
+        
+        // Apply unique rule with ignore condition if we have a prompt ID (updating)
+        if ($promptId) {
+            $rules['slug'] = ['required', 'string', 'max:255', Rule::unique('prompts')->ignore($promptId)];
+        } else {
+            // For new prompts, enforce strict uniqueness
+            $rules['slug'] = ['required', 'string', 'max:255', 'unique:prompts'];
+        }
+        
+        return $rules;
     }
 }
