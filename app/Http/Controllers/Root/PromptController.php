@@ -9,14 +9,18 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 class PromptController extends Controller
 {
+    public function index()
+    {
+        return Inertia::render('Root/Prompts/Index', [
+            'prompts' => Prompt::all(),
+        ]);
+    }
+
     public function create()
     {
         return Inertia::render('Root/Prompts/Create', [
             'models' => collect(config('models.models'))->map(function ($models, $provider) {
-                return [
-                    'provider' => $provider,
-                    'models' => $models,
-                ];
+                return $models;
             }),
         ]);
     }

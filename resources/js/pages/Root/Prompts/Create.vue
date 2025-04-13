@@ -12,7 +12,7 @@
 
             <!-- Create Prompt Form -->
             <div class="glass-effect neon-border rounded-xl p-6 max-w-4xl mx-auto w-full">
-                <form @submit.prevent="submitForm" class="space-y-6">
+                <form @submit.prevent="submit" class="space-y-6">
                     <!-- Title -->
                     <div class="space-y-2">
                         <label for="title" class="block text-sm font-medium text-foreground/80">Title</label>
@@ -22,7 +22,7 @@
                             placeholder="Enter prompt title" 
                             required
                         />
-                        <p v-if="errors.title" class="mt-1 text-sm text-red-500">{{ errors.title }}</p>
+                        <p v-if="form.errors.title" class="mt-1 text-sm text-red-500">{{ form.errors.title }}</p>
                     </div>
 
                     <!-- Slug -->
@@ -42,7 +42,7 @@
                             placeholder="prompt-slug" 
                             required
                         />
-                        <p v-if="errors.slug" class="mt-1 text-sm text-red-500">{{ errors.slug }}</p>
+                        <p v-if="form.errors.slug" class="mt-1 text-sm text-red-500">{{ form.errors.slug }}</p>
                     </div>
 
                     <!-- Excerpt -->
@@ -56,7 +56,7 @@
                             placeholder="Brief description of the prompt"
                             required
                         ></textarea>
-                        <p v-if="errors.excerpt" class="mt-1 text-sm text-red-500">{{ errors.excerpt }}</p>
+                        <p v-if="form.errors.excerpt" class="mt-1 text-sm text-red-500">{{ form.errors.excerpt }}</p>
                     </div>
 
                     <!-- Content (Markdown) -->
@@ -73,7 +73,7 @@
 - Use headings, lists, etc."
                             required
                         ></textarea>
-                        <p v-if="errors.content" class="mt-1 text-sm text-red-500">{{ errors.content }}</p>
+                        <p v-if="form.errors.content" class="mt-1 text-sm text-red-500">{{ form.errors.content }}</p>
                     </div>
 
                     <!-- Image Upload -->
@@ -113,7 +113,7 @@
                                 <p>Formats: JPG, PNG, WebP</p>
                             </div>
                         </div>
-                        <p v-if="errors.image" class="mt-1 text-sm text-red-500">{{ errors.image }}</p>
+                        <p v-if="form.errors.image" class="mt-1 text-sm text-red-500">{{ form.errors.image }}</p>
                     </div>
 
                     <!-- Two columns layout for remaining fields -->
@@ -126,7 +126,7 @@
                                 type="datetime-local"
                                 v-model="form.published_at" 
                             />
-                            <p v-if="errors.published_at" class="mt-1 text-sm text-red-500">{{ errors.published_at }}</p>
+                            <p v-if="form.errors.published_at" class="mt-1 text-sm text-red-500">{{ form.errors.published_at }}</p>
                         </div>
 
                         <!-- Word Count -->
@@ -138,7 +138,7 @@
                                 v-model="form.word_count" 
                                 placeholder="Approximate word count" 
                             />
-                            <p v-if="errors.word_count" class="mt-1 text-sm text-red-500">{{ errors.word_count }}</p>
+                            <p v-if="form.errors.word_count" class="mt-1 text-sm text-red-500">{{ form.errors.word_count }}</p>
                         </div>
                     </div>
 
@@ -166,7 +166,7 @@
                                 </div>
                             </div>
                         </div>
-                        <p v-if="errors.target_models" class="mt-1 text-sm text-red-500">{{ errors.target_models }}</p>
+                        <p v-if="form.errors.target_models" class="mt-1 text-sm text-red-500">{{ form.errors.target_models }}</p>
                     </div>
 
                     <!-- Submit Button -->
@@ -175,9 +175,9 @@
                             type="submit" 
                             class="neon-border w-full py-2 px-4 rounded-lg font-medium focus:outline-none transition-all duration-300
                                    border border-primary/30 bg-primary/10 text-primary-foreground hover:bg-primary/90 focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
-                            :disabled="isSubmitting"
+                            :disabled="form.processing"
                         >
-                            <span v-if="isSubmitting" class="flex items-center justify-center">
+                            <span v-if="form.processing" class="flex items-center justify-center">
                                 <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -196,10 +196,10 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import CyberLink from '@/components/theme/CyberLink.vue';
 import AnimatedInputBorder from '@/components/theme/AnimatedInputBorder.vue';
-import { ref, reactive } from 'vue';
+import { ref } from 'vue';
 
 // Define types for models data structure
 type ModelsConfig = {
@@ -221,8 +221,8 @@ const breadcrumbs: BreadcrumbItem[] = [
     }
 ];
 
-// Form state
-const form = reactive({
+// Form state using Inertia's useForm
+const form = useForm({
     title: '',
     slug: '',
     excerpt: '',
@@ -238,9 +238,6 @@ defineProps<{
     models: ModelsConfig;
 }>();
 
-// Form handling
-const errors = reactive({} as Record<string, string>);
-const isSubmitting = ref(false);
 const imagePreview = ref<string | null>(null);
 const fileInput = ref<HTMLInputElement | null>(null);
 
@@ -269,19 +266,6 @@ const handleImageUpload = (event: Event) => {
     if (input.files && input.files.length > 0) {
         const file = input.files[0];
         
-        // Validate file size (2MB max)
-        if (file.size > 2 * 1024 * 1024) {
-            errors.image = 'Image size should not exceed 2MB';
-            return;
-        }
-        
-        // Validate file type
-        const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-        if (!validTypes.includes(file.type)) {
-            errors.image = 'Only JPG, PNG, and WebP formats are allowed';
-            return;
-        }
-        
         // Set image and create preview
         form.image = file;
         const reader = new FileReader();
@@ -289,53 +273,12 @@ const handleImageUpload = (event: Event) => {
             imagePreview.value = e.target?.result as string;
         };
         reader.readAsDataURL(file);
-        
-        // Clear any previous errors
-        errors.image = '';
     }
 };
 
-// Form submission
-const submitForm = () => {
-    // Reset errors
-    Object.keys(errors).forEach(key => delete errors[key]);
-    
-    // Validate form fields (basic validation)
-    if (!form.title) errors.title = 'Title is required';
-    if (!form.slug) errors.slug = 'Slug is required';
-    if (!form.excerpt) errors.excerpt = 'Excerpt is required';
-    if (!form.content) errors.content = 'Content is required';
-    if (form.target_models.length === 0) errors.target_models = 'At least one target model must be selected';
-    
-    // If there are errors, stop submission
-    if (Object.keys(errors).length > 0) {
-        return;
-    }
-    
-    // Show loading state
-    isSubmitting.value = true;
-    
-    // Simulate API call (replace with actual API call)
-    setTimeout(() => {
-        console.log('Form submitted with data:', form);
-        
-        // Reset form after successful submission
-        // form.title = '';
-        // form.slug = '';
-        // form.excerpt = '';
-        // form.content = '';
-        // form.image = null;
-        // form.published_at = '';
-        // form.word_count = '';
-        // form.target_models = [];
-        // imagePreview.value = null;
-        
-        // End loading state
-        isSubmitting.value = false;
-        
-        // Show success message or redirect
-        alert('Prompt created successfully!');
-    }, 1500);
+// Form submission using Inertia
+const submit = () => {
+    form.post(route('root.prompts.store'));
 };
 </script>
 
