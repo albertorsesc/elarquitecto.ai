@@ -123,6 +123,7 @@
                             </CyberLink>
                             <button 
                                 @click="copyPrompt"
+                                data-copy-button
                                 class="w-full py-2 px-4 rounded-lg font-medium border border-white/10 bg-white/5 text-foreground hover:bg-white/10 transition-all flex items-center justify-center gap-2"
                             >
                                 <span>Copy to Clipboard</span>
@@ -177,8 +178,43 @@ const renderedContent = computed(() => {
 
 // Copy prompt to clipboard
 const copyPrompt = () => {
-    navigator.clipboard.writeText(props.prompt.content);
-    // You could add a toast notification here
+    try {
+        // Create a temporary textarea element
+        const textArea = document.createElement('textarea');
+        // Set its value to the prompt content
+        textArea.value = props.prompt.content;
+        // Make it invisible
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        // Select and copy the content
+        textArea.focus();
+        textArea.select();
+        const success = document.execCommand('copy');
+        // Remove the temporary element
+        document.body.removeChild(textArea);
+
+        // Show success feedback
+        const button = document.querySelector('[data-copy-button]');
+        if (button) {
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span>Copied!</span>';
+            
+            // Reset button text after 2 seconds
+            setTimeout(() => {
+                button.innerHTML = originalText;
+            }, 2000);
+        }
+
+        if (!success) {
+            console.error('Failed to copy text');
+            alert('Failed to copy to clipboard. Please try again.');
+        }
+    } catch (error) {
+        console.error('Failed to copy content: ', error);
+        alert('Failed to copy to clipboard. Please try again.');
+    }
 };
 
 // Confirm deletion modal
