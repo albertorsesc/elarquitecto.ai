@@ -56,7 +56,7 @@
 
                         <!-- Edit Link -->
                         <div class="mt-3 pt-3 border-t border-border/30">
-                            <CyberLink :href="`/root/prompts/${prompt.id}/edit`" variant="outline" size="sm" full-width>
+                            <CyberLink :href="route('root.prompts.edit', prompt)" variant="outline" size="sm" full-width>
                                 View Details
                             </CyberLink>
                         </div>
@@ -90,7 +90,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'Prompts',
-        href: '/root/prompts',
+        href: route('root.prompts.index'),
     },
 ];
 
