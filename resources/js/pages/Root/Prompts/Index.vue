@@ -5,7 +5,7 @@
         <div class="flex h-full flex-1 flex-col gap-4 p-4 bg-background">
             <div class="flex items-center justify-between mb-6">
                 <h1 class="text-2xl font-bold text-glow animate-text-glow">Prompts</h1>
-                <CyberLink href="/root/prompts/create" variant="primary" size="md">
+                <CyberLink :href="route('root.prompts.create')" variant="primary" size="md">
                     Create New Prompt
                 </CyberLink>
             </div>

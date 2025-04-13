@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Root;
 
+use App\Models\Prompt;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Inertia\Testing\AssertableInertia;
@@ -35,7 +36,9 @@ class PromptsTest extends TestCase
      */
     public function test_root_user_can_view_create_prompt_page()
     {
-        // Test implementation
+        $response = $this->get(route('root.prompts.create'));
+        $response->assertOk();
+        $response->assertInertia(fn (AssertableInertia $assert) => $assert->component('Root/Prompts/Create'));
     }
     
     /**
@@ -43,7 +46,28 @@ class PromptsTest extends TestCase
      */
     public function test_root_user_can_create_prompt()
     {
-        // Test implementation
+        $prompt = $this->make(Prompt::class, [
+            'published_at' => null,
+        ]);
+
+        $response = $this->post(
+            route('root.prompts.store'),
+            $prompt->toArray()
+        );
+
+        $response->assertRedirect(route('root.prompts.index'));
+        $response->assertSessionHas('success', 'Prompt created successfully');
+        
+        $this->assertDatabaseHas('prompts', [
+            'title' => $prompt->title,
+            'slug' => $prompt->slug,
+            'excerpt' => $prompt->excerpt,
+            'content' => $prompt->content,
+            'published_at' => null,
+            'word_count' => $prompt->word_count,
+            'target_models' => json_encode($prompt->target_models),
+        ]);
+        $this->assertNull($prompt->published_at);
     }
     
     /**
@@ -51,7 +75,11 @@ class PromptsTest extends TestCase
      */
     public function test_root_user_can_view_prompt_details()
     {
-        // Test implementation
+        $prompt = $this->create(Prompt::class);
+
+        $response = $this->get(route('root.prompts.show', $prompt));
+        $response->assertOk();
+        $response->assertInertia(fn (AssertableInertia $assert) => $assert->component('Root/Prompts/Show'));
     }
     
     /**
@@ -59,7 +87,11 @@ class PromptsTest extends TestCase
      */
     public function test_root_user_can_view_edit_prompt_page()
     {
-        // Test implementation
+        $prompt = $this->create(Prompt::class);
+
+        $response = $this->get(route('root.prompts.edit', $prompt));
+        $response->assertOk();
+        $response->assertInertia(fn (AssertableInertia $assert) => $assert->component('Root/Prompts/Edit'));
     }
     
     /**
@@ -67,7 +99,30 @@ class PromptsTest extends TestCase
      */
     public function test_root_user_can_update_prompt()
     {
-        // Test implementation
+        $prompt = $this->create(Prompt::class);
+
+        $response = $this->put(route('root.prompts.update', $prompt), [
+            'title' => 'Updated Prompt',
+            'slug' => 'updated-prompt',
+            'excerpt' => 'Updated Excerpt',
+            'content' => 'Updated Content',
+            'published_at' => '2025-01-01',
+            'word_count' => 100,
+            'target_models' => ['gpt-4o', 'gpt-4'],
+        ]);
+
+        $response->assertRedirect(route('root.prompts.show', $prompt));
+        $response->assertSessionHas('success', 'Prompt updated successfully');
+
+        $this->assertDatabaseHas('prompts', [
+            'title' => 'Updated Prompt',
+            'slug' => 'updated-prompt',
+            'excerpt' => 'Updated Excerpt',
+            'content' => 'Updated Content',
+            'published_at' => '2025-01-01 00:00:00',
+            'word_count' => 100,
+            'target_models' => json_encode(['gpt-4o', 'gpt-4']),
+        ]);
     }
     
     /**

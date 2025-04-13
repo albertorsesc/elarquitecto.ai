@@ -24,4 +24,9 @@ abstract class TestCase extends BaseTestCase
     {
         return $class::factory()->create($attributes);
     }
+
+    public function make(string $class, array $attributes = []): Model
+    {
+        return $class::factory()->make($attributes);
+    }
 }
