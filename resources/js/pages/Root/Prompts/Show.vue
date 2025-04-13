@@ -124,7 +124,7 @@
                             <button 
                                 @click="copyPrompt"
                                 data-copy-button
-                                class="w-full py-2 px-4 rounded-lg font-medium border border-white/10 bg-white/5 text-foreground hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+                                class="cyber-button w-full py-2 px-4 rounded-lg font-medium border border-white/10 bg-white/5 text-foreground hover:bg-white/10 transition-all flex items-center justify-center gap-2"
                             >
                                 <span>Copy to Clipboard</span>
                             </button>
@@ -199,11 +199,13 @@ const copyPrompt = () => {
         const button = document.querySelector('[data-copy-button]');
         if (button) {
             const originalText = button.innerHTML;
-            button.innerHTML = '<span>Copied!</span>';
+            button.classList.add('animate-pulse');
+            button.innerHTML = '<span class="text-glow">Copied!</span>';
             
             // Reset button text after 2 seconds
             setTimeout(() => {
                 button.innerHTML = originalText;
+                button.classList.remove('animate-pulse');
             }, 2000);
         }
 
@@ -277,17 +279,5 @@ html:not(.dark) .force-dark {
   border: 1px solid hsl(var(--border));
 }
 
-/* Animation for the pulse effect */
-@keyframes pulse-slow {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-.animate-pulse-slow {
-  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
+/* Animation styles are now imported from theme.css and tailwind.config.js */
 </style>
