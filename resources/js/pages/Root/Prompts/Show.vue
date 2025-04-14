@@ -6,7 +6,7 @@
             <div class="flex items-center justify-between mb-6">
                 <h1 class="text-2xl font-bold text-glow animate-text-glow">Prompt Details</h1>
                 <div class="flex space-x-3">
-                    <CyberLink :href="route('root.prompts.edit', prompt.id)" variant="outline" size="md">
+                    <CyberLink :href="route('root.prompts.edit', prompt.slug)" variant="outline" size="md">
                         Edit Prompt
                     </CyberLink>
                     <CyberLink :href="route('root.prompts.index')" variant="outline" size="md">

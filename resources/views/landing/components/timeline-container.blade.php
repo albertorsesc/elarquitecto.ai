@@ -1,6 +1,6 @@
 {{-- The variables $items and $withScrollbar are passed from the include statement --}}
 
-<div class="timeline-container">
+<div class="relative w-full px-4">
     <!-- Background effect -->
     <div class="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent">
       <div class="cyberpunk-grid-bg absolute inset-0 opacity-10"></div>

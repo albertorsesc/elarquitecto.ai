@@ -651,3 +651,19 @@
     text-shadow: 0 0 10px rgba(244, 113, 181, 0.5);
     animation: iconColor 6s infinite;
   }
+
+  /* Resource Type Badges */
+  .resource-type-badge {
+    @apply inline-block px-2 py-0.5 text-xs font-semibold rounded-full;
+    box-shadow: 0 0 8px rgba(var(--color-primary-rgb), 0.3);
+  }
+
+  .type-prompt {
+    @apply bg-primary/20 text-primary border border-primary/30;
+  }
+
+  /* Hover effects for resource type badges */
+  .timeline-item:hover .resource-type-badge {
+    @apply bg-opacity-40 shadow-lg;
+    box-shadow: 0 0 12px rgba(var(--color-primary-rgb), 0.5);
+  }
