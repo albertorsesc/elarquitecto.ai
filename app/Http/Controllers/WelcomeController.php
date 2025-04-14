@@ -35,7 +35,8 @@ class WelcomeController extends Controller
         // Get all prompts sorted by creation date (newest first)
         $prompts = Prompt::query()
             ->with(['tags', 'category']) // Eager load relationships
-            ->orderByDesc('created_at')
+            ->whereNotNull('published_at')
+            ->orderByDesc('published_at')
             ->limit(6) // Limit to most recent prompts
             ->get()
             ->map(function ($prompt) {

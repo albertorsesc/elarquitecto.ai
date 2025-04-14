@@ -24,6 +24,11 @@ const rootNavItems: NavItem[] = [
         href: route('root.prompts.index'),
         icon: MessageSquareText,
     },
+    {
+        title: 'Categories',
+        href: route('root.categories.index'),
+        icon: Folder,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
