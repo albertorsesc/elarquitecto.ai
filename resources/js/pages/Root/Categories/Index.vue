@@ -50,10 +50,6 @@
                                     <div class="flex gap-2">
                                         <CyberLink :href="route('root.categories.index', category.slug)" 
                                             variant="outline" size="sm">
-                                            View
-                                        </CyberLink>
-                                        <CyberLink :href="route('root.categories.index', category.slug)" 
-                                            variant="outline" size="sm">
                                             Edit
                                         </CyberLink>
                                         <CyberLink href="#" 

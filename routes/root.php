@@ -20,7 +20,8 @@ Route::middleware(['auth', 'verified', EnsureRootUser::class.':r007'])->prefix('
         Route::get('categories', 'index')->name('categories.index');
         Route::get('categories/create', 'create')->name('categories.create');
         Route::post('categories', 'store')->name('categories.store');
-        Route::get('categories/{category}', 'show')->name('categories.show');
+        Route::get('categories/{category}/edit', 'edit')->name('categories.edit');
+        Route::put('categories/{category}', 'update')->name('categories.update');
     });
     // Route::controller(TagController::class)->group(function () {});
 });

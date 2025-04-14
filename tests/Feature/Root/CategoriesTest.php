@@ -45,16 +45,23 @@ class CategoriesTest extends TestCase
         $this->assertDatabaseHas('categories', $newCategory->toArray());
     }
 
-    public function test_root_user_can_view_category_show_page()
+    public function test_root_user_can_view_category_edit_page()
     {
         $category = $this->create(Category::class);
-        $response = $this->get(route('root.categories.show', $category->slug));
+        $response = $this->get(route('root.categories.edit', $category->slug));
         $response->assertOk();
         $response->assertInertia(fn (AssertableInertia $page) =>
-            $page->component('Root/Categories/Show')
+            $page->component('Root/Categories/Edit')
                 ->has('category')
         );
     }
-    
-    
+
+    public function test_root_user_can_update_category()
+    {
+        $category = $this->create(Category::class);
+        $newCategory = $this->make(Category::class);
+        $response = $this->put(route('root.categories.update', $category->slug), $newCategory->toArray());
+        $response->assertRedirect(route('root.categories.index'));
+        $this->assertDatabaseHas('categories', $newCategory->toArray());
+    }
 }

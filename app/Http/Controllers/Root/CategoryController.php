@@ -34,10 +34,23 @@ class CategoryController extends Controller
         return redirect()->route('root.categories.index')->with('success', 'Category created successfully');
     }
 
-    public function show(Category $category)
+    public function edit(Category $category)
     {
-        return Inertia::render('Root/Categories/Show', [
+        return Inertia::render('Root/Categories/Edit', [
             'category' => $category,
         ]);
+    }
+
+    public function update(Request $request, Category $category)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:categories,slug,' . $category->id,
+            'description' => 'nullable|string',
+        ]);
+
+        $category->update($request->only('name', 'slug', 'description'));
+
+        return redirect()->route('root.categories.index')->with('success', 'Category updated successfully');
     }
 }
