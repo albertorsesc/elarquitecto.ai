@@ -45,6 +45,66 @@
                         <p v-if="form.errors.slug" class="mt-1 text-sm text-red-500">{{ form.errors.slug }}</p>
                     </div>
 
+                    <!-- Category and Tags Selection -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Category Dropdown -->
+                        <div class="space-y-2">
+                            <label for="category" class="block text-sm font-medium text-foreground/80">Category</label>
+                            <select
+                                id="category"
+                                v-model="form.category_id"
+                                class="w-full rounded-xl border border-white/10 bg-background/50 py-2 px-3 text-foreground 
+                                       focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 
+                                       focus:ring-cyan-400/30 transition-all duration-300"
+                                required
+                                @change="updateAvailableTags"
+                            >
+                                <option value="" disabled>Select a category</option>
+                                <option v-for="category in categories" :key="category.id" :value="category.id">
+                                    {{ category.name }}
+                                </option>
+                            </select>
+                            <p v-if="form.errors.category_id" class="mt-1 text-sm text-red-500">{{ form.errors.category_id }}</p>
+                        </div>
+
+                        <!-- Tags Multi-select -->
+                        <div class="space-y-2">
+                            <label for="tags" class="block text-sm font-medium text-foreground/80">Tags</label>
+                            <div class="relative">
+                                <select
+                                    id="tags"
+                                    v-model="form.tags"
+                                    multiple
+                                    class="w-full rounded-xl border border-white/10 bg-background/50 py-2 px-3 text-foreground
+                                           focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1
+                                           focus:ring-cyan-400/30 transition-all duration-300 min-h-[120px]"
+                                    required
+                                >
+                                    <option v-if="availableTags.length === 0 && form.category_id" disabled>
+                                        No tags available for this category
+                                    </option>
+                                    <option v-else-if="!form.category_id" disabled>
+                                        Please select a category first
+                                    </option>
+                                    <option v-for="tag in availableTags" :key="tag.id" :value="tag.id">
+                                        {{ tag.name }}
+                                    </option>
+                                </select>
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    <div v-for="tagId in form.tags" :key="tagId" 
+                                         class="inline-flex items-center px-2 py-1 rounded-full text-xs
+                                                bg-primary/20 text-primary-foreground border border-primary/30">
+                                        {{ findTagName(tagId) }}
+                                        <button @click.prevent="removeTag(tagId)" type="button" class="ml-1 text-primary-foreground/70 hover:text-primary-foreground">
+                                            &times;
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <p v-if="form.errors.tags" class="mt-1 text-sm text-red-500">{{ form.errors.tags }}</p>
+                        </div>
+                    </div>
+
                     <!-- Excerpt -->
                     <div class="space-y-2">
                         <label for="excerpt" class="block text-sm font-medium text-foreground/80">Excerpt</label>
@@ -196,15 +256,11 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
+import { type Category, type Tag, type ModelsConfig } from '@/types/prompt';
 import { Head, useForm } from '@inertiajs/vue3';
 import CyberLink from '@/components/theme/CyberLink.vue';
 import AnimatedInputBorder from '@/components/theme/AnimatedInputBorder.vue';
-import { ref } from 'vue';
-
-// Define types for models data structure
-type ModelsConfig = {
-    [provider: string]: string[];
-};
+import { ref, watch } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -230,16 +286,62 @@ const form = useForm({
     image: null as File | null,
     published_at: '',
     word_count: '',
-    target_models: [] as string[]
+    target_models: [] as string[],
+    category_id: '' as number | string,
+    tags: [] as number[]
 });
 
+// Available tags based on selected category
+const availableTags = ref<Tag[]>([]);
+
 // Props type definition
-defineProps<{
+const props = defineProps<{
     models: ModelsConfig;
+    categories: Category[];
+    tags: Tag[];
 }>();
 
 const imagePreview = ref<string | null>(null);
 const fileInput = ref<HTMLInputElement | null>(null);
+
+// Update available tags when category changes
+function updateAvailableTags() {
+    if (!form.category_id) {
+        availableTags.value = [];
+        form.tags = [];
+        return;
+    }
+    
+    // Find the selected category
+    const selectedCategory = props.categories.find(cat => cat.id === Number(form.category_id));
+    
+    // If the category has preloaded tags, use them
+    if (selectedCategory?.tags) {
+        availableTags.value = selectedCategory.tags;
+    } else {
+        // Otherwise filter from all tags
+        availableTags.value = props.tags.filter(tag => tag.category_id === Number(form.category_id));
+    }
+    
+    // Clear selected tags that don't belong to this category
+    form.tags = form.tags.filter(tagId => 
+        availableTags.value.some(tag => tag.id === tagId)
+    );
+}
+
+// Watch for category changes
+watch(() => form.category_id, updateAvailableTags);
+
+// Find tag name by id
+function findTagName(tagId: number): string {
+    const tag = props.tags.find(t => t.id === tagId);
+    return tag?.name || 'Unknown Tag';
+}
+
+// Remove a tag from selection
+function removeTag(tagId: number): void {
+    form.tags = form.tags.filter(id => id !== tagId);
+}
 
 // Generate slug from title
 const generateSlug = () => {
@@ -306,5 +408,31 @@ input[type="checkbox"] {
 
 input[type="checkbox"]:focus {
   @apply ring-1 ring-primary/50;
+}
+
+/* Custom styling for select elements */
+select {
+  @apply rounded-xl border border-white/10 bg-background/50 py-2 px-3 text-foreground;
+  appearance: auto;
+}
+
+select:focus {
+  @apply border-cyan-400/30 bg-background/70 outline-none ring-1 ring-cyan-400/30;
+}
+
+select[multiple] {
+  height: auto;
+  min-height: 120px;
+}
+
+select[multiple] option {
+  padding: 8px;
+  margin-bottom: 2px;
+  border-radius: 4px;
+}
+
+select[multiple] option:checked {
+  background-color: hsl(var(--primary) / 0.2);
+  color: hsl(var(--primary-foreground));
 }
 </style>

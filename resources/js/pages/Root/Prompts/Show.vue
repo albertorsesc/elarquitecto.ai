@@ -6,7 +6,7 @@
             <div class="flex items-center justify-between mb-6">
                 <h1 class="text-2xl font-bold text-glow animate-text-glow">Prompt Details</h1>
                 <div class="flex space-x-3">
-                    <CyberLink :href="route('root.prompts.edit', prompt)" variant="outline" size="md">
+                    <CyberLink :href="route('root.prompts.edit', prompt.id)" variant="outline" size="md">
                         Edit Prompt
                     </CyberLink>
                     <CyberLink :href="route('root.prompts.index')" variant="outline" size="md">
@@ -18,12 +18,12 @@
             <!-- Prompt Header -->
             <div class="glass-effect neon-border rounded-xl overflow-hidden">
                 <div class="relative h-64 w-full overflow-hidden">
-                    <img :src="prompt.image || '/img/logo.png'" :alt="prompt.title"
+                    <img :src="prompt.image_url || '/img/logo.png'" :alt="prompt.title"
                         class="h-full w-full object-cover" />
                     
                     <!-- Category Badge -->
                     <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-sm text-sm font-medium px-3 py-1 rounded-full border border-primary/30 text-primary animate-pulse-slow">
-                        {{ prompt.category || 'Uncategorized' }}
+                        {{ prompt.category && prompt.category.length > 0 ? prompt.category[0].name : 'Uncategorized' }}
                     </div>
 
                     <!-- Publishing Info -->
@@ -31,9 +31,7 @@
                         <h1 class="text-3xl font-bold mb-2 text-white">{{ prompt.title }}</h1>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2 text-sm text-white/80">
-                                <span>By {{ prompt.author }}</span>
-                                <span>•</span>
-                                <span>{{ prompt.createdAt }}</span>
+                                <span>{{ new Date(prompt.published_at).toLocaleDateString() }}</span>
                                 <span>•</span>
                                 <span>{{ prompt.word_count }} words</span>
                             </div>
@@ -65,9 +63,9 @@
                     <div class="glass-effect neon-border rounded-xl p-6">
                         <h2 class="text-lg font-semibold mb-4 text-glow">Tags</h2>
                         <div class="flex flex-wrap gap-2">
-                            <span v-for="tag in prompt.tags" :key="tag" 
+                            <span v-for="tag in prompt.tags" :key="tag.id" 
                                 class="px-3 py-1 rounded-full bg-sidebar-accent text-sidebar-accent-foreground text-sm">
-                                {{ tag }}
+                                {{ tag.name }}
                             </span>
                             <span v-if="!prompt.tags || prompt.tags.length === 0" class="text-muted-foreground text-sm">
                                 No tags available
@@ -105,11 +103,7 @@
                             </div>
                             <div class="flex justify-between">
                                 <dt class="text-muted-foreground">Published:</dt>
-                                <dd>{{ prompt.published_at || 'Draft' }}</dd>
-                            </div>
-                            <div class="flex justify-between">
-                                <dt class="text-muted-foreground">Created:</dt>
-                                <dd>{{ prompt.createdAt }}</dd>
+                                <dd>{{ prompt.published_at ? new Date(prompt.published_at).toLocaleDateString() : 'Draft' }}</dd>
                             </div>
                         </dl>
                     </div>
@@ -118,7 +112,7 @@
                     <div class="glass-effect neon-border rounded-xl p-6">
                         <h2 class="text-lg font-semibold mb-4 text-glow">Actions</h2>
                         <div class="space-y-3">
-                            <CyberLink :href="`/root/prompts/${prompt.id}/edit`" variant="outline" size="sm" full-width>
+                            <CyberLink :href="route('root.prompts.edit', prompt.id)" variant="outline" size="sm" full-width>
                                 Edit Prompt
                             </CyberLink>
                             <button 
@@ -145,6 +139,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
+import { type Prompt } from '@/types/prompt';
 import { Head } from '@inertiajs/vue3';
 import CyberLink from '@/components/theme/CyberLink.vue';
 import { computed } from 'vue';
@@ -166,7 +161,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: props.prompt.title,
-        href: route('root.prompts.show', props.prompt),
+        href: route('root.prompts.show', props.prompt.slug),
     },
 ];
 

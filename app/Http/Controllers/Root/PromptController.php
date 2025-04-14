@@ -4,15 +4,18 @@ namespace App\Http\Controllers\Root;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PromptRequest;
+use App\Models\Category;
 use App\Models\Prompt;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Enums\PromptCategoryEnum;
 class PromptController extends Controller
 {
     public function index()
     {
         return Inertia::render('Root/Prompts/Index', [
-            'prompts' => Prompt::all(),
+            'prompts' => Prompt::with(['category', 'tags'])->get(),
         ]);
     }
 
@@ -20,28 +23,36 @@ class PromptController extends Controller
     {
         return Inertia::render('Root/Prompts/Create', [
             'models' => collect(config('models.models'))->map(fn ($models, $provider) => $models),
+            'categories' => $categories = Category::with('tags')
+                ->whereIn('slug', PromptCategoryEnum::slugs())
+                ->get(),
+            'tags' => Tag::with('category')->whereIn('category_id', $categories->pluck('id'))->get(),
         ]);
     }
 
     public function store(PromptRequest $request)
     {
-        Prompt::create($request->validated());
-
+        $prompt = Prompt::create($request->validated());
+        
         return redirect()->route('root.prompts.index')->with('success', 'Prompt created successfully');
     }
 
     public function show(Prompt $prompt)
     {
         return Inertia::render('Root/Prompts/Show', [
-            'prompt' => $prompt,
+            'prompt' => $prompt->load(['category', 'tags']),
         ]);
     }
 
     public function edit(Prompt $prompt)
     {
         return Inertia::render('Root/Prompts/Edit', [
-            'prompt' => $prompt,
+            'prompt' => $prompt->load(['category', 'tags']),
             'models' => collect(config('models.models'))->map(fn ($models, $provider) => $models),
+            'categories' => $categories = Category::with('tags')
+                ->whereIn('slug', PromptCategoryEnum::slugs())
+                ->get(),
+            'tags' => Tag::with('category')->whereIn('category_id', $categories->pluck('id'))->get(),
         ]); 
     }
 

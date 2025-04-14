@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasCategory;
+use App\Models\Concerns\HasTags;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Prompt extends Model
 {
     /** @use HasFactory<\Database\Factories\PromptFactory> */
-    use HasFactory;
+    use HasFactory, HasCategory, HasTags;
 
     /**
      * The attributes that are mass assignable.
@@ -36,4 +38,12 @@ class Prompt extends Model
         'published_at' => 'datetime',
         'word_count' => 'integer',
     ];
+
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 }

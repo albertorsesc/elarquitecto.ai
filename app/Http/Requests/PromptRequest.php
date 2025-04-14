@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\PromptTagEnum;
+use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -26,6 +29,9 @@ class PromptRequest extends FormRequest
             return $models;
         })->toArray();
         
+        // Get valid prompt tag ids
+        $validTagSlugs = PromptTagEnum::slugs();
+        
         $rules = [
             'title' => ['required', 'string', 'max:255'],
             'excerpt' => ['required', 'string', 'max:255'],
@@ -35,6 +41,20 @@ class PromptRequest extends FormRequest
             'word_count' => ['required', 'integer'],
             'target_models' => ['nullable', 'array'],
             'target_models.*' => ['nullable', 'string', 'in:' . implode(',', $validModels)],
+            'category_id' => ['required', 'exists:categories,id'],
+            'tags' => ['required', 'array', 'min:1'],
+            'tags.*' => [
+                'exists:tags,id',
+                function ($attribute, $value, $fail) use ($validTagSlugs) {
+                    $tag = Tag::find($value);
+                    if (!$tag) return;
+                    
+                    // Check if the tag's slug is in the list of valid prompt tag slugs
+                    if (!in_array($tag->slug, $validTagSlugs)) {
+                        $fail('The selected tag is not valid for prompts.');
+                    }
+                },
+            ],
         ];
 
         // Get the current prompt ID if we're on an update route
