@@ -14,24 +14,4 @@
     @else
       <x-timeline.section :items="$items ?? []" />
     @endif
-
-    {{-- Commented Vue code preserved as requested
-    <template v-else>
-      <div class="relative pb-10">
-        <!-- Timeline line -->
-        <div class="timeline-line"></div>
-
-        <!-- Timeline items -->
-        <div class="timeline-items">
-            hello
-          <TimelineItemCard
-            v-for="(item, index) in items"
-            :key="item.id"
-            :item="item"
-            :position="index % 2 === 0 ? 'left' : 'right'"
-          />
-        </div>
-      </div>
-    </template> 
-    --}}
   </div>

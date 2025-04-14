@@ -51,8 +51,7 @@ class WelcomeController extends Controller
                     'date' => $prompt->created_at->format('M d, Y'),
                     'image' => $prompt->image,
                     'word_count' => $prompt->word_count, // Add word count directly
-                    'url' => '/', // Redirect to home for now
-                    'model' => $prompt, // Store the full model for future use if needed
+                    'url' => route('prompts.show', $prompt), // Redirect to home for now
                 ];
             });
 

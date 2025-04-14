@@ -38,7 +38,7 @@
             <!-- Navigation Links -->
             <div class="order-2 flex items-center gap-1 sm:order-3 sm:gap-3">
                 @if(auth()->check())
-                <a href="route('dashboard')"
+                <a href="{{ route('dashboard') }}"
                     class="neon-border rounded bg-primary/10 px-2 py-1 text-xs font-semibold text-primary transition-all hover:bg-primary/20 sm:px-3 sm:py-1.5 sm:text-sm"
                 >
                     Dashboard

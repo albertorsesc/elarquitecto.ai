@@ -1,11 +1,14 @@
 @props([
-    'fromColor' => 'primary/5',
-    'viaColor' => 'cyan-400/5',
-    'toColor' => 'accent/5',
-    'direction' => 'br',
+    'color' => 'primary',
+    'opacity' => '10',
     'hoverEffect' => true,
-    'rounded' => 'xl'
+    'size' => '80%',
+    'blur' => '40px'
 ])
 
-<!-- Breathing glow effect -->
-<div class="absolute inset-0 animate-breath rounded-{{ $rounded }} bg-gradient-to-{{ $direction }} from-{{ $fromColor }} via-{{ $viaColor }} to-{{ $toColor }} {{ $hoverEffect ? 'opacity-0 group-hover:opacity-100' : 'opacity-100' }}"></div> 
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden opacity-{{ $opacity }} {{ $hoverEffect ? 'group-hover:opacity-20' : '' }} -z-5">
+    <div class="absolute w-{{ $size }} h-{{ $size }} rounded-full animate-breath" 
+         style="background: radial-gradient(circle, hsl(var(--{{ $color }})) 0%, transparent 70%); 
+                filter: blur({{ $blur }});">
+    </div>
+</div> 

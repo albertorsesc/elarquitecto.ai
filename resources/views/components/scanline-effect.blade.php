@@ -1,7 +1,3 @@
-@props([
-    'opacity' => '10',
-    'zIndex' => '30'
-])
+@props(['opacity' => '05'])
 
-<!-- Scanline effect -->
-<div class="absolute inset-0 z-{{ $zIndex }} bg-scanline opacity-{{ $opacity }}"></div> 
+<div class="pointer-events-none absolute inset-0 bg-scanline opacity-{{ $opacity }} z-10"></div> 
