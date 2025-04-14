@@ -51,26 +51,26 @@
                             'href' => '/prompts',
                             'icon' => 'fa-regular fa-comment-dots'
                         ],
-                        [
-                            'title' => 'Herramientas',
-                            'href' => '/tools',
-                            'icon' => 'fa-solid fa-screwdriver-wrench'
-                        ],
-                        [
-                            'title' => 'Foro',
-                            'href' => '/forum',
-                            'icon' => 'fa-solid fa-comments'
-                        ],
-                        [
-                            'title' => 'Recursos',
-                            'href' => '/resources',
-                            'icon' => 'fa-solid fa-book'
-                        ],
-                        [
-                            'title' => 'Comunidad',
-                            'href' => '/community',
-                            'icon' => 'fa-solid fa-users'
-                        ]
+                        // [
+                        //     'title' => 'Herramientas',
+                        //     'href' => '/tools',
+                        //     'icon' => 'fa-solid fa-screwdriver-wrench'
+                        // ],
+                        // [
+                        //     'title' => 'Foro',
+                        //     'href' => '/forum',
+                        //     'icon' => 'fa-solid fa-comments'
+                        // ],
+                        // [
+                        //     'title' => 'Recursos',
+                        //     'href' => '/resources',
+                        //     'icon' => 'fa-solid fa-book'
+                        // ],
+                        // [
+                        //     'title' => 'Comunidad',
+                        //     'href' => '/community',
+                        //     'icon' => 'fa-solid fa-users'
+                        // ]
                     ];
                 @endphp
 
@@ -111,26 +111,6 @@
             <div class="flex flex-col items-center">
                 <!-- Icons only in collapsed state -->
                 <div class="flex flex-1 justify-between w-full items-center">
-                    <a href="/blog"
-                        class="group relative"
-                        title="Blog"
-                    >
-                        <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 transition-all group-hover:bg-primary/20">
-                            <i class="fa-solid fa-blog text-lg text-primary"></i>
-                        </div>
-                        <!-- Glow effect on hover -->
-                        <div class="absolute -inset-1 rounded-full opacity-0 transition-opacity group-hover:opacity-100">
-                            <x-multi-color-sliding-neon 
-                                topColor="#FF1CF7" 
-                                rightColor="#00FFE1" 
-                                bottomColor="#01FF88" 
-                                leftColor="#5B6EF7" 
-                                opacity="30" 
-                                :hoverEffect="true" 
-                            />
-                        </div>
-                    </a>
-
                     @php
                         $links = [
                             [
@@ -138,26 +118,26 @@
                                 'href' => '/prompts',
                                 'icon' => 'fa-regular fa-comment-dots'
                             ],
-                            [
-                                'title' => 'Herramientas',
-                                'href' => '/tools',
-                                'icon' => 'fa-solid fa-screwdriver-wrench'
-                            ],
-                            [
-                                'title' => 'Foro',
-                                'href' => '/forum',
-                                'icon' => 'fa-solid fa-comments'
-                            ],
-                            [
-                                'title' => 'Recursos',
-                                'href' => '/resources',
-                                'icon' => 'fa-solid fa-book'
-                            ],
-                            [
-                                'title' => 'Comunidad',
-                                'href' => '/community',
-                                'icon' => 'fa-solid fa-users'
-                            ]
+                            // [
+                            //     'title' => 'Herramientas',
+                            //     'href' => '/tools',
+                            //     'icon' => 'fa-solid fa-screwdriver-wrench'
+                            // ],
+                            // [
+                            //     'title' => 'Foro',
+                            //     'href' => '/forum',
+                            //     'icon' => 'fa-solid fa-comments'
+                            // ],
+                            // [
+                            //     'title' => 'Recursos',
+                            //     'href' => '/resources',
+                            //     'icon' => 'fa-solid fa-book'
+                            // ],
+                            // [
+                            //     'title' => 'Comunidad',
+                            //     'href' => '/community',
+                            //     'icon' => 'fa-solid fa-users'
+                            // ]
                         ];
                     @endphp
                     

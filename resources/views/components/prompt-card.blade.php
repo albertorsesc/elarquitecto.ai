@@ -48,7 +48,7 @@
         : ($prompt['date'] ?? date('M d, Y'));
 @endphp
 
-<div class="group h-full overflow-hidden rounded-xl border border-border/50 glass-effect neon-border transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)]">
+<div class="group h-full overflow-hidden rounded-xl border border-border/50 glass-effect transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.3)]">
     <!-- Card Image -->
     <div class="relative h-40 w-full overflow-hidden">
         <img src="{{ $get('image', '/img/logo.png') }}" alt="{{ $get('title', 'Prompt') }}"
@@ -92,18 +92,22 @@
         <!-- View Link -->
         <div class="mt-3 pt-3 border-t border-border/30">
             @if($isObject)
-                <x-cyber-link 
-                    :href="$url" 
-                    variant="outline" 
-                    size="sm" 
-                    :fullWidth="true">
-                    View Details
-                </x-cyber-link>
+                <div class="neon-border rounded-md overflow-hidden">
+                    <x-cyber-link 
+                        :href="$url" 
+                        variant="outline" 
+                        size="sm" 
+                        :fullWidth="true">
+                        View Details
+                    </x-cyber-link>
+                </div>
             @else
-                <a href="{{ $url }}" 
-                   class="block w-full text-center py-1.5 px-3 text-sm rounded-md border border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary transition-colors">
-                  View Details
-                </a>
+                <div class="neon-border rounded-md overflow-hidden">
+                    <a href="{{ $url }}" 
+                       class="block w-full text-center py-1.5 px-3 text-sm bg-primary/10 hover:bg-primary/20 text-primary transition-colors">
+                      View Details
+                    </a>
+                </div>
             @endif
         </div>
     </div>

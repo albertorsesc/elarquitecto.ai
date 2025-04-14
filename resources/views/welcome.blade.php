@@ -43,7 +43,7 @@
   
             <!-- Blog Carousel -->
             <div class="relative">
-              <x-blog.blog-carousel :articles="$articles ?? ['data' => []]" />
+              {{-- <x-blog.blog-carousel :articles="$articles ?? ['data' => []]" /> --}}
   
               <!-- Section corner accents -->
               <x-corner-accent leftColor="secondary" rightColor="accent" />

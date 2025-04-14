@@ -3,7 +3,7 @@
 @section('title', 'Prompts')
 
 @section('content')
-    <div class="flex h-full flex-1 flex-col gap-4 p-4 bg-background mb-24">
+    <div class="flex h-full flex-1 flex-col gap-4 p-4 mb-24 relative z-10">
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-bold text-glow animate-text-glow">Prompts</h1>
         </div>
