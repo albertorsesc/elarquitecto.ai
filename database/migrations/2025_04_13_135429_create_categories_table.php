@@ -27,7 +27,10 @@ return new class extends Migration
             $table->morphs('categorizable');
             $table->timestamps();
 
-            $table->unique(['category_id', 'categorizable_id', 'categorizable_type']);
+            $table->unique(
+                ['category_id', 'categorizable_id', 'categorizable_type'],
+                'categorizables_unique'
+            );
         });
     }
 
