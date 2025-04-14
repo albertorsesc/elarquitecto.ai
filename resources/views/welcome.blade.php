@@ -26,6 +26,55 @@
 <body class="min-h-screen bg-background text-foreground antialiased overflow-x-hidden">
     @include('landing.header')
 
+    <!-- Flash Messages -->
+    @if (session('success'))
+    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" class="fixed top-20 right-4 z-50 max-w-md">
+        <div class="glass-effect rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 shadow-[0_0_15px_rgba(34,197,94,0.2)] backdrop-blur-xl">
+            <div class="flex items-center">
+                <div class="mr-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-green-500/20 text-green-500">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-green-500">{{ session('success') }}</p>
+                </div>
+                <div class="ml-auto pl-3">
+                    <button @click="show = false" class="inline-flex h-6 w-6 items-center justify-center rounded-full text-green-500 hover:bg-green-500/20">
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Animated progress bar -->
+            <div class="mt-2 h-0.5 w-full rounded bg-green-500/20">
+                <div class="h-full w-full rounded bg-green-500" x-init="setTimeout(() => $el.style.width = '0%', 100)" style="width: 100%; transition: width 5s linear;"></div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if (session('error'))
+    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" class="fixed top-20 right-4 z-50 max-w-md">
+        <div class="glass-effect rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 shadow-[0_0_15px_rgba(239,68,68,0.2)] backdrop-blur-xl">
+            <div class="flex items-center">
+                <div class="mr-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-red-500/20 text-red-500">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-red-500">{{ session('error') }}</p>
+                </div>
+                <div class="ml-auto pl-3">
+                    <button @click="show = false" class="inline-flex h-6 w-6 items-center justify-center rounded-full text-red-500 hover:bg-red-500/20">
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Animated progress bar -->
+            <div class="mt-2 h-0.5 w-full rounded bg-red-500/20">
+                <div class="h-full w-full rounded bg-red-500" x-init="setTimeout(() => $el.style.width = '0%', 100)" style="width: 100%; transition: width 5s linear;"></div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <div class="w-full pb-[70px]">
         <!-- Main Content -->
         <div class="w-full mx-auto">

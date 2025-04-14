@@ -58,29 +58,30 @@
                 </p>
                 
                 <!-- Subscription form -->
-                <form class="mt-8 flex justify-center sm:mt-10">
+                <form action="{{ route('subscribers.store') }}" method="POST" class="mt-8 flex justify-center sm:mt-10">
+                    @csrf
                     <div class="group relative w-full max-w-2xl">
                         <input
-                        v-model="form.email"
+                        name="email"
                         type="email"
                         placeholder="Tu correo electrónico"
                         class="relative z-10 w-full rounded-xl border border-white/10 bg-background/50 py-3 pl-4 pr-36 text-sm text-foreground placeholder:text-foreground/50 focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all duration-300"
-                        :class="{ 'border-red-500': form.errors.email }"
+                        @error('email') class="border-red-500" @enderror
                         required
                         />
                         <button
                         type="submit"
                         class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-lg bg-primary px-4 py-1.5 text-sm font-semibold text-white transition-all hover:bg-primary/80 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)]"
-                        :disabled="isSubmitting"
                         >
-                        {{-- <span>Enviando...</span> --}}
-                        <span v-else>Suscribirse</span>
+                        Suscribirse
                     </button>
                     
                     <!-- Error message -->
-                    {{-- <div v-if="form.errors.email" class="absolute -bottom-6 left-0 text-sm text-red-400">
-                        {{ form.errors.email }}
-                    </div> --}}
+                    @error('email')
+                        <div class="absolute -bottom-6 left-0 text-sm text-red-400">
+                            {{ $message }}
+                        </div>
+                    @enderror
                     
                     <!-- Animated border effect -->
                     <div class="absolute bottom-0 left-0 h-[1px] w-0 bg-gradient-to-r from-primary via-cyan-400 to-secondary transition-all duration-300 group-focus-within:w-full"></div>
