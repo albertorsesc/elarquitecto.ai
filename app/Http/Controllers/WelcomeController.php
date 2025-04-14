@@ -20,11 +20,6 @@ class WelcomeController extends Controller
         $groupedTimeline = $timeline->groupBy('type');
 
         return view('welcome', [
-            'seo' => [
-                'title' => 'El Arquitecto A.I.',
-                'description' => 'Democratizando I.A. para el beneficio de Latinoamérica',
-                'keywords' => 'IA, Inteligencia Artificial, Latinoamérica, AI',
-            ],
             'timeline' => $groupedTimeline,
             'articles' => ['data' => []], // Empty articles for now
         ]);

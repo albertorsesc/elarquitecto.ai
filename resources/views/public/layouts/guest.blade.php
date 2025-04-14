@@ -5,7 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>@yield('title', 'El Arquitecto AI')</title>
+    @php
+    // Get values from sections or use defaults
+    $seoTitle = View::hasSection('title') ? trim(View::getSection('title')) : 'El Arquitecto AI';
+    $seoDescription = View::hasSection('description') ? trim(View::getSection('description')) : '';
+    $seoKeywords = View::hasSection('keywords') ? trim(View::getSection('keywords')) : '';
+    $seoContent = View::hasSection('content-for-seo') ? trim(View::getSection('content-for-seo')) : '';
+    $seoImage = View::hasSection('og-image') ? trim(View::getSection('og-image')) : '';
+    $seoType = View::hasSection('og-type') ? trim(View::getSection('og-type')) : 'website';
+    $seoSchemaType = View::hasSection('schema-type') ? trim(View::getSection('schema-type')) : 'WebPage';
+    // schemaData is handled separately via $schemaData variable
+    @endphp
+    
+    {{-- SEO Component - Central place for all SEO meta tags --}}
+    <x-seo 
+        title="{{ $seoTitle }}"
+        description="{{ $seoDescription }}"
+        keywords="{{ $seoKeywords }}"
+        content="{{ $seoContent }}"
+        image="{{ $seoImage }}"
+        type="{{ $seoType }}"
+        schemaType="{{ $seoSchemaType }}"
+        :schemaData="$schemaData ?? []"
+    />
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

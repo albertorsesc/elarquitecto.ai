@@ -1,6 +1,27 @@
 @extends('public.layouts.guest')
 
-@section('title', 'Prompts')
+@section('title', 'Prompts | El Arquitecto A.I.')
+@section('description', 'Explora nuestra colección de prompts de IA optimizados para ayudarte a obtener los mejores resultados con diferentes modelos de IA.')
+@section('keywords', 'prompts, inteligencia artificial, AI prompts, IA prompts, ChatGPT, El Arquitecto AI')
+@section('og-type', 'website')
+@section('schema-type', 'CollectionPage')
+
+@php
+// Define schema data for SEO component to use in the layout
+$schemaData = [
+    'mainEntity' => [
+        '@type' => 'ItemList',
+        'itemListElement' => $prompts->map(function($prompt, $index) {
+            return [
+                '@type' => 'ListItem',
+                'position' => (int)$index + 1,
+                'url' => route('prompts.show', $prompt),
+                'name' => $prompt->title
+            ];
+        })->toArray()
+    ]
+];
+@endphp
 
 @section('content')
     <div class="flex h-full flex-1 flex-col gap-4 p-4 mb-24 relative z-10">

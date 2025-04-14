@@ -1,6 +1,24 @@
 @extends('public.layouts.guest')
 
-@section('title', $prompt->title)
+@section('title', $prompt->title . ' | El Arquitecto AI')
+@section('description', $prompt->excerpt)
+@section('keywords')
+{{ $prompt->tags->pluck('name')->join(', ') }}, prompts, inteligencia artificial, AI, IA
+@endsection
+@section('content-for-seo', $prompt->content)
+@section('og-type', 'article')
+@section('schema-type', 'HowTo')
+
+@php
+// Define schema data for SEO component to use in the layout
+$schemaData = [
+    'published_at' => $prompt->published_at ?? $prompt->created_at,
+    'updated_at' => $prompt->updated_at,
+    'author' => 'Alberto Rosas',
+    'category' => $prompt->category ? $prompt->category[0]->name : null,
+    'tags' => $prompt->tags->pluck('name')->toArray()
+];
+@endphp
 
 @section('content')
     <div class="flex flex-col gap-6 mb-24">

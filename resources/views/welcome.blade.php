@@ -5,9 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>{{ $seo['title'] ?? 'El Arquitecto A.I.' }}</title>
-    <meta name="description" content="{{ $seo['description'] ?? 'Democratizando I.A. para el beneficio de Latinoamérica' }}">
-    <meta name="keywords" content="{{ $seo['keywords'] ?? 'IA, Inteligencia Artificial, Latinoamérica, AI' }}">
+    @php
+    // Define schema data for organization
+    $schemaData = [
+        'sameAs' => [
+            'https://instagram.com/elarquitectoai',
+            'https://facebook.com/elarquitectoai',
+            'https://youtube.com/@elarquitectoai',
+            'https://tiktok.com/@elarquitectoai',
+        ]
+    ];
+    @endphp
+
+    {{-- SEO Component - Central place for all SEO meta tags --}}
+    <x-seo 
+        title="{{ $seo['title'] ?? 'El Arquitecto A.I.' }}"
+        description="{{ $seo['description'] ?? 'Democratizando I.A. para el beneficio de Latinoamérica' }}"
+        keywords="{{ $seo['keywords'] ?? 'IA, Inteligencia Artificial, Latinoamérica, AI' }}"
+        image="{{ $seo['image'] ?? asset('/img/logo.png') }}"
+        type="{{ $seo['type'] ?? 'website' }}"
+        schemaType="Organization"
+        :schemaData="$schemaData"
+    />
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
