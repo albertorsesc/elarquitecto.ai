@@ -18,6 +18,9 @@ Route::middleware(['auth', 'verified', EnsureRootUser::class.':r007'])->prefix('
 
     Route::controller(CategoryController::class)->group(function () {
         Route::get('categories', 'index')->name('categories.index');
+        Route::get('categories/create', 'create')->name('categories.create');
+        Route::post('categories', 'store')->name('categories.store');
+        Route::get('categories/{category}', 'show')->name('categories.show');
     });
     // Route::controller(TagController::class)->group(function () {});
 });

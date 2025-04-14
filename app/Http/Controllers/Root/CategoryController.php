@@ -15,4 +15,29 @@ class CategoryController extends Controller
             'categories' => Category::all(),
         ]);
     }
+
+    public function create()
+    {
+        return Inertia::render('Root/Categories/Create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:categories',
+            'description' => 'nullable|string',
+        ]);
+
+        Category::create($request->only('name', 'slug', 'description'));
+
+        return redirect()->route('root.categories.index')->with('success', 'Category created successfully');
+    }
+
+    public function show(Category $category)
+    {
+        return Inertia::render('Root/Categories/Show', [
+            'category' => $category,
+        ]);
+    }
 }
