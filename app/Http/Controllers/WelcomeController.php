@@ -39,9 +39,19 @@ class WelcomeController extends Controller
     {
         // Get all prompts sorted by creation date (newest first)
         $prompts = Prompt::query()
+            ->with(['tags', 'category']) // Eager load relationships
             ->orderByDesc('created_at')
+            ->limit(6) // Limit to most recent prompts
             ->get()
             ->map(function ($prompt) {
+                // Map tags to a simple array with 'name' and 'slug' keys
+                $tagsArray = $prompt->tags->map(function($tag) {
+                    return [
+                        'name' => $tag->name,
+                        'slug' => $tag->slug,
+                    ];
+                })->toArray();
+
                 return [
                     'id' => $prompt->id,
                     'type' => 'prompt', // Type identifier for grouping
@@ -50,8 +60,10 @@ class WelcomeController extends Controller
                     'content' => $prompt->excerpt, // Use excerpt as timeline content
                     'date' => $prompt->created_at->format('M d, Y'),
                     'image' => $prompt->image,
-                    'word_count' => $prompt->word_count, // Add word count directly
-                    'url' => route('prompts.show', $prompt), // Redirect to home for now
+                    'word_count' => $prompt->word_count,
+                    'url' => route('prompts.show', $prompt),
+                    'tags' => $tagsArray, // Use the transformed tags array
+                    'category' => $prompt->category ? [$prompt->category] : [],
                 ];
             });
 

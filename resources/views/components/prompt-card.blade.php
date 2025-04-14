@@ -29,12 +29,15 @@
         
     $hasTags = $isObject 
         ? ($prompt->tags && count($prompt->tags) > 0) 
-        : (isset($prompt['model']) && isset($prompt['model']['tags']) && count($prompt['model']['tags']) > 0);
+        : (
+            (isset($prompt['tags']) && count($prompt['tags']) > 0) || 
+            (isset($prompt['model']) && isset($prompt['model']['tags']) && count($prompt['model']['tags']) > 0)
+        );
         
     $tags = $isObject 
         ? ($prompt->tags ?? []) 
-        : ($prompt['model']['tags'] ?? []);
-        
+        : ($prompt['tags'] ?? ($prompt['model']['tags'] ?? []));
+
     $url = $isObject 
         ? route('prompts.show', $prompt) 
         : ($prompt['url'] ?? '/');
@@ -75,7 +78,13 @@
         <div class="flex flex-wrap gap-1 mt-1">
             @foreach($tags as $tag)
                 <span class="text-xs px-2 py-0.5 rounded-full bg-sidebar-accent text-sidebar-accent-foreground">
-                    {{ $isObject ? $tag->name : $tag['name'] }}
+                    @if($isObject)
+                        {{ $tag->name }}
+                    @elseif(is_array($tag) && isset($tag['name']))
+                        {{ $tag['name'] }}
+                    @else
+                        {{ $tag }}
+                    @endif
                 </span>
             @endforeach
         </div>
