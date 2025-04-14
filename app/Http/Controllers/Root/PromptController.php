@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Root;
 
+use App\Enums\PromptCategoryEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PromptRequest;
 use App\Models\Category;
 use App\Models\Prompt;
 use App\Models\Tag;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Enums\PromptCategoryEnum;
+
 class PromptController extends Controller
 {
     public function index()
@@ -33,7 +33,7 @@ class PromptController extends Controller
     public function store(PromptRequest $request)
     {
         $prompt = Prompt::create($request->validated());
-        
+
         return redirect()->route('root.prompts.index')->with('success', 'Prompt created successfully');
     }
 
@@ -53,7 +53,7 @@ class PromptController extends Controller
                 ->whereIn('slug', PromptCategoryEnum::slugs())
                 ->get(),
             'tags' => Tag::with('category')->whereIn('category_id', $categories->pluck('id'))->get(),
-        ]); 
+        ]);
     }
 
     public function update(PromptRequest $request, Prompt $prompt)

@@ -19,7 +19,7 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         $name = fake()->randomElement(CategoryEnum::values());
-        
+
         return [
             'name' => $name,
             'slug' => Str::slug($name),

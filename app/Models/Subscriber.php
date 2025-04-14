@@ -32,4 +32,4 @@ class Subscriber extends Model
     {
         return $this->verified_at !== null;
     }
-} 
+}

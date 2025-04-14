@@ -22,23 +22,23 @@ class TagFactory extends Factory
     {
         // Generate a unique name by appending a random suffix
         $baseName = fake()->randomElement(TagEnum::values());
-        $name = $baseName . ' ' . Str::random(5);
+        $name = $baseName.' '.Str::random(5);
         $slug = Str::slug($name);
-        
+
         // Get or create the category for this tag
         $categoryName = $this->getCategoryForTag($baseName);
         $category = Category::firstOrCreate(
             ['name' => $categoryName],
             ['slug' => Str::slug($categoryName), 'description' => fake()->sentence()]
         );
-        
+
         return [
             'name' => $name,
             'slug' => $slug,
             'category_id' => $category->id,
         ];
     }
-    
+
     /**
      * Get the category name for a given tag.
      */
@@ -46,7 +46,7 @@ class TagFactory extends Factory
     {
         // Default category if not found
         $categoryName = CategoryEnum::AI->value;
-        
+
         // Check which category the tag belongs to
         if (in_array($tagName, TagEnum::getByCategory(CategoryEnum::AI->value))) {
             $categoryName = CategoryEnum::AI->value;
@@ -57,7 +57,7 @@ class TagFactory extends Factory
         } elseif (in_array($tagName, TagEnum::getByCategory(CategoryEnum::AUTOMATION->value))) {
             $categoryName = CategoryEnum::AUTOMATION->value;
         }
-        
+
         return $categoryName;
     }
 }

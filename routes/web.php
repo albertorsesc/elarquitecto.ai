@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\Public\PromptController;
 use App\Http\Controllers\SubscriberController;
+use App\Http\Controllers\WelcomeController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
 

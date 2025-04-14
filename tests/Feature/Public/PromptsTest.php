@@ -2,15 +2,14 @@
 
 namespace Tests\Feature\Public;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\Prompt;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class PromptsTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     public function test_prompts_index_page_displays_published_prompts()
     {
         // Create published prompts
@@ -63,7 +62,7 @@ class PromptsTest extends TestCase
     {
         // Test show page displays requested prompt
     }
-    
+
     public function test_prompts_show_returns_404_for_unpublished_prompt()
     {
         // Test 404 for unpublished prompts
@@ -73,7 +72,7 @@ class PromptsTest extends TestCase
     {
         // Test 404 for non-existent prompts
     }
-    
+
     public function test_related_prompts_are_displayed_on_show_page()
     {
         // Test related prompts section

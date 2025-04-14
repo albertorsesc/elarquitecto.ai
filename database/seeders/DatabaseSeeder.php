@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
         ]);
-        
+
         // Seed categories and tags
         $this->call(CategoryAndTagSeeder::class);
     }

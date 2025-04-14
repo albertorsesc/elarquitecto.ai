@@ -16,7 +16,7 @@ class PromptController extends Controller
         $prompts = Prompt::whereNotNull('published_at')
             ->orderBy('published_at', 'desc')
             ->paginate(15);
-            
+
         return view('public.prompts.index', [
             'prompts' => $prompts,
         ]);
@@ -27,15 +27,15 @@ class PromptController extends Controller
      */
     public function show(Prompt $prompt)
     {
-        if (!$prompt->published_at) {
+        if (! $prompt->published_at) {
             abort(404);
         }
-        
+
         $relatedPrompts = Prompt::whereNotNull('published_at')
             ->where('id', '!=', $prompt->id)
             ->limit(3)
             ->get();
-            
+
         return view('public.prompts.show', [
             'prompt' => $prompt,
             'relatedPrompts' => $relatedPrompts,

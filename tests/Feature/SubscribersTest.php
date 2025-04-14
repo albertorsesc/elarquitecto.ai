@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\SubscriberJoinJob;
+use App\Models\Subscriber;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
-use App\Models\Subscriber;
-use App\Jobs\SubscriberJoinJob;
+use Tests\TestCase;
 
 class SubscribersTest extends TestCase
 {

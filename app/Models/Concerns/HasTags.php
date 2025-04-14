@@ -16,12 +16,12 @@ trait HasTags
         static::created(function ($model) {
             static::handleTagsAssignment($model);
         });
-        
+
         static::updated(function ($model) {
             static::handleTagsAssignment($model);
         });
     }
-    
+
     /**
      * Handle tags assignment from input data.
      */
@@ -29,7 +29,7 @@ trait HasTags
     {
         if (request()->has('tags')) {
             $tags = request()->input('tags', []);
-            if (!empty($tags)) {
+            if (! empty($tags)) {
                 $model->setTags($tags);
             }
         }
@@ -51,7 +51,7 @@ trait HasTags
         if ($tags instanceof Collection) {
             $tags = $tags->modelKeys();
         }
-        
+
         $this->tags()->sync($tags);
     }
 
@@ -62,7 +62,7 @@ trait HasTags
     {
         return $this->tags->contains($tag);
     }
-    
+
     /**
      * Get all tag IDs for this model.
      */
@@ -70,4 +70,4 @@ trait HasTags
     {
         return $this->tags->pluck('id')->toArray();
     }
-} 
+}

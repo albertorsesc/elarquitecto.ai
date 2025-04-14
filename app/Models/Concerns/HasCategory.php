@@ -15,12 +15,12 @@ trait HasCategory
         static::created(function ($model) {
             static::handleCategoryAssignment($model);
         });
-        
+
         static::updated(function ($model) {
             static::handleCategoryAssignment($model);
         });
     }
-    
+
     /**
      * Handle category assignment from input data.
      */
@@ -36,7 +36,7 @@ trait HasCategory
 
     /**
      * Get the category that the model belongs to.
-     * 
+     *
      * We use morphToMany even though a model only belongs to one category,
      * because this provides consistency with the taggable relationship and
      * allows for potential future flexibility.
@@ -61,7 +61,7 @@ trait HasCategory
     {
         return $this->category->contains($category);
     }
-    
+
     /**
      * Get the category ID if it exists.
      */
@@ -69,4 +69,4 @@ trait HasCategory
     {
         return $this->category->first()?->id;
     }
-} 
+}

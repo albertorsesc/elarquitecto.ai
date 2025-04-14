@@ -32,7 +32,7 @@ class WelcomeController extends Controller
 
     /**
      * Get all timeline items.
-     * 
+     *
      * This method will be expanded later to include other resource types.
      */
     protected function getTimelineItems(): Collection
@@ -45,7 +45,7 @@ class WelcomeController extends Controller
             ->get()
             ->map(function ($prompt) {
                 // Map tags to a simple array with 'name' and 'slug' keys
-                $tagsArray = $prompt->tags->map(function($tag) {
+                $tagsArray = $prompt->tags->map(function ($tag) {
                     return [
                         'name' => $tag->name,
                         'slug' => $tag->slug,
@@ -74,4 +74,4 @@ class WelcomeController extends Controller
 
         return $prompts;
     }
-} 
+}

@@ -14,7 +14,7 @@ class EnsureRootUser
     public function handle(Request $request, Closure $next, string $role): Response
     {
         // Check if the user is authenticated
-        if (!$request->user()) {
+        if (! $request->user()) {
             return redirect('/login');
         }
 
@@ -22,10 +22,10 @@ class EnsureRootUser
         $rootUserEmail = config("auth.roles.{$role}");
 
         // If no root user configured or user's email doesn't match
-        if (!$rootUserEmail || $request->user()->email !== $rootUserEmail) {
+        if (! $rootUserEmail || $request->user()->email !== $rootUserEmail) {
             abort(403, 'Te perdiste, herman@. Te acompaño de regreso a la página de inicio.');
         }
 
         return $next($request);
     }
-} 
+}

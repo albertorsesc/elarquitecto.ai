@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Prompt extends Model
 {
     /** @use HasFactory<\Database\Factories\PromptFactory> */
-    use HasFactory, HasCategory, HasTags;
+    use HasCategory, HasFactory, HasTags;
 
     /**
      * The attributes that are mass assignable.

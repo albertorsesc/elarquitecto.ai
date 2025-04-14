@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\Subscriber;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -29,4 +28,4 @@ class SubscriberJoinJob implements ShouldQueue
         // Handle the subscriber join process
         // This would typically send a welcome email or perform other onboarding actions
     }
-} 
+}
