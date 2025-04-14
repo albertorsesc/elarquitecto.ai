@@ -45,4 +45,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function isRoot(): bool
+    {
+        return $this->email === config('auth.roles.r007');
+    }
 }

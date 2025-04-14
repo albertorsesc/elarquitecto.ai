@@ -39,13 +39,20 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
+        $auth = [
+            'user' => $request->user(),
+        ];
+
+        // Add is_root property only if user is authenticated and is root
+        if ($request->user() && $request->user()->isRoot()) {
+            $auth['is_root'] = true;
+        }
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
-            'auth' => [
-                'user' => $request->user(),
-            ],
+            'auth' => $auth,
             'ziggy' => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),

@@ -54,7 +54,7 @@ const footerNavItems: NavItem[] = [
 
         <SidebarContent>
             <NavMain :items="mainNavItems" />
-            <NavMain :items="rootNavItems" group-label="Root" />
+            <NavMain v-if="$page.props.auth.is_root" :items="rootNavItems" group-label="Root" />
         </SidebarContent>
 
         <SidebarFooter>

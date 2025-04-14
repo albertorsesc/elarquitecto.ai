@@ -3,17 +3,17 @@
 $sections = [
   [
     'id' => 1,
-    'title' => 'Blog',
-    'description' => 'Artículos sobre IA, tutoriales y mejores prácticas para mantenerte actualizado.',
-    'icon' => 'carbon:blog',
-    'link' => '/blog'
-  ],
-  [
-    'id' => 2,
     'title' => 'Prompts',
     'description' => 'Colección de prompts efectivos para diferentes modelos de IA y casos de uso.',
     'icon' => 'carbon:chat',
     'link' => '/prompts'
+  ],
+  [
+    'id' => 2,
+    'title' => 'Blog',
+    'description' => 'Artículos sobre IA, tutoriales y mejores prácticas para mantenerte actualizado.',
+    'icon' => 'carbon:blog',
+    'link' => '/blog'
   ],
   [
     'id' => 3,

@@ -12,7 +12,7 @@
             </a>
 
             <!-- Search Bar -->
-            <div class="order-3 mt-2 w-full sm:order-2 sm:mt-0 sm:w-auto sm:flex-1 sm:px-4 md:px-6">
+            <div class="order-3 mt-2 w-full sm:order-2 sm:mt-0 sm:w-auto sm:flex-1 sm:px-4 md:px-6 hidden">
                 <div class="group relative">
                 <input
                     type="text"
@@ -44,12 +44,12 @@
                     Dashboard
                 </a>
             @else
-                <a href="{{ route('login') }}" class="px-1 text-xs text-foreground/80 transition-colors hover:text-primary sm:px-2 sm:text-sm">
+                {{-- <a href="{{ route('login') }}" class="px-1 text-xs text-foreground/80 transition-colors hover:text-primary sm:px-2 sm:text-sm">
                     Entrar
                 </a>
                 <a href="{{ route('register') }}" class="neon-border rounded bg-primary px-2 py-1 text-xs font-semibold text-white transition-all hover:bg-primary/80 sm:px-3 sm:py-1.5 sm:text-sm">
                     Registrarme
-                </a>
+                </a> --}}
             @endif
         </div>
     </div>
