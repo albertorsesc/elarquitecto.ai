@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Root;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\Category;
 
 class CategoryController extends Controller
 {
@@ -45,7 +45,7 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:categories,slug,' . $category->id,
+            'slug' => 'required|string|max:255|unique:categories,slug,'.$category->id,
             'description' => 'nullable|string',
         ]);
 

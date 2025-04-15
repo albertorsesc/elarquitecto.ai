@@ -1,25 +1,42 @@
 <template>
-    <Head title="Edit Category" />
+    <Head title="Create Tag" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 p-4 bg-background">
             <div class="flex items-center justify-between mb-6">
-                <h1 class="text-2xl font-bold text-glow animate-text-glow">Edit Category</h1>
-                <CyberLink :href="route('root.categories.index')" variant="outline" size="md">
-                    Back to Categories
+                <h1 class="text-2xl font-bold text-glow animate-text-glow">Create Tag</h1>
+                <CyberLink :href="route('root.tags.index')" variant="outline" size="md">
+                    Back to Tags
                 </CyberLink>
             </div>
 
-            <!-- Edit Category Form -->
+            <!-- Create Tag Form -->
             <div class="glass-effect neon-border rounded-xl p-6 max-w-4xl mx-auto w-full">
                 <form @submit.prevent="submit" class="space-y-6">
+                    <!-- Category Selection -->
+                    <div class="space-y-2">
+                        <label for="category_id" class="block text-sm font-medium text-foreground/80">Category</label>
+                        <select
+                            id="category_id"
+                            v-model="form.category_id"
+                            class="w-full rounded-xl border border-white/10 bg-background/50 py-2 px-3 text-foreground placeholder:text-foreground/50 focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all duration-300"
+                            required
+                        >
+                            <option value="" disabled>Select a category</option>
+                            <option v-for="category in categories" :key="category.id" :value="category.id">
+                                {{ category.name }}
+                            </option>
+                        </select>
+                        <p v-if="form.errors.category_id" class="mt-1 text-sm text-red-500">{{ form.errors.category_id }}</p>
+                    </div>
+
                     <!-- Name -->
                     <div class="space-y-2">
                         <label for="name" class="block text-sm font-medium text-foreground/80">Name</label>
                         <AnimatedInputBorder 
                             id="name" 
                             v-model="form.name" 
-                            placeholder="Enter category name" 
+                            placeholder="Enter tag name" 
                             maxlength="255"
                             required
                         />
@@ -40,23 +57,10 @@
                         <AnimatedInputBorder 
                             id="slug" 
                             v-model="form.slug" 
-                            placeholder="category-slug" 
+                            placeholder="tag-slug" 
                             required
                         />
                         <p v-if="form.errors.slug" class="mt-1 text-sm text-red-500">{{ form.errors.slug }}</p>
-                    </div>
-
-                    <!-- Description -->
-                    <div class="space-y-2">
-                        <label for="description" class="block text-sm font-medium text-foreground/80">Description</label>
-                        <textarea
-                            id="description"
-                            v-model="form.description"
-                            rows="4"
-                            class="w-full rounded-xl border border-white/10 bg-background/50 py-2 px-3 text-foreground placeholder:text-foreground/50 focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all duration-300"
-                            placeholder="Brief description of the category"
-                        ></textarea>
-                        <p v-if="form.errors.description" class="mt-1 text-sm text-red-500">{{ form.errors.description }}</p>
                     </div>
 
                     <!-- Submit Button -->
@@ -74,7 +78,7 @@
                                 </svg>
                                 Processing...
                             </span>
-                            <span v-else>Update Category</span>
+                            <span v-else>Create Tag</span>
                         </button>
                     </div>
                 </form>
@@ -90,31 +94,31 @@ import { Head, useForm } from '@inertiajs/vue3';
 import CyberLink from '@/components/theme/CyberLink.vue';
 import AnimatedInputBorder from '@/components/theme/AnimatedInputBorder.vue';
 
-// Define props with category data
-const props = defineProps<{
-    category: Category;
-}>();
-
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
         href: '/dashboard',
     },
     {
-        title: 'Categories',
-        href: route('root.categories.index'),
+        title: 'Tags',
+        href: route('root.tags.index'),
     },
     {
-        title: 'Edit',
-        href: route('root.categories.edit', props.category.slug),
+        title: 'Create',
+        href: route('root.tags.create'),
     }
 ];
 
+// Props
+defineProps<{
+    categories: Category[];
+}>();
+
 // Form state using Inertia's useForm
 const form = useForm({
-    name: props.category.name,
-    slug: props.category.slug,
-    description: props.category.description || '',
+    name: '',
+    slug: '',
+    category_id: '',
 });
 
 // Generate slug from name
@@ -131,7 +135,11 @@ const generateSlug = () => {
 
 // Form submission using Inertia
 const submit = () => {
-    form.put(route('root.categories.update', props.category.slug));
+    form.post(route('root.tags.store'), {
+        onSuccess: () => {
+            form.reset();
+        }
+    });
 };
 </script>
 

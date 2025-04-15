@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Root\CategoryController;
 use App\Http\Controllers\Root\PromptController;
+use App\Http\Controllers\Root\TagController;
 use App\Http\Middleware\EnsureRootUser;
 use Illuminate\Support\Facades\Route;
 
@@ -23,5 +24,12 @@ Route::middleware(['auth', 'verified', EnsureRootUser::class.':r007'])->prefix('
         Route::get('categories/{category}/edit', 'edit')->name('categories.edit');
         Route::put('categories/{category}', 'update')->name('categories.update');
     });
-    // Route::controller(TagController::class)->group(function () {});
+
+    Route::controller(TagController::class)->group(function () {
+        Route::get('tags', 'index')->name('tags.index');
+        Route::get('tags/create', 'create')->name('tags.create');
+        Route::post('tags', 'store')->name('tags.store');
+        Route::get('tags/{tag}/edit', 'edit')->name('tags.edit');
+        Route::put('tags/{tag}', 'update')->name('tags.update');
+    });
 });

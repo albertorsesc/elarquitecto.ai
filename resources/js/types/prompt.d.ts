@@ -1,17 +1,8 @@
-export interface Category {
-    id: number;
-    name: string;
-    slug: string;
-    description: string | null;
-    tags?: Tag[];
-}
+import { Category } from './category';
+import { Tag } from './tag';
 
-export interface Tag {
-    id: number;
-    name: string;
-    slug: string;
-    category_id: number;
-}
+// Re-export imported types
+export type { Category, Tag };
 
 export interface Prompt {
     id: number;

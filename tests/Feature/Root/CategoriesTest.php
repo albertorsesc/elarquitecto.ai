@@ -4,9 +4,9 @@ namespace Tests\Feature\Root;
 
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use Inertia\Testing\AssertableInertia;
+use Tests\TestCase;
+
 class CategoriesTest extends TestCase
 {
     use RefreshDatabase;
@@ -22,9 +22,8 @@ class CategoriesTest extends TestCase
     {
         $response = $this->get(route('root.categories.index'));
         $response->assertOk();
-        $response->assertInertia(fn (AssertableInertia $page) =>
-            $page->component('Root/Categories/Index')
-                ->has('categories')
+        $response->assertInertia(fn (AssertableInertia $page) => $page->component('Root/Categories/Index')
+            ->has('categories')
         );
     }
 
@@ -32,8 +31,7 @@ class CategoriesTest extends TestCase
     {
         $response = $this->get(route('root.categories.create'));
         $response->assertOk();
-        $response->assertInertia(fn (AssertableInertia $page) =>
-            $page->component('Root/Categories/Create')
+        $response->assertInertia(fn (AssertableInertia $page) => $page->component('Root/Categories/Create')
         );
     }
 
@@ -50,9 +48,8 @@ class CategoriesTest extends TestCase
         $category = $this->create(Category::class);
         $response = $this->get(route('root.categories.edit', $category->slug));
         $response->assertOk();
-        $response->assertInertia(fn (AssertableInertia $page) =>
-            $page->component('Root/Categories/Edit')
-                ->has('category')
+        $response->assertInertia(fn (AssertableInertia $page) => $page->component('Root/Categories/Edit')
+            ->has('category')
         );
     }
 

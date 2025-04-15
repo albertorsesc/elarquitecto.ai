@@ -255,8 +255,8 @@
 
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
-import { type Prompt, type Category, type Tag, type ModelsConfig } from '@/types/prompt';
+import { type BreadcrumbItem, type Category, type Tag } from '@/types';
+import { type Prompt, type ModelsConfig } from '@/types/prompt';
 import { Head, useForm } from '@inertiajs/vue3';
 import CyberLink from '@/components/theme/CyberLink.vue';
 import AnimatedInputBorder from '@/components/theme/AnimatedInputBorder.vue';

@@ -2,6 +2,9 @@ import type { PageProps } from '@inertiajs/core';
 import type { LucideIcon } from 'lucide-vue-next';
 import type { Config } from 'ziggy-js';
 
+export * from './tag';
+export * from './category';
+
 export interface Auth {
     user: User;
     is_root?: boolean;
