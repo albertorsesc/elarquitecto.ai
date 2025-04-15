@@ -45,36 +45,36 @@ class PromptsTest extends TestCase
 
     public function test_prompts_index_shows_paginated_results()
     {
-        // Test pagination functionality
+        $this->markTestSkipped('This test is not implemented yet.');
     }
 
     public function test_prompts_can_be_filtered_by_category()
     {
-        // Test category filtering works correctly
+        $this->markTestSkipped('This test is not implemented yet.');
     }
 
     public function test_prompts_can_be_filtered_by_tag()
     {
-        // Test tag filtering works correctly
+        $this->markTestSkipped('This test is not implemented yet.');
     }
 
     public function test_prompts_show_page_displays_correct_prompt()
     {
-        // Test show page displays requested prompt
+        $this->markTestSkipped('This test is not implemented yet.');
     }
 
     public function test_prompts_show_returns_404_for_unpublished_prompt()
     {
-        // Test 404 for unpublished prompts
+        $this->markTestSkipped('This test is not implemented yet.');
     }
 
     public function test_prompts_show_returns_404_for_nonexistent_prompt()
     {
-        // Test 404 for non-existent prompts
+        $this->markTestSkipped('This test is not implemented yet.');
     }
 
     public function test_related_prompts_are_displayed_on_show_page()
     {
-        // Test related prompts section
+        $this->markTestSkipped('This test is not implemented yet.');
     }
 }
