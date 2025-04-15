@@ -290,7 +290,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 // Extract category_id and tag_ids from the loaded prompt
-const currentCategoryId = props.prompt.category[0]?.id || '';
+const currentCategoryId = props.prompt.category[0]?.id || null;
 const currentTagIds = props.prompt.tags.map(tag => tag.id) || [];
 
 // Available tags based on selected category
@@ -351,6 +351,11 @@ function removeTag(tagId: number): void {
 
 // Initialize available tags based on the current category
 onMounted(() => {
+    // Ensure form.category_id is properly set before updating available tags
+    if (!form.category_id && currentCategoryId) {
+        form.category_id = currentCategoryId;
+    }
+    
     updateAvailableTags();
 });
 
