@@ -42,20 +42,7 @@ class PromptRequest extends FormRequest
             'target_models.*' => ['nullable', 'string', 'in:'.implode(',', $validModels)],
             'category_id' => ['required', 'exists:categories,id'],
             'tags' => ['required', 'array', 'min:1'],
-            'tags.*' => [
-                'exists:tags,id',
-                function ($attribute, $value, $fail) use ($validTagSlugs) {
-                    $tag = Tag::find($value);
-                    if (! $tag) {
-                        return;
-                    }
-
-                    // Check if the tag's slug is in the list of valid prompt tag slugs
-                    if (! in_array($tag->slug, $validTagSlugs)) {
-                        $fail('The selected tag is not valid for prompts.');
-                    }
-                },
-            ],
+            'tags.*' => ['exists:tags,id'],
         ];
 
         // Get the current prompt ID if we're on an update route
