@@ -61,7 +61,7 @@ $schemaData = [
                     
                     <!-- Right side date -->
                     <span class="text-sm text-muted-foreground">
-                        {{ date('M d, Y', strtotime($prompt->published_at ?? $prompt->created_at)) }}
+                        {{ ($prompt->published_at ?? $prompt->created_at)->isoFormat('D [de] MMM, YYYY') }}
                     </span>
                 </div>
                 
@@ -174,50 +174,12 @@ $schemaData = [
         <!-- Related Prompts -->
         @if ($relatedPrompts->count() > 0)
             <div class="mt-8">
-                <h3 class="text-xl font-semibold mb-6 text-foreground">Related Prompts</h3>
+                <h3 class="text-xl font-semibold mb-6 text-foreground">
+                    También te podría interesar
+                </h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach ($relatedPrompts as $relatedPrompt)
-                        <div class="group relative h-full overflow-hidden rounded-xl border border-border/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)]">
-                            <!-- Glass Effect -->
-                            <x-glass-effect />
-                            
-                            <!-- Animation wrapper to isolate animations -->
-                            <div class="neon-border-wrapper">
-                                <!-- Basic Neon Border -->
-                                <x-neon-border />
-                                
-                                <!-- Multi-colored sliding neon lights -->
-                                <x-multi-color-sliding-neon 
-                                    topColor="#FF1CF7" 
-                                    rightColor="#00FFE1" 
-                                    bottomColor="#01FF88" 
-                                    leftColor="#5B6EF7" 
-                                    opacity="20" 
-                                    :hoverEffect="true" 
-                                />
-                                
-                                <!-- Breathing Glow -->
-                                <x-breathing-glow />
-                            </div>
-                            
-                            <div class="p-4 relative z-10">
-                                <h4 class="font-semibold mb-2 group-hover:text-primary transition-colors">
-                                    {{ $relatedPrompt->title }}
-                                </h4>
-                                <p class="text-sm text-muted-foreground line-clamp-2 mb-4">
-                                    {{ $relatedPrompt->excerpt }}
-                                </p>
-                                <div class="mt-2">
-                                    <x-cyber-button
-                                        href="{{ route('prompts.show', $relatedPrompt) }}"
-                                        variant="outline"
-                                        size="sm"
-                                        :fullWidth="true">
-                                        View Prompt
-                                    </x-cyber-button>
-                                </div>
-                            </div>
-                        </div>
+                        <x-prompt-card :prompt="$relatedPrompt" />
                     @endforeach
                 </div>
             </div>

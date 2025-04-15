@@ -8,4 +8,4 @@ if (! function_exists('md_to_html')) {
     {
         return app(App\Markdown\Converter::class, ['nofollow' => $nofollow])->toHtml($markdown);
     }
-} 
+}

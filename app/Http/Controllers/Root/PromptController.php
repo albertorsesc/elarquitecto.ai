@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Root;
 
-use App\Enums\PromptCategoryEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PromptRequest;
 use App\Models\Category;

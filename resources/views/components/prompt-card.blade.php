@@ -46,9 +46,16 @@
         ? ($prompt->word_count ?? (isset($prompt->content) ? count(explode(' ', $prompt->content)) : 0))
         : ($prompt['word_count'] ?? 0);
         
-    $date = $isObject
-        ? date('M d, Y', strtotime($prompt->published_at ?? $prompt->created_at))
-        : ($prompt['date'] ?? date('M d, Y'));
+    // Use Carbon for date formatting with system locale
+    if ($isObject) {
+        // For object prompts, we have direct access to the Carbon instance
+        $date = $prompt->published_at ?? $prompt->created_at;
+    } else {
+        if (isset($prompt['date'])) {
+            // For array prompts with date string, parse it with Carbon
+            $date = $prompt['date'];
+        }
+    }
 @endphp
 
 <div class="group h-full overflow-hidden rounded-xl border border-border/50 glass-effect transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.3)]">
@@ -93,7 +100,7 @@
         <!-- Footer -->
         <div class="mt-3 flex items-center justify-between text-xs text-muted-foreground">
             <span class="flex items-center gap-1">
-                <span>{{ $wordCount }} words</span>
+                <span>{{ $wordCount }} palabras</span>
             </span>
             <span>{{ $date }}</span>
         </div>
@@ -107,14 +114,14 @@
                         variant="outline" 
                         size="sm" 
                         :fullWidth="true">
-                        View Details
+                        Ver Detalles
                     </x-cyber-link>
                 </div>
             @else
                 <div class="neon-border rounded-md overflow-hidden">
                     <a href="{{ $url }}" 
                        class="block w-full text-center py-1.5 px-3 text-sm bg-primary/10 hover:bg-primary/20 text-primary transition-colors">
-                      View Details
+                      Ver Detalles
                     </a>
                 </div>
             @endif

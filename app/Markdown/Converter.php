@@ -3,21 +3,22 @@
 namespace App\Markdown;
 
 use League\CommonMark\Environment\Environment;
-use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
-use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
 use League\CommonMark\Extension\Attributes\AttributesExtension;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\ExternalLink\ExternalLinkExtension;
+use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
 use League\CommonMark\MarkdownConverter as LeagueMarkdownConverter;
 
 class Converter
 {
     protected LeagueMarkdownConverter $converter;
+
     protected bool $nofollowLinks;
-    
+
     public function __construct(bool $nofollow = true)
     {
         $this->nofollowLinks = $nofollow;
-        
+
         // Basic configuration
         $config = [
             'html_input' => 'strip', // Basic sanitization
@@ -35,25 +36,26 @@ class Converter
         ];
 
         $environment = new Environment($config);
-        
+
         // Add core extensions
-        $environment->addExtension(new CommonMarkCoreExtension());
-        $environment->addExtension(new GithubFlavoredMarkdownExtension());
-        
+        $environment->addExtension(new CommonMarkCoreExtension);
+        $environment->addExtension(new GithubFlavoredMarkdownExtension);
+
         // Add optional extensions
-        $environment->addExtension(new AttributesExtension());
-        $environment->addExtension(new ExternalLinkExtension());
-        
+        $environment->addExtension(new AttributesExtension);
+        $environment->addExtension(new ExternalLinkExtension);
+
         // Instantiate the converter
         $this->converter = new LeagueMarkdownConverter($environment);
     }
-    
+
     /**
      * Converts Markdown to HTML.
      */
     public function toHtml(string $markdown): string
     {
         $html = $this->converter->convert($markdown)->getContent();
+
         return $html;
     }
-} 
+}
