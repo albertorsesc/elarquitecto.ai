@@ -23,10 +23,8 @@ class PromptController extends Controller
     {
         return Inertia::render('Root/Prompts/Create', [
             'models' => collect(config('models.models'))->map(fn ($models, $provider) => $models),
-            'categories' => $categories = Category::with('tags')
-                ->whereIn('slug', PromptCategoryEnum::slugs())
-                ->get(),
-            'tags' => Tag::with('category')->whereIn('category_id', $categories->pluck('id'))->get(),
+            'categories' => Category::with('tags')->get(),
+            'tags' => Tag::all(),
         ]);
     }
 
