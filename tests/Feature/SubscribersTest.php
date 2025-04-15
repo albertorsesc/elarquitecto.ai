@@ -3,10 +3,14 @@
 namespace Tests\Feature;
 
 use App\Jobs\SubscriberJoinJob;
+use App\Jobs\SubscriberVerifiedJob;
 use App\Models\Subscriber;
+use App\Notifications\NewSubscriberNotification;
+use App\Notifications\SubscriberVerifiedNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
@@ -20,6 +24,7 @@ class SubscribersTest extends TestCase
         parent::setUp();
         Mail::fake();
         Queue::fake();
+        Notification::fake();
     }
 
     public function test_user_can_subscribe_with_valid_email(): void
@@ -96,5 +101,54 @@ class SubscribersTest extends TestCase
         $response = $this->get('/subscribe/invalid-hash');
 
         $response->assertStatus(404);
+    }
+
+    public function test_notification_sent_when_user_subscribes(): void
+    {
+        $email = $this->faker->safeEmail();
+
+        $response = $this->post('/subscribe', [
+            'email' => $email,
+        ]);
+
+        $response->assertRedirect();
+
+        // First, test that the job was dispatched
+        Queue::assertPushed(SubscriberJoinJob::class, function ($job) use ($email) {
+            return $job->subscriber->email === $email;
+        });
+
+        // Execute the job manually
+        $subscriber = Subscriber::where('email', $email)->first();
+        (new SubscriberJoinJob($subscriber))->handle();
+
+        // Assert that a notification was sent to Slack
+        Notification::assertSentOnDemand(NewSubscriberNotification::class);
+    }
+
+    public function test_notification_sent_when_user_verifies_subscription(): void
+    {
+        $email = $this->faker->safeEmail();
+        $hash = md5($email);
+
+        $subscriber = Subscriber::create([
+            'email' => $email,
+            'hash' => $hash,
+        ]);
+
+        $response = $this->get("/subscribe/{$hash}");
+        $response->assertRedirect('/');
+
+        // Execute the job manually
+        Queue::assertPushed(SubscriberVerifiedJob::class, function ($job) use ($email) {
+            return $job->subscriber->email === $email;
+        });
+
+        // Execute the job manually
+        $subscriber->refresh();
+        (new SubscriberVerifiedJob($subscriber))->handle();
+
+        // Assert that a notification was sent to Slack
+        Notification::assertSentOnDemand(SubscriberVerifiedNotification::class);
     }
 }

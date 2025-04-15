@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SubscriberJoinJob;
+use App\Jobs\SubscriberVerifiedJob;
 use App\Models\Subscriber;
 use Illuminate\Http\Request;
 
@@ -39,6 +40,9 @@ class SubscriberController extends Controller
         $subscriber->hash = null;
         $subscriber->verified_at = now();
         $subscriber->save();
+
+        // Dispatch a job to handle subscriber verification
+        SubscriberVerifiedJob::dispatch($subscriber);
 
         return redirect('/')->with('success', 'Tu suscripción ha sido confirmada. ¡Gracias!');
     }
