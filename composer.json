@@ -44,6 +44,7 @@
         "tests": [
             "./vendor/bin/pint",
             "php artisan test",
+            "npm run lint --fix",
             "npm run ts:check"
         ],
         "post-autoload-dump": [

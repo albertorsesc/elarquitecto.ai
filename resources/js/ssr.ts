@@ -12,6 +12,11 @@ declare global {
     interface Window {
         route: any;
     }
+}
+
+// Define the Global interface for NodeJS
+declare global {
+    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace NodeJS {
         interface Global {
             route: any;
@@ -36,7 +41,7 @@ createServer((page) =>
                 ziggyRoute(name, params, absolute, ziggyConfig as any);
 
             // Make route function available globally...
-            // @ts-ignore - Type definitions for Ziggy routes are complex
+            // @ts-expect-error - Type definitions for Ziggy routes are complex
             app.config.globalProperties.route = routeFunction;
 
             // Make route function available globally for SSR...
