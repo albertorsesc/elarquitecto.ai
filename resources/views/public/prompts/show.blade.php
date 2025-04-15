@@ -79,7 +79,7 @@ $schemaData = [
             
             <!-- Content -->
             <div class="prose prose-invert max-w-none mb-8 border-t border-border/30 pt-6">
-                <p>{{ $prompt->content }}</p>
+                {!! md_to_html($prompt->content) !!}
             </div>
             
             <!-- Back Button -->
