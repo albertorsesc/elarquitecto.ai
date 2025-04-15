@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Subscriber;
-use App\Notifications\NewSubscriberNotification;
+use App\Notifications\SubscriberVerifiedNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -11,7 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Notification;
 
-class SubscriberJoinJob implements ShouldQueue
+class SubscriberVerifiedJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -27,12 +27,9 @@ class SubscriberJoinJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $totalSubscribers = Subscriber::count();
+        $totalVerifiedSubscribers = Subscriber::whereNotNull('verified_at')->count();
 
         Notification::route('slack', slack_channel())
-            ->notify(new NewSubscriberNotification($this->subscriber, $totalSubscribers));
-
-        // Additional subscriber onboarding actions would go here
-        // For example, sending a welcome email, etc.
+            ->notify(new SubscriberVerifiedNotification($this->subscriber, $totalVerifiedSubscribers));
     }
 }
