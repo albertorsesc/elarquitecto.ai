@@ -32,12 +32,11 @@ class WelcomeController extends Controller
      */
     protected function getTimelineItems(): Collection
     {
-        // Get all prompts sorted by creation date (newest first)
         $prompts = Prompt::query()
-            ->with(['tags', 'category']) // Eager load relationships
+            ->with(['tags', 'category'])
             ->whereNotNull('published_at')
             ->orderByDesc('published_at')
-            ->limit(6) // Limit to most recent prompts
+            ->limit(6)
             ->get()
             ->map(function ($prompt) {
                 // Map tags to a simple array with 'name' and 'slug' keys
@@ -54,7 +53,7 @@ class WelcomeController extends Controller
                     'title' => $prompt->title,
                     'excerpt' => $prompt->excerpt,
                     'content' => $prompt->excerpt, // Use excerpt as timeline content
-                    'date' => $prompt->created_at->format('M d, Y'),
+                    'date' => $prompt->created_at->isoFormat('D [de] MMM, YYYY'),
                     'image' => $prompt->image,
                     'word_count' => $prompt->word_count,
                     'url' => route('prompts.show', $prompt),

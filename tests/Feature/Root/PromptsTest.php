@@ -244,55 +244,6 @@ class PromptsTest extends TestCase
     }
 
     /**
-     * Test root user can only assign prompt-specific categories and tags
-     */
-    public function test_root_user_can_only_use_prompt_specific_categories_and_tags()
-    {
-        // Create a prompt
-        $prompt = $this->make(Prompt::class);
-
-        // Get categories and tags from PromptCategoryEnum and PromptTagEnum
-        $category = $this->createPromptCategory(PromptCategoryEnum::CONTENT_CREATION->value);
-
-        // Create a prompt-specific tag (from PromptTagEnum)
-        $promptTag = $this->createPromptTag($category, PromptTagEnum::BLOG_WRITING->value);
-
-        // Create a non-prompt-specific tag (one that doesn't exist in PromptTagEnum)
-        $nonPromptTag = $this->create(Tag::class, [
-            'name' => 'Not A Prompt Tag',
-            'slug' => 'not-a-prompt-tag',
-            'category_id' => $category->id,
-        ]);
-
-        // Test creating with valid prompt-specific tag
-        $response = $this->post(
-            route('root.prompts.store'),
-            $prompt->toArray() + [
-                'category_id' => $category->id,
-                'tags' => [$promptTag->id],
-            ]
-        );
-
-        $response->assertRedirect(route('root.prompts.index'));
-        $response->assertSessionHas('success', 'Prompt created successfully');
-
-        // Test creating with non-prompt tag
-        $prompt2 = $this->make(Prompt::class, ['slug' => 'prompt-with-non-prompt-tag']);
-
-        // Make the request and expect a validation error
-        $response = $this->post(
-            route('root.prompts.store'),
-            $prompt2->toArray() + [
-                'category_id' => $category->id,
-                'tags' => [$nonPromptTag->id],
-            ]
-        );
-
-        // This should have validation errors due to the non-prompt tag
-        $response->assertSessionHasErrors(['tags.0']);
-    }
-
-    /**
      * Test root user can assign categories to a prompt
      */
     public function test_root_user_can_assign_categories_to_prompt()

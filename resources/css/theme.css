@@ -690,3 +690,40 @@
     @apply bg-opacity-40 shadow-lg;
     box-shadow: 0 0 12px rgba(var(--color-primary-rgb), 0.5);
   }
+
+  /* --------------------------------------------- */
+  /* Markdown Custom Styling - Start               */
+  /* --------------------------------------------- */
+
+  /* Main heading (h1) styling */
+  .prose h1 {
+    @apply text-3xl font-bold mb-6 mt-4 border-b border-primary/30 pb-2 relative;
+    background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--secondary)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(var(--primary-rgb), 0.4);
+    letter-spacing: -0.5px;
+  }
+
+  .prose h1::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+      hsl(var(--primary)), 
+      hsl(var(--secondary)),
+      hsl(var(--accent)),
+      transparent);
+    box-shadow: 
+      0 0 10px rgba(var(--primary-rgb), 0.7),
+      0 0 20px rgba(var(--primary-rgb), 0.3);
+  }
+
+  /* --------------------------------------------- */
+  /* Markdown Custom Styling - End                 */
+  /* --------------------------------------------- */
