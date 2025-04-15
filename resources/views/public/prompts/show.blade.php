@@ -77,9 +77,84 @@ $schemaData = [
                 @endif
             </div>
             
-            <!-- Content -->
-            <div class="prose prose-invert max-w-none mb-8 border-t border-border/30 pt-6">
-                {!! md_to_html($prompt->content) !!}
+            <!-- Alpine.js Prompt Copy Component -->
+            <div x-data="{
+                promptContent: {{ json_encode($prompt->content) }},
+                showToast: false,
+                
+                async copyPrompt() {
+                    try {
+                        // Try using the Clipboard API first
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            await navigator.clipboard.writeText(this.promptContent);
+                        } else {
+                            // Fallback method
+                            const textarea = document.createElement('textarea');
+                            textarea.value = this.promptContent;
+                            textarea.style.position = 'fixed';
+                            textarea.style.opacity = '0';
+                            document.body.appendChild(textarea);
+                            textarea.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(textarea);
+                        }
+                        
+                        // Show toast
+                        this.showToast = true;
+                        
+                        // Hide toast after 2 seconds
+                        setTimeout(() => {
+                            this.showToast = false;
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy: ', err);
+                    }
+                }
+            }">
+                <!-- Copy button at the beginning -->
+                <div class="flex justify-end mb-4">
+                    <button 
+                        type="button" 
+                        class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs border border-border/50 hover:bg-primary/10 hover:text-primary" 
+                        title="Copiar Prompt"
+                        @click="copyPrompt()">
+                        <i class="fas fa-copy text-glow-multi"></i>
+                    </button>
+                </div>
+                
+                <!-- Content -->
+                <div class="prose prose-invert max-w-none mb-8 border-t border-border/30 pt-6">
+                    {!! md_to_html($prompt->content) !!}
+                </div>
+                
+                <!-- Copy button at the end -->
+                <div class="flex justify-center mb-6">
+                    <button 
+                        type="button" 
+                        class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 border border-border/50 hover:bg-primary/10 hover:text-primary"
+                        @click="copyPrompt()">
+                        <i class="fas fa-copy mr-2 text-glow-multi"></i>
+                        Copiar Prompt
+                    </button>
+                </div>
+                
+                <!-- Toast notification - Fixed at top center -->
+                <template x-teleport="body">
+                    <div 
+                        x-show="showToast" 
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform -translate-y-4"
+                        x-transition:enter-end="opacity-100 transform translate-y-0"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100 transform translate-y-0"
+                        x-transition:leave-end="opacity-0 transform -translate-y-4"
+                        class="fixed top-6 left-1/2 transform -translate-x-1/2 backdrop-blur-sm bg-black/90 border border-primary px-6 py-3 rounded-md shadow-[0_0_20px_rgba(var(--primary-rgb),0.7)] z-50">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-primary mr-2 text-xl"></i>
+                            <span class="text-white font-semibold">Prompt Copiado!</span>
+                        </div>
+                    </div>
+                </template>
             </div>
             
             <!-- Back Button -->
