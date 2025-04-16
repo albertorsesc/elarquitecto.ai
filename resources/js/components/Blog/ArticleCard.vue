@@ -10,7 +10,7 @@
 
     <!-- Card Image -->
     <div class="article-card-image">
-      <img :src="article.hero_image_url || '/img/logo.png'" :alt="article.title" />
+      <img :src="heroImageSource" :alt="article.title" />
       
       <!-- Status Indicators -->
       <div class="article-card-gradient-overlay">
@@ -114,6 +114,19 @@ const readingTime = computed(() => {
   const words = props.article.body.split(/\s+/).length;
   const minutes = Math.ceil(words / 225);
   return minutes;
+});
+
+const heroImageSource = computed(() => {
+  if (!props.article.hero_image_url) return '/img/logo.png';
+  
+  // Check if the URL is an absolute URL (starts with http:// or https://)
+  // if (props.article.hero_image_url.match(/^https?:\/\//)) {
+  //   return props.article.hero_image_url;
+  // }
+  
+  // If it's a relative URL, return as is
+  console.log(props.article);
+  return props.article.hero_image_url;
 });
 </script>
 

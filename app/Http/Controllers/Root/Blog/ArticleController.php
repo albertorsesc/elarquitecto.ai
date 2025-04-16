@@ -67,8 +67,9 @@ class ArticleController extends Controller
     public function show(Article $article)
     {
         // increment the views count
+
         return Inertia::render('Root/Blog/Articles/Show', [
-            'article' => $article,
+            'article' => $article->load(['category', 'tags', 'media']),
         ]);
     }
 
