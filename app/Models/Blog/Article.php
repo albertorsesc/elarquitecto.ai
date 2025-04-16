@@ -2,7 +2,11 @@
 
 namespace App\Models\Blog;
 
+use App\Models\Concerns\HasCategory;
+use App\Models\Concerns\HasTags;
+use App\Models\Media;
 use App\Traits\HasAuthor;
+use App\Traits\HasMedia;
 use App\Traits\HasSlug;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,9 +16,13 @@ class Article extends Model
 {
     use HasAuthor;
 
+    use HasCategory;
+
     /** @use HasFactory<\Database\Factories\Blog\ArticleFactory> */
     use HasFactory;
+    use HasMedia;
     use HasSlug;
+    use HasTags;
     use HasUuid;
 
     protected $fillable = [
@@ -31,6 +39,13 @@ class Article extends Model
     ];
 
     /**
+     * Appends custom attributes to JSON representations of the model.
+     */
+    protected $appends = [
+        'hero_image_url',
+    ];
+
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
@@ -40,4 +55,15 @@ class Article extends Model
         'is_pinned' => 'boolean',
         'is_featured' => 'boolean',
     ];
+
+    /**
+     * Get the hero image URL.
+     * Will prefer a media if available, fall back to hero_image_url
+     */
+    public function getHeroImageUrlAttribute(): ?string
+    {
+        $heroMedia = $this->getPrimaryMedia('hero');
+
+        return $heroMedia ? $heroMedia->url : $this->attributes['hero_image_url'] ?? null;
+    }
 }
