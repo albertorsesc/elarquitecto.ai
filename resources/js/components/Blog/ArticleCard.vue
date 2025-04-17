@@ -114,7 +114,7 @@ const readingTime = computed(() => {
 
 const heroImageSource = computed(() => {
   // Use optional chaining to safely access hero_image_url
-  return (props.article.hero_image_url as string) || '/img/logo.png';
+  return (props.article.hero_image_url as string) || '/img/logo.webp';
 });
 </script>
 

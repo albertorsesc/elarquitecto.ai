@@ -26,6 +26,7 @@
               alt="{{ $article['title'] }}"
               class="h-full w-full object-cover transition-transform duration-700 will-change-transform group-hover:scale-110"
               onerror="this.src='https://via.placeholder.com/400x200/1a1a2e/ffffff?text=El+Arquitecto+A.I.';"
+              loading="lazy"
             />
 
             <!-- Scanline effect -->

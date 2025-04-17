@@ -18,7 +18,7 @@
             <!-- Prompt Header -->
             <div class="glass-effect neon-border rounded-xl overflow-hidden">
                 <div class="relative h-64 w-full overflow-hidden">
-                    <img :src="prompt.image_url || '/img/logo.png'" :alt="prompt.title"
+                    <img :src="prompt.image_url || '/img/logo.webp'" :alt="prompt.title"
                         class="h-full w-full object-cover" />
                     
                     <!-- Category Badge -->

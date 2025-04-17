@@ -22,7 +22,7 @@
         title="{{ $seo['title'] ?? 'El Arquitecto A.I.' }}"
         description="{{ $seo['description'] ?? 'Democratizando I.A. para el beneficio de Latinoamérica' }}"
         keywords="{{ $seo['keywords'] ?? 'IA, Inteligencia Artificial, Latinoamérica, AI' }}"
-        image="{{ $seo['image'] ?? asset('/img/logo.png') }}"
+        image="{{ $seo['image'] ?? asset('/img/logo.webp') }}"
         type="{{ $seo['type'] ?? 'website' }}"
         schemaType="Organization"
         :schemaData="$schemaData"

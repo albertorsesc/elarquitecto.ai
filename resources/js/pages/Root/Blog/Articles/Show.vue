@@ -18,7 +18,7 @@
             <!-- Article Header -->
             <div class="glass-effect neon-border rounded-xl overflow-hidden">
                 <div class="relative h-64 w-full overflow-hidden">
-                    <img :src="article.hero_image_url || '/img/logo.png'" 
+                    <img :src="article.hero_image_url || '/img/logo.webp'" 
                         :alt="article.title"
                         class="h-full w-full object-cover transition-transform" 
                     />

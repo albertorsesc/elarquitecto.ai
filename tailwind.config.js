@@ -14,6 +14,9 @@ export default {
             fontFamily: {
                 sans: ['Instrument Sans', ...defaultTheme.fontFamily.sans],
             },
+            maxWidth: {
+                '5xl': '64rem', // 1024px
+            },
             keyframes: {
                 'neon-slide-right': {
                     '0%': { transform: 'translateX(-100%)' },

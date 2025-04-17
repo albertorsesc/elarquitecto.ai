@@ -20,7 +20,7 @@ onMounted(() => {
         <div class="auth-glass-card relative w-full max-w-sm rounded-xl border border-white/10 p-8 shadow-[0_0_30px_rgba(124,58,237,0.3)]">
             <!-- Center logo with semi-transparency -->
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-                <img src="/img/logo.png" alt="El Arquitecto A.I. Logo" class="w-full min-w-full min-h-full object-cover opacity-[0.07]" />
+                <img src="/img/logo.webp" alt="El Arquitecto A.I. Logo" class="w-full min-w-full min-h-full object-cover opacity-[0.07]" />
             </div>
             
             <!-- Animated corner accents -->

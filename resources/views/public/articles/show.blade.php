@@ -21,7 +21,7 @@ $schemaData = [
 @endphp
 
 @section('content')
-    <div class="flex flex-col gap-6 mb-24">
+    <div class="flex flex-col gap-6 mb-24 mx-auto max-w-5xl">
         <!-- Main Content Card -->
         <div class="relative glass-effect border border-border/50 rounded-xl p-6 shadow-[0_0_15px_rgba(var(--primary-rgb),0.3)]">
             <!-- Animation wrapper to isolate animations -->
@@ -50,6 +50,7 @@ $schemaData = [
                         src="{{ $article->hero_image_url }}" 
                         alt="{{ $article->title }}" 
                         class="w-full h-full object-cover"
+                        loading="lazy"
                     />
                     <!-- Status Indicators -->
                     <div class="absolute bottom-0 left-0 right-0 p-3 flex justify-between items-center bg-gradient-to-t from-black/80 to-transparent">
@@ -74,25 +75,25 @@ $schemaData = [
             <div class="mb-6 flex flex-col gap-2">
                 <h1 class="text-3xl font-bold text-glow animate-text-glow">{{ $article->title }}</h1>
                 
-                <div class="flex items-center justify-between mt-2">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mt-2">
                     <!-- Left side meta -->
-                    <div class="flex items-center gap-3 text-sm text-muted-foreground">
+                    <div class="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                         <!-- Reading time -->
-                        <div class="flex items-center gap-1">
+                        <div class="flex items-center gap-1 mr-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <span>{{ $article->reading_time }} min de lectura</span>
                         </div>
                         
-                        <!-- View count -->
-                        <div class="flex items-center gap-1">
+                        <!-- View count - hidden for now as requested -->
+                        {{-- <div class="flex items-center gap-1 mr-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                             </svg>
                             <span>{{ $article->view_count }} visitas</span>
-                        </div>
+                        </div> --}}
                         
                         <!-- Category -->
                         @if($article->category && count($article->category) > 0)
@@ -103,7 +104,7 @@ $schemaData = [
                     </div>
                     
                     <!-- Right side date and author -->
-                    <div class="flex flex-col items-end text-sm">
+                    <div class="flex flex-col md:items-end text-sm">
                         <span class="text-muted-foreground">
                             {{ ($article->published_at ?? $article->created_at)->isoFormat('D [de] MMM, YYYY') }}
                         </span>
@@ -264,5 +265,22 @@ $schemaData = [
   box-shadow: 0 0 15px rgba(var(--primary-rgb), 0.3);
 }
 
+/* Article meta information responsive styles */
+@media (max-width: 768px) {
+  /* Add spacing between date and other meta info on mobile */
+  .flex-col.md\:flex-row.md\:items-center.md\:justify-between.gap-3 {
+    gap: 0.75rem;
+  }
+  
+  /* Ensure date and author align properly */
+  .flex-col.md\:items-end.text-sm {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Improve spacing for wrapped meta items */
+  .flex.flex-wrap.items-center.gap-2 {
+    margin-bottom: 0.25rem;
+  }
+}
 </style>
 @endpush 

@@ -22,7 +22,7 @@
 
     <!-- Card Image -->
     <div class="article-card-image">
-        <img src="{{ $article->hero_image_url ?? '/img/logo.png' }}" alt="{{ $article->title ?? 'Article' }}" />
+        <img src="{{ $article->hero_image_url ?? '/img/logo.webp' }}" alt="{{ $article->title ?? 'Article' }}" loading="lazy" />
         
         <!-- Status Indicators -->
         <div class="article-card-gradient-overlay">

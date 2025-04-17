@@ -112,7 +112,7 @@ class Seo extends Component
         }
 
         $this->canonical = $canonical ?: request()->url();
-        $this->image = $image ?: asset('/img/logo.png');
+        $this->image = $image ?: asset('/img/logo.webp');
         $this->type = $type;
         $this->robots = $robots;
         $this->twitterCreator = $twitterCreator;
@@ -238,7 +238,7 @@ class Seo extends Component
                     'name' => config('app.name'),
                     'logo' => [
                         '@type' => 'ImageObject',
-                        'url' => asset('/img/logo.png'),
+                        'url' => asset('/img/logo.webp'),
                     ],
                 ],
                 'mainEntityOfPage' => [
@@ -256,7 +256,7 @@ class Seo extends Component
                 '@type' => 'Organization',
                 'name' => config('app.name'),
                 'url' => config('app.url'),
-                'logo' => asset('/img/logo.png'),
+                'logo' => asset('/img/logo.webp'),
                 'sameAs' => $this->schemaData['sameAs'] ?? [],
             ],
             'HowTo' => [
@@ -275,7 +275,7 @@ class Seo extends Component
                     'name' => config('app.name'),
                     'logo' => [
                         '@type' => 'ImageObject',
-                        'url' => asset('/img/logo.png'),
+                        'url' => asset('/img/logo.webp'),
                     ],
                 ],
                 'mainEntityOfPage' => [

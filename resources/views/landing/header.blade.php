@@ -8,7 +8,7 @@
         <div class="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-2 px-2">
             <!-- Logo with glow -->
             <a href="/" class="group flex items-center">
-                <img src="/img/logo.png" alt="El Arquitecto A.I. Logo" class="h-8 w-auto transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.3)] sm:h-10" />
+                <img src="/img/logo.webp" alt="El Arquitecto A.I. Logo" class="h-8 w-auto transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.3)] sm:h-10" />
             </a>
 
             <!-- Search Bar -->

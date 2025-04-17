@@ -40,7 +40,7 @@
             <div
             class="absolute inset-0 z-0 opacity-10"
             style="
-                background-image: url('{{ asset('img/logo.png') }}');
+                background-image: url('{{ asset('img/logo.webp') }}');
                 background-size: 150%;
                 background-position: center;
                 background-repeat: no-repeat;
@@ -125,7 +125,7 @@
     <div
         class="w-full h-full rounded-full"
         style="
-            background-image: url('{{ asset('img/logo.png') }}');
+            background-image: url('{{ asset('img/logo.webp') }}');
             background-size: 70% 70%;
             background-position: center;
             background-repeat: no-repeat;

@@ -6,8 +6,9 @@
     
     <!-- Card Image -->
     <div class="relative h-40 w-full overflow-hidden">
-      <img src="{{ $item['image'] ?? '/img/logo.png' }}" alt="{{ $item['title'] ?? 'Prompt' }}"
-          class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+      <img src="{{ $item['image'] ?? '/img/logo.webp' }}" alt="{{ $item['title'] ?? 'Prompt' }}"
+          class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          loading="lazy" />
       
       <!-- Category Badge -->
       <div class="absolute top-3 right-3 bg-black/50 backdrop-blur-sm text-xs font-medium px-2 py-1 rounded-full border border-primary/30 text-primary animate-pulse-slow">
