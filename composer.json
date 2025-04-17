@@ -48,6 +48,13 @@
             "npm run lint --fix",
             "npm run ts:check"
         ],
+        "clean-dev": [
+            "php artisan migrate:fresh --seed",
+            "php artisan optimize:clear",
+            "php artisan clear-compiled",
+            "rm -rf storage/app/public",
+            "rm -rf storage/logs"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

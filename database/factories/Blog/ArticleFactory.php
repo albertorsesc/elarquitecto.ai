@@ -29,9 +29,6 @@ class ArticleFactory extends Factory
             'is_featured' => false,
             'view_count' => 0,
             'original_url' => null,
-            'hero_image_url' => null,
-            'hero_image_author_name' => null,
-            'hero_image_author_url' => null,
         ];
     }
 }

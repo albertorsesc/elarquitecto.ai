@@ -35,9 +35,6 @@ class ArticleController extends Controller
             'is_featured' => ['nullable', 'boolean'],
             'original_url' => ['nullable', 'url'],
             'hero_image' => ['nullable', 'file', 'image', 'max:5000'], // 5MB
-            'hero_image_url' => ['nullable', 'url'],
-            'hero_image_author_name' => ['nullable', 'string'],
-            'hero_image_author_url' => ['nullable', 'url'],
             'tags' => ['nullable', 'array'],
             'category_id' => ['nullable', 'exists:categories,id'],
         ]);
@@ -54,9 +51,6 @@ class ArticleController extends Controller
             'is_pinned',
             'is_featured',
             'original_url',
-            'hero_image_url',
-            'hero_image_author_name',
-            'hero_image_author_url',
         ]);
 
         $article = Article::create($data);
@@ -76,7 +70,7 @@ class ArticleController extends Controller
     public function edit(Article $article)
     {
         return Inertia::render('Root/Blog/Articles/Edit', [
-            'article' => $article,
+            'article' => $article->load(['category', 'tags', 'media']),
             'categories' => \App\Models\Category::with('tags')->get(),
             'tags' => \App\Models\Tag::all(),
         ]);
@@ -86,22 +80,16 @@ class ArticleController extends Controller
     {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'body' => ['required', 'string', 'max:10000'],
+            'body' => ['required', 'string'],
             'published_at' => ['nullable', 'date'],
             'is_pinned' => ['boolean'],
             'is_featured' => ['boolean'],
             'original_url' => ['nullable', 'url'],
             'hero_image' => ['nullable', 'file', 'image', 'max:2048'], // 2MB
-            'hero_image_url' => ['nullable', 'url'],
-            'hero_image_author_name' => ['nullable', 'string'],
-            'hero_image_author_url' => ['nullable', 'url'],
             'tags' => ['nullable', 'array'],
             'category_id' => ['nullable', 'exists:categories,id'],
         ]);
 
-        // Update the article
-        // Media handling is done automatically via the HasMedia trait
-        // Category and Tags are handled by their respective traits
         $article->update($request->only([
             'title',
             'body',
@@ -109,9 +97,6 @@ class ArticleController extends Controller
             'is_pinned',
             'is_featured',
             'original_url',
-            'hero_image_url',
-            'hero_image_author_name',
-            'hero_image_author_url',
         ]));
 
         return redirect()->route('root.blog.articles.show', $article);

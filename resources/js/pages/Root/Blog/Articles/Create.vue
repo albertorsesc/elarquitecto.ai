@@ -130,60 +130,14 @@
                                 :maxFiles="1"
                                 acceptType="image"
                                 fileTypeLabel="image"
-                                selectButtonText="Seleccionar imagen"
+                                selectButtonText="Select image"
                                 :maxFileSize="5"
                                 @error="handleDropzoneError"
-                                @file-uploaded="handleFileUploaded"
                                 @file-removed="clearDirectFile"
                             />
                         </div>
                         
                         <p v-if="form.errors.hero_image" class="mt-1 text-sm text-red-500">{{ form.errors.hero_image }}</p>
-                    </div>
-
-                    <!-- Alternative Image URL Section -->
-                    <div v-if="!hasHeroImage" class="space-y-4 p-4 border border-dashed border-border/50 rounded-xl">
-                        <div class="flex items-center">
-                            <div class="h-px flex-grow bg-border/30"></div>
-                            <span class="px-3 text-xs text-muted-foreground">OR provide image URLs</span>
-                            <div class="h-px flex-grow bg-border/30"></div>
-                        </div>
-                        
-                        <!-- Hero Image URL -->
-                        <div class="space-y-2">
-                            <label for="hero_image_url" class="block text-sm font-medium text-foreground/80">Hero Image URL</label>
-                            <AnimatedInputBorder 
-                                id="hero_image_url" 
-                                v-model="form.hero_image_url" 
-                                placeholder="https://example.com/image.jpg" 
-                            />
-                            <p v-if="form.errors.hero_image_url" class="mt-1 text-sm text-red-500">{{ form.errors.hero_image_url }}</p>
-                        </div>
-
-                        <!-- Two columns layout for image attribution -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Hero Image Author Name -->
-                            <div class="space-y-2">
-                                <label for="hero_image_author_name" class="block text-sm font-medium text-foreground/80">Image Author Name</label>
-                                <AnimatedInputBorder 
-                                    id="hero_image_author_name" 
-                                    v-model="form.hero_image_author_name" 
-                                    placeholder="Photographer or Artist Name" 
-                                />
-                                <p v-if="form.errors.hero_image_author_name" class="mt-1 text-sm text-red-500">{{ form.errors.hero_image_author_name }}</p>
-                            </div>
-
-                            <!-- Hero Image Author URL -->
-                            <div class="space-y-2">
-                                <label for="hero_image_author_url" class="block text-sm font-medium text-foreground/80">Image Author URL</label>
-                                <AnimatedInputBorder 
-                                    id="hero_image_author_url" 
-                                    v-model="form.hero_image_author_url" 
-                                    placeholder="https://example.com/author" 
-                                />
-                                <p v-if="form.errors.hero_image_author_url" class="mt-1 text-sm text-red-500">{{ form.errors.hero_image_author_url }}</p>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Original URL (for cross-posting) -->
@@ -272,7 +226,7 @@ import { Head, useForm } from '@inertiajs/vue3';
 import CyberLink from '@/components/theme/CyberLink.vue';
 import AnimatedInputBorder from '@/components/theme/AnimatedInputBorder.vue';
 import Dropzone from '@/components/Dropzone.vue';
-import { ref, watch, computed } from 'vue';
+import { ref, watch } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -296,18 +250,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 // For Vue3Dropzone
 const heroImages = ref<any[]>([]);
 
-// Computed property to check if hero image exists
-const hasHeroImage = computed(() => heroImages.value.length > 0);
-
 // Form state using Inertia's useForm
 const form = useForm({
     title: '',
     slug: '',
     body: '',
     hero_image: null as File | null,
-    hero_image_url: '',
-    hero_image_author_name: '',
-    hero_image_author_url: '',
     original_url: '',
     published_at: '',
     is_pinned: false,
@@ -330,19 +278,9 @@ const handleDropzoneError = (error: { type: string; files: File[] }) => {
     const { type, files } = error;
     
     if (type === 'file-too-large') {
-        alert(`File size exceeds the 2MB limit: ${files.map(f => f.name).join(', ')}`);
+        alert(`File size exceeds the 5MB limit: ${files.map(f => f.name).join(', ')}`);
     } else if (type === 'invalid-file-format') {
         alert(`Invalid file format: ${files.map(f => f.name).join(', ')}`);
-    }
-};
-
-// Handle file uploaded from dropzone
-const handleFileUploaded = (fileData: any) => {
-    if (fileData && fileData.file) {
-        // When a file is uploaded via dropzone, we need to clear the URL fields
-        form.hero_image_url = '';
-        form.hero_image_author_name = '';
-        form.hero_image_author_url = '';
     }
 };
 
@@ -397,6 +335,13 @@ const generateSlug = () => {
     }
 };
 
+// Clear direct file preview
+const clearDirectFile = () => {
+    // Reset form fields since we're removing the image
+    form.hero_image = null;
+    heroImages.value = [];
+};
+
 // Form submission using Inertia
 const submit = (e?: Event) => {
     // Explicitly prevent default form submission behavior
@@ -419,13 +364,6 @@ const submit = (e?: Event) => {
             heroImages.value = [];
         },
     });
-};
-
-// Clear direct file preview
-const clearDirectFile = () => {
-    // Reset form fields since we're removing the image
-    form.hero_image = null;
-    heroImages.value = [];
 };
 </script>
 

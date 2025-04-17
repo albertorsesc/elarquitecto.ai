@@ -58,9 +58,6 @@ class ArticlesTest extends TestCase
             'is_pinned' => $newArticle->is_pinned,
             'is_featured' => $newArticle->is_featured,
             'original_url' => $newArticle->original_url,
-            'hero_image_url' => $newArticle->hero_image_url,
-            'hero_image_author_name' => $newArticle->hero_image_author_name,
-            'hero_image_author_url' => $newArticle->hero_image_author_url,
         ]);
     }
 

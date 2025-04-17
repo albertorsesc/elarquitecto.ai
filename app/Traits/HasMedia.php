@@ -18,12 +18,11 @@ trait HasMedia
     {
         // Delete all media when model is deleted
         static::deleting(function (Model $model) {
-            $model->media->each(function (Media $media) {
-                $media->delete();
+            $model->media->each(function (Media $media) use ($model) {
+                $model->deleteMedia($media);
             });
         });
 
-        // Handle media uploads when model is created or updated
         static::created(function (Model $model) {
             static::handleMediaFromRequest($model);
         });
@@ -31,6 +30,22 @@ trait HasMedia
         static::updated(function (Model $model) {
             static::handleMediaFromRequest($model);
         });
+    }
+
+    /**
+     * Get the URL for a single file collection.
+     * This can be used directly in model accessors, e.g.:
+     *
+     * public function getHeroImageUrlAttribute()
+     * {
+     *     return $this->getSingleFileUrl('hero');
+     * }
+     */
+    public function getSingleFileUrl(string $collection): ?string
+    {
+        $media = $this->getPrimaryMedia($collection);
+
+        return $media ? $media->url : null;
     }
 
     /**
@@ -82,20 +97,48 @@ trait HasMedia
     }
 
     /**
+     * Get collections that should only have a single primary file.
+     * Override this method in your model to customize behavior.
+     */
+    protected function getSingleFileCollections(): array
+    {
+        return property_exists($this, 'singleFileCollections')
+            ? $this->singleFileCollections
+            : ['hero', 'thumbnail', 'avatar'];
+    }
+
+    /**
+     * Determine if the given collection should only have a single primary file.
+     */
+    protected function isSingleFileCollection(string $collection): bool
+    {
+        return in_array($collection, $this->getSingleFileCollections());
+    }
+
+    /**
      * Add a media file to this model.
      */
     public function addMedia(UploadedFile $file, string $collection = 'default'): Media
     {
-        // Generate a unique filename
         $extension = $file->getClientOriginalExtension();
         $filename = Str::uuid().'.'.$extension;
 
-        // Determine the path (based on model type and collection)
         $modelType = strtolower(class_basename($this));
-        $relativePath = "{$modelType}/$this->id/{$collection}/{$filename}";
+        $relativePath = "{$modelType}/{$this->id}/{$collection}/{$filename}";
 
-        // Store the file
         $path = $file->storeAs('', $relativePath, 'public');
+
+        // For collections that should only have one primary file
+        // we need to delete existing files
+        if ($this->isSingleFileCollection($collection)) {
+            // Get all media in this collection and delete them
+            $this->media()
+                ->where('collection_name', $collection)
+                ->get()
+                ->each(function ($media) {
+                    $this->deleteMedia($media);
+                });
+        }
 
         // Create the media record
         $media = new Media([
@@ -105,7 +148,7 @@ trait HasMedia
             'disk' => 'public',
             'path' => $path,
             'size' => $file->getSize(),
-            'is_primary' => $this->media()->where('collection_name', $collection)->doesntExist(),
+            'is_primary' => true, // Always set new uploads as primary
         ]);
 
         $this->media()->save($media);
@@ -134,6 +177,8 @@ trait HasMedia
             return false;
         }
 
+        // Only try to delete the file if it's stored on a real disk
+        // External disk is used for URLs, not actual files
         if (Storage::disk($media->disk)->exists($media->path)) {
             Storage::disk($media->disk)->delete($media->path);
         }
@@ -152,59 +197,31 @@ trait HasMedia
     }
 
     /**
-     * Add media from a URL with attribution information.
-     * Use this method specifically for URL-based images that need attribution.
-     */
-    public function addMediaFromUrl(string $url, string $collection = 'default', ?string $authorName = null, ?string $authorUrl = null): ?Media
-    {
-        if (empty($url)) {
-            return null;
-        }
-
-        // Create media record for URL
-        $media = new Media([
-            'collection_name' => $collection,
-            'file_name' => basename($url),
-            'mime_type' => 'image/url', // Special type for URL-based images
-            'disk' => 'external', // Indicate this is an external resource
-            'path' => $url,
-            'size' => 0, // Size is not applicable for URL-based images
-            'is_primary' => $this->media()->where('collection_name', $collection)->doesntExist(),
-        ]);
-
-        $this->media()->save($media);
-
-        // Add attribution if provided
-        if ($authorName || $authorUrl) {
-            $this->setMediaCustomProperties($media, [
-                'author_name' => $authorName,
-                'author_url' => $authorUrl,
-            ]);
-        }
-
-        return $media;
-    }
-
-    /**
      * Handle media upload from request automatically.
-     * This method is called during model creation and update.
+     * This method is called during model creation and update events.
      */
-    protected static function handleMediaFromRequest(Model $model): void
+    public static function handleMediaFromRequest(Model $model): void
     {
         $request = request();
 
-        // Handle hero image upload
-        if ($request->hasFile('hero_image') && $request->file('hero_image')->isValid()) {
-            $model->addMediaFromRequest('hero_image', 'hero');
-        }
-        // Handle hero image URL with attribution
-        elseif ($request->filled('hero_image_url')) {
-            $model->addMediaFromUrl(
-                $request->input('hero_image_url'),
-                'hero',
-                $request->input('hero_image_author_name'),
-                $request->input('hero_image_author_url')
-            );
+        // Define standard media collections and their associated fields
+        $mediaCollections = [
+            'hero' => [
+                'file' => 'hero_image',
+            ],
+            // Add more collections here as needed with their respective field names
+        ];
+
+        // Process each media collection
+        foreach ($mediaCollections as $collection => $fields) {
+            // Get field name
+            $fileField = $fields['file'] ?? null;
+
+            // Handle file upload if present
+            if ($fileField && $request->hasFile($fileField) && $request->file($fileField)->isValid()) {
+                // A new file will automatically replace the old one in the addMedia method
+                $model->addMedia($request->file($fileField), $collection);
+            }
         }
     }
 }

@@ -20,9 +20,6 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->mediumText('body');
             $table->string('original_url')->nullable(); // For cross-posting attribution
-            $table->string('hero_image_url')->nullable();
-            $table->string('hero_image_author_name')->nullable();
-            $table->string('hero_image_author_url')->nullable();
             $table->boolean('is_pinned')->default(false);
             $table->boolean('is_featured')->default(false);
             $table->integer('view_count')->default(0);

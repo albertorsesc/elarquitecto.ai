@@ -41,6 +41,12 @@ class Media extends Model
      */
     public function getUrlAttribute(): string
     {
+        // For external resources (URLs), return the path directly
+        if ($this->disk === 'external') {
+            return $this->path;
+        }
+
+        // For local storage, build a URL to the file in storage
         return asset('storage/'.$this->path);
     }
 

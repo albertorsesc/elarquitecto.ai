@@ -17,13 +17,18 @@ class Article extends Model
     use HasAuthor;
 
     use HasCategory;
-
     /** @use HasFactory<\Database\Factories\Blog\ArticleFactory> */
     use HasFactory;
     use HasMedia;
     use HasSlug;
     use HasTags;
     use HasUuid;
+
+    /**
+     * Define which media collections should only have a single file.
+     * This property is used by the HasMedia trait.
+     */
+    protected $singleFileCollections = ['hero'];
 
     protected $fillable = [
         'title',
@@ -32,9 +37,6 @@ class Article extends Model
         'is_pinned',
         'is_featured',
         'original_url',
-        'hero_image_url',
-        'hero_image_author_name',
-        'hero_image_author_url',
         'slug',
     ];
 
@@ -43,6 +45,7 @@ class Article extends Model
      */
     protected $appends = [
         'hero_image_url',
+        'reading_time',
     ];
 
     /**
@@ -58,12 +61,26 @@ class Article extends Model
 
     /**
      * Get the hero image URL.
-     * Will prefer a media if available, fall back to hero_image_url
+     * This uses the getSingleFileUrl method from the HasMedia trait.
      */
     public function getHeroImageUrlAttribute(): ?string
     {
-        $heroMedia = $this->getPrimaryMedia('hero');
+        return $this->getSingleFileUrl('hero');
+    }
 
-        return $heroMedia ? $heroMedia->url : $this->attributes['hero_image_url'] ?? null;
+    /**
+     * Calculate the reading time for the article in minutes.
+     */
+    public function getReadingTimeAttribute(): int
+    {
+        if (empty($this->body)) {
+            return 1;
+        }
+
+        // Average reading speed: 225 words per minute
+        $words = str_word_count(strip_tags($this->body));
+        $minutes = ceil($words / 225);
+
+        return max(1, $minutes); // Ensure at least 1 minute of reading time
     }
 }

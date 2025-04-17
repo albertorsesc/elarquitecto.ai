@@ -109,24 +109,12 @@ const formatDate = computed(() => {
 });
 
 const readingTime = computed(() => {
-  if (!props.article.body) return 1;
-  // Average reading speed: 225 words per minute
-  const words = props.article.body.split(/\s+/).length;
-  const minutes = Math.ceil(words / 225);
-  return minutes;
+  return props.article.reading_time || 1;
 });
 
 const heroImageSource = computed(() => {
-  if (!props.article.hero_image_url) return '/img/logo.png';
-  
-  // Check if the URL is an absolute URL (starts with http:// or https://)
-  // if (props.article.hero_image_url.match(/^https?:\/\//)) {
-  //   return props.article.hero_image_url;
-  // }
-  
-  // If it's a relative URL, return as is
-  console.log(props.article);
-  return props.article.hero_image_url;
+  // Use optional chaining to safely access hero_image_url
+  return (props.article.hero_image_url as string) || '/img/logo.png';
 });
 </script>
 

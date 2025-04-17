@@ -66,23 +66,6 @@
                         <h2 class="text-xl font-semibold mb-4 text-glow">Content</h2>
                         <div class="prose prose-invert max-w-none mt-4" v-html="renderedContent"></div>
                     </div>
-
-                    <!-- Hero Image Attribution -->
-                    <div v-if="article.hero_image_author_name" class="glass-effect neon-border rounded-xl p-6">
-                        <h2 class="text-xl font-semibold mb-4 text-glow">Image Attribution</h2>
-                        <div class="text-muted-foreground">
-                            <p>Photo by 
-                                <a v-if="article.hero_image_author_url" 
-                                   :href="article.hero_image_author_url" 
-                                   target="_blank" 
-                                   rel="noopener noreferrer"
-                                   class="text-primary hover:underline">
-                                    {{ article.hero_image_author_name }}
-                                </a>
-                                <span v-else>{{ article.hero_image_author_name }}</span>
-                            </p>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Sidebar -->
