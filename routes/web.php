@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Public\ArticleController;
 use App\Http\Controllers\Public\PromptController;
 use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\WelcomeController;
@@ -11,6 +12,10 @@ Route::get('/', [WelcomeController::class, 'index'])->name('home');
 // Public Prompts Routes
 Route::get('prompts', [PromptController::class, 'index'])->name('prompts.index');
 Route::get('prompts/{prompt}', [PromptController::class, 'show'])->name('prompts.show');
+
+// Public Articles Routes
+Route::get('articulos', [ArticleController::class, 'index'])->name('articles.index');
+Route::get('articulos/{article}', [ArticleController::class, 'show'])->name('articles.show');
 
 // Subscriber Routes
 Route::post('subscribe', [SubscriberController::class, 'store'])->name('subscribers.store');

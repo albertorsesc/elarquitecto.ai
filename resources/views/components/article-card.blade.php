@@ -2,7 +2,7 @@
 
 @php
     // Generate URL
-    $url = '#';
+    $url = route('articles.show', $article);
     
     // Create excerpt
     $excerpt = $article->excerpt ?? 

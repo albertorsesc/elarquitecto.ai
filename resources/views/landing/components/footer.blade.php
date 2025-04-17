@@ -51,6 +51,11 @@
                             'href' => '/prompts',
                             'icon' => 'fa-regular fa-comment-dots'
                         ],
+                        [
+                            'title' => 'Blog',
+                            'href' => '/articulos',
+                            'icon' => 'fa-regular fa-file-lines'
+                        ],
                         // [
                         //     'title' => 'Herramientas',
                         //     'href' => '/tools',
@@ -110,13 +115,18 @@
         <div x-show="!isExpanded" class="mx-auto max-w-3xl px-4 h-full flex flex-col justify-center">
             <div class="flex flex-col items-center">
                 <!-- Icons only in collapsed state -->
-                <div class="flex flex-1 justify-between w-full items-center">
+                <div class="flex flex-1 justify-start gap-32 w-full items-center">
                     @php
                         $links = [
                             [
                                 'title' => 'Prompts',
                                 'href' => '/prompts',
                                 'icon' => 'fa-regular fa-comment-dots'
+                            ],
+                            [
+                                'title' => 'Blog',
+                                'href' => '/articulos',
+                                'icon' => 'fa-regular fa-file-lines'
                             ],
                             // [
                             //     'title' => 'Herramientas',
