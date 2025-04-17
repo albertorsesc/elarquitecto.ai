@@ -23,15 +23,15 @@ class ArticlesTest extends TestCase
 
     public function test_articles_index_page_displays_published_articles()
     {
-        // Create categories
+        // Create categories with unique names (adding test prefix)
         $category1 = $this->create(Category::class, [
-            'name' => 'Category 1',
-            'slug' => 'category-1',
+            'name' => 'Index Test Category 1',
+            'slug' => 'index-test-category-1',
         ]);
 
         $category2 = $this->create(Category::class, [
-            'name' => 'Category 2',
-            'slug' => 'category-2',
+            'name' => 'Index Test Category 2',
+            'slug' => 'index-test-category-2',
         ]);
 
         // Create published articles
@@ -92,16 +92,16 @@ class ArticlesTest extends TestCase
 
     public function test_articles_index_shows_paginated_results()
     {
-        // Create a category for all articles to use
+        // Create a category for all articles to use (with unique name)
         $category = $this->create(Category::class, [
-            'name' => 'Test Category',
-            'slug' => 'test-category',
+            'name' => 'Pagination Test Category',
+            'slug' => 'pagination-test-category',
         ]);
 
         $tag = $this->create(Tag::class, [
             'category_id' => $category->id,
-            'name' => 'Test Tag',
-            'slug' => 'test-tag',
+            'name' => 'Pagination Test Tag',
+            'slug' => 'pagination-test-tag',
         ]);
 
         // Create 8 published articles (pagination limit is 6)
@@ -194,7 +194,8 @@ class ArticlesTest extends TestCase
         ]);
 
         $category = $this->create(Category::class, [
-            'name' => 'Test Category',
+            'name' => 'Show Test Category',
+            'slug' => 'show-test-category',
         ]);
 
         $article = $this->create(Article::class, [
@@ -208,10 +209,14 @@ class ArticlesTest extends TestCase
         $article->category()->sync([$category->id]);
 
         $tag1 = $this->create(Tag::class, [
-            'name' => 'Test Tag 1',
+            'category_id' => $category->id,
+            'name' => 'Show Test Tag 1',
+            'slug' => 'show-test-tag-1',
         ]);
         $tag2 = $this->create(Tag::class, [
-            'name' => 'Test Tag 2',
+            'category_id' => $category->id,
+            'name' => 'Show Test Tag 2',
+            'slug' => 'show-test-tag-2',
         ]);
         $article->tags()->sync([$tag1->id, $tag2->id]);
 
@@ -224,9 +229,9 @@ class ArticlesTest extends TestCase
         $response->assertSee('Test Article Title');
         $response->assertSee('This is the test article body content.');
         $response->assertSee('Test Author');
-        $response->assertSee('Test Category');
-        $response->assertSee('Test Tag 1');
-        $response->assertSee('Test Tag 2');
+        $response->assertSee('Show Test Category');
+        $response->assertSee('Show Test Tag 1');
+        $response->assertSee('Show Test Tag 2');
 
         // Reload the article from the database to check view count was incremented
         $article->refresh();
@@ -242,12 +247,21 @@ class ArticlesTest extends TestCase
 
     public function test_article_view_count_does_not_increment_for_same_visitor()
     {
+        // Create a category with a unique name for this test
+        $category = $this->create(Category::class, [
+            'name' => 'View Count Test Category',
+            'slug' => 'view-count-test-category',
+        ]);
+
         $article = $this->create(Article::class, [
             'title' => 'Article View Count Test',
             'body' => 'This is a test article for view count tracking.',
             'published_at' => now()->subDay(),
             'view_count' => 0,
         ]);
+
+        // Associate with category
+        $article->setCategory($category);
 
         // First visit - should increment view count to 1
         $this->withSession(['viewed_articles' => []])
