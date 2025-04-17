@@ -23,11 +23,8 @@ trait HasMedia
             });
         });
 
-        static::created(function (Model $model) {
-            static::handleMediaFromRequest($model);
-        });
-
-        static::updated(function (Model $model) {
+        // Handle media uploads when model is being saved (both for creation and updates)
+        static::saved(function (Model $model) {
             static::handleMediaFromRequest($model);
         });
     }

@@ -63,7 +63,7 @@
 
                     <!-- Content -->
                     <div class="glass-effect neon-border rounded-xl p-6">
-                        <h2 class="text-xl font-semibold mb-4 text-glow">Content</h2>
+                        <h2 class="text-xl font-semibold mb-4 text-glow">{{ article.title }}</h2>
                         <div class="prose prose-invert max-w-none mt-4" v-html="renderedContent"></div>
                     </div>
                 </div>
