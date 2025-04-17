@@ -9,9 +9,9 @@
     @if($withScrollbar ?? false)
       <!-- Timeline wrapper with fixed height and scrolling -->
       <x-neon-scrollbar height="500px">
-        <x-timeline.section :items="$items ?? []" />
+        <x-timeline.section :items="$items" />
       </x-neon-scrollbar>
     @else
-      <x-timeline.section :items="$items ?? []" />
+      <x-timeline.section :items="$items" />
     @endif
   </div>

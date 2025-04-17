@@ -122,31 +122,4 @@ const heroImageSource = computed(() => {
 .glass-effect {
   background-color: hsl(var(--card)) !important;
 }
-
-.cyber-button-container {
-  position: relative;
-  overflow: hidden;
-  border-radius: 0.375rem;
-}
-
-.cyber-button-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(var(--primary-rgb), 0.5),
-    transparent
-  );
-  transition: 0.5s;
-  pointer-events: none;
-}
-
-.cyber-button-container:hover::before {
-  left: 100%;
-}
 </style> 

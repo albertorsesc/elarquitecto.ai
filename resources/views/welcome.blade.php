@@ -121,14 +121,6 @@
               <x-corner-accent leftColor="primary" rightColor="cyan-400" />
             </div>
   
-            <!-- Blog Carousel -->
-            <div class="relative">
-              {{-- <x-blog.blog-carousel :articles="$articles ?? ['data' => []]" /> --}}
-  
-              <!-- Section corner accents -->
-              <x-corner-accent leftColor="secondary" rightColor="accent" />
-            </div>
-  
             <!-- Section Cards -->
             @include('landing.sections')
   

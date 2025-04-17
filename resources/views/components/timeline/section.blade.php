@@ -5,11 +5,13 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     @forelse($items as $index => $item)
       @php
-        $type = $item['type'] ?? null;
+        $type = strtolower(class_basename($item));
       @endphp
       
       @if($type === 'prompt')
         <x-prompt-card :prompt="$item" />
+      @elseif($type === 'article')
+        <x-article-card :article="$item" />
       @else
         <x-timeline.item 
           :item="$item"

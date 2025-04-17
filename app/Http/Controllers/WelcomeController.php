@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog\Article;
 use App\Models\Prompt;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
@@ -13,26 +14,21 @@ class WelcomeController extends Controller
      */
     public function index(): View
     {
-        // Get timeline items - currently only prompts
-        $timeline = $this->getTimelineItems();
-
-        // Group timeline items by type
-        $groupedTimeline = $timeline->groupBy('type');
+        $prompts = $this->getPrompts();
+        $articles = $this->getArticles();
 
         return view('welcome', [
-            'timeline' => $groupedTimeline,
-            'articles' => ['data' => []], // Empty articles for now
+            'prompts' => $prompts,
+            'articles' => $articles,
         ]);
     }
 
     /**
-     * Get all timeline items.
-     *
-     * This method will be expanded later to include other resource types.
+     * Get prompts for the welcome page.
      */
-    protected function getTimelineItems(): Collection
+    protected function getPrompts(): Collection
     {
-        $prompts = Prompt::query()
+        return Prompt::query()
             ->with(['tags', 'category'])
             ->whereNotNull('published_at')
             ->orderByDesc('published_at')
@@ -61,12 +57,51 @@ class WelcomeController extends Controller
                     'category' => $prompt->category ? [$prompt->category] : [],
                 ];
             });
+    }
 
-        // In future, we'll add other resource types here and merge them
-        // Example:
-        // $articles = Article::query()->orderByDesc('created_at')->get()->map(...);
-        // return $prompts->concat($articles)->sortByDesc('date');
+    /**
+     * Get articles for the welcome page.
+     */
+    protected function getArticles(): Collection
+    {
+        return Article::query()
+            ->with(['tags:id,slug', 'category:id,slug'])
+            ->whereNotNull('published_at')
+            ->orderByDesc('published_at')
+            ->limit(6)
+            ->get();
+        // ->map(function ($article) {
+        //     // Map tags to a simple array with 'name' and 'slug' keys
+        //     $tagsArray = $article->tags->map(function ($tag) {
+        //         return [
+        //             $tag->slug,
+        //         ];
+        //     })->flatten()->toArray();
 
-        return $prompts;
+        //     // Calculate excerpt from body
+        //     $excerpt = strlen($article->body) > 150
+        //         ? substr(strip_tags($article->body), 0, 150) . '...'
+        //         : strip_tags($article->body);
+
+        //     return [
+        //         'id' => $article->id,
+        //         'type' => 'article', // Type identifier for grouping
+        //         'title' => $article->title,
+        //         'excerpt' => $excerpt,
+        //         'content' => $excerpt, // Use excerpt as timeline content
+        //         'date' => $article->published_at->isoFormat('D [de] MMM, YYYY'),
+        //         'image' => $article->hero_image_url,
+        //         'body' => $article->body,
+        //         'reading_time' => $article->reading_time,
+        //         'is_pinned' => $article->is_pinned,
+        //         'is_featured' => $article->is_featured,
+        //         'view_count' => $article->view_count,
+        //         'published_at' => $article->published_at->format('Y-m-d H:i:s'),
+        //         'url' => '#',
+        //         'slug' => $article->slug,
+        //         'tags' => $tagsArray,
+        //         'category' => $article->category->first()->name,
+        //     ];
+        // });
     }
 }

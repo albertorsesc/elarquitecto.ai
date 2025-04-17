@@ -10,31 +10,29 @@
       </h2>
 
       <!-- Prompt Timeline Section -->
-      @if(isset($timeline['prompt']) && count($timeline['prompt']) > 0)
+      @if(isset($prompts) && count($prompts) > 0)
         <div class="mb-12">
           <h3 class="text-center text-xl font-semibold mb-8 text-primary animate-text-glow">
             Prompts Recientes
           </h3>
           @include('landing.components.timeline-container', [
-            'items' => $timeline['prompt'] ?? [],
+            'items' => $prompts,
             'withScrollbar' => false
           ])
         </div>
       @endif
 
-      {{-- Future resource types will be added here as they become available --}}
-      {{--
-      @if(isset($timeline['article']) && count($timeline['article']) > 0)
+      <!-- Article Timeline Section (Uncommented) -->
+      @if(isset($articles) && count($articles) > 0)
         <div class="mb-12">
           <h3 class="text-center text-xl font-semibold mb-8 text-secondary animate-text-glow">
             Artículos Recientes
           </h3>
           @include('landing.components.timeline-container', [
-            'items' => $timeline['article'] ?? [],
+            'items' => $articles,
             'withScrollbar' => false
           ])
         </div>
       @endif
-      --}}
     </div>
   </section>
