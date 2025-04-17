@@ -8,6 +8,7 @@
 @section('content-for-seo', $article->body)
 @section('og-type', 'article')
 @section('schema-type', 'Article')
+@section('og-image', $article->hero_image_url ? $article->hero_image_url : url('/img/logo.webp'))
 
 @php
 // Define schema data for SEO component to use in the layout
@@ -108,9 +109,9 @@ $schemaData = [
                         <span class="text-muted-foreground">
                             {{ ($article->published_at ?? $article->created_at)->isoFormat('D [de] MMM, YYYY') }}
                         </span>
-                        <span class="text-primary">
+                        {{-- <span class="text-primary">
                             Por {{ $article->author ? $article->author->name : 'Alberto Rosas' }}
-                        </span>
+                        </span> --}}
                     </div>
                 </div>
                 

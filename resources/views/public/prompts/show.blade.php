@@ -8,6 +8,7 @@
 @section('content-for-seo', $prompt->content)
 @section('og-type', 'article')
 @section('schema-type', 'HowTo')
+@section('og-image', $prompt->image ? $prompt->image : url('/img/logo.webp'))
 
 @php
 // Define schema data for SEO component to use in the layout
