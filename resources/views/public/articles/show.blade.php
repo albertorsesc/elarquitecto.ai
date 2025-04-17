@@ -126,36 +126,96 @@ $schemaData = [
             </div>
             
             <!-- Article Content -->
-            <div class="prose prose-invert max-w-none mb-8 border-t border-border/30 pt-6">
+            <div class="prose prose-invert prose-custom max-w-none mb-8 border-t border-border/30 pt-6">
                 {!! md_to_html($article->body) !!}
             </div>
             
             <!-- Social Sharing -->
-            <div class="flex justify-center gap-4 mb-6 pt-4 border-t border-border/30">
-                <!-- Twitter/X Share -->
-                <a href="https://twitter.com/intent/tweet?url={{ urlencode(route('articles.show', $article)) }}&text={{ urlencode($article->title) }}" 
-                   target="_blank"
-                   class="inline-flex items-center justify-center rounded-md font-medium h-10 px-4 py-2 border border-border/50 hover:bg-primary/10 hover:text-primary transition-colors">
-                    <i class="fab fa-twitter mr-2 text-glow-multi"></i>
-                    Compartir
-                </a>
+            <div class="mb-6 pt-4 border-t border-border/30">
+                <div class="text-center mb-2 text-sm text-muted-foreground">Compartir este artículo</div>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <!-- Copy Link Button -->
+                    <button
+                       onclick="copyArticleLink()"
+                       aria-label="Copiar enlace"
+                       class="social-share-btn inline-flex items-center justify-center rounded-md font-medium h-10 px-3 sm:px-4 py-2 border border-border/50 hover:bg-primary/10 hover:text-primary transition-colors copy-link-btn">
+                        <i class="fas fa-share-alt text-glow-multi sm:mr-2"></i>
+                        <span class="hidden sm:inline">Copiar enlace</span>
+                    </button>
                 
-                <!-- Facebook Share -->
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('articles.show', $article)) }}"
-                   target="_blank"
-                   class="inline-flex items-center justify-center rounded-md font-medium h-10 px-4 py-2 border border-border/50 hover:bg-primary/10 hover:text-primary transition-colors">
-                    <i class="fab fa-facebook mr-2 text-glow-multi"></i>
-                    Compartir
-                </a>
-                
-                <!-- LinkedIn Share -->
-                <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(route('articles.show', $article)) }}&title={{ urlencode($article->title) }}"
-                   target="_blank"
-                   class="inline-flex items-center justify-center rounded-md font-medium h-10 px-4 py-2 border border-border/50 hover:bg-primary/10 hover:text-primary transition-colors">
-                    <i class="fab fa-linkedin mr-2 text-glow-multi"></i>
-                    Compartir
-                </a>
+                    <!-- Twitter/X Share -->
+                    <a href="https://twitter.com/intent/tweet?url={{ urlencode(route('articles.show', $article)) }}&text={{ urlencode($article->title) }}" 
+                       target="_blank" aria-label="Compartir en Twitter"
+                       class="social-share-btn inline-flex items-center justify-center rounded-md font-medium h-10 px-3 sm:px-4 py-2 border border-border/50 hover:bg-primary/10 hover:text-primary transition-colors">
+                        <i class="fab fa-twitter text-glow-multi sm:mr-2"></i>
+                        <span class="hidden sm:inline">Twitter</span>
+                    </a>
+                    
+                    <!-- Facebook Share -->
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('articles.show', $article)) }}"
+                       target="_blank" aria-label="Compartir en Facebook"
+                       class="social-share-btn inline-flex items-center justify-center rounded-md font-medium h-10 px-3 sm:px-4 py-2 border border-border/50 hover:bg-primary/10 hover:text-primary transition-colors">
+                        <i class="fab fa-facebook text-glow-multi sm:mr-2"></i>
+                        <span class="hidden sm:inline">Facebook</span>
+                    </a>
+                    
+                    <!-- LinkedIn Share -->
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(route('articles.show', $article)) }}&title={{ urlencode($article->title) }}"
+                       target="_blank" aria-label="Compartir en LinkedIn"
+                       class="social-share-btn inline-flex items-center justify-center rounded-md font-medium h-10 px-3 sm:px-4 py-2 border border-border/50 hover:bg-primary/10 hover:text-primary transition-colors">
+                        <i class="fab fa-linkedin text-glow-multi sm:mr-2"></i>
+                        <span class="hidden sm:inline">LinkedIn</span>
+                    </a>
+                </div>
             </div>
+            
+            <!-- Add JavaScript for copy link functionality -->
+            <script>
+            function copyArticleLink() {
+                // Get the current URL
+                const url = window.location.href;
+                
+                // Use the modern Clipboard API if available
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url)
+                        .then(() => showCopySuccess())
+                        .catch(() => fallbackCopyMethod(url));
+                } else {
+                    fallbackCopyMethod(url);
+                }
+            }
+            
+            function fallbackCopyMethod(text) {
+                // Create a temporary input element
+                const input = document.createElement('input');
+                input.style.position = 'absolute';
+                input.style.left = '-9999px';
+                input.value = text;
+                document.body.appendChild(input);
+                
+                // Select and copy the link
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                
+                showCopySuccess();
+            }
+            
+            function showCopySuccess() {
+                // Show visual feedback
+                const btn = document.querySelector('.copy-link-btn');
+                btn.classList.add('copy-success');
+                
+                const originalContent = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check text-green-400 sm:mr-2 animate-pulse"></i><span class="hidden sm:inline">¡Copiado!</span>';
+                
+                // Reset the button after a delay
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.classList.remove('copy-success');
+                }, 2000);
+            }
+            </script>
             
             <!-- Back Button -->
             <div class="mt-8 pt-4 border-t border-border/30">
@@ -196,5 +256,13 @@ $schemaData = [
 .glass-effect {
   background-color: hsl(var(--card)) !important;
 }
+
+/* Prose custom styling for better images */
+.prose-custom img:not(.markdown-image) {
+  @apply rounded-lg mx-auto my-6 max-w-full;
+  max-width: 800px;
+  box-shadow: 0 0 15px rgba(var(--primary-rgb), 0.3);
+}
+
 </style>
 @endpush 

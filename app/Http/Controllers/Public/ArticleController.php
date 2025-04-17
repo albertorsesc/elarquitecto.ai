@@ -27,15 +27,6 @@ class ArticleController extends Controller
             throw new ModelNotFoundException;
         }
 
-        $viewedArticles = session()->get('viewed_articles', []);
-
-        if (! in_array($article->id, $viewedArticles)) {
-            $article->increment('view_count');
-
-            $viewedArticles[] = $article->id;
-            session()->put('viewed_articles', $viewedArticles);
-        }
-
         $article->load(['tags', 'category', 'author']);
 
         $relatedArticles = Article::query()

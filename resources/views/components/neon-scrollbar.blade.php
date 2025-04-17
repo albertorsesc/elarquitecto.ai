@@ -72,52 +72,11 @@
     }
 }
 
-/* Custom scrollbar - isolated from animations */
-/* These styles isolate the scrollbar from animation effects */
-/* For modern WebKit browsers (Chrome, Safari, Edge) */
-::-webkit-scrollbar {
-    width: {{ $width }};
-    height: {{ $width }};
-}
-
-::-webkit-scrollbar-track {
-    background: {{ $trackColor }};
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: {{ $thumbColor }};
-    border-radius: 10px;
-    transition: background-color 0.3s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: {{ $thumbHoverColor }};
-}
-
-/* For Firefox */
-* {
-    scrollbar-width: thin;
-    scrollbar-color: {{ $thumbColor }} {{ $trackColor }};
-}
-
-/* Ensure the scrollbar doesn't inherit animation properties */
-::-webkit-scrollbar-thumb, 
-::-webkit-scrollbar-track {
-    -webkit-animation: none !important;
-    animation: none !important;
-    backdrop-filter: none !important;
-    filter: none !important;
-    transform: none !important;
-}
-
-/* Avoid unnecessary repaints on scrollbar */
-* {
-    will-change: auto !important;
-}
-
-/* Make sure scrollbar doesn't get affected by neon effects */
-::-webkit-scrollbar-corner {
-    background: transparent;
+/* Mobile optimization */
+@media screen and (max-width: 768px) {
+    .neon-scrollbar::-webkit-scrollbar {
+        width: 3px !important;
+        height: 3px !important;
+    }
 }
 </style>

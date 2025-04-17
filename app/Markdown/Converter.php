@@ -2,6 +2,7 @@
 
 namespace App\Markdown;
 
+use App\Markdown\Extension\ResponsiveImageExtension;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\Attributes\AttributesExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
@@ -45,6 +46,9 @@ class Converter
         $environment->addExtension(new AttributesExtension);
         $environment->addExtension(new ExternalLinkExtension);
 
+        // Add our custom image extension
+        $environment->addExtension(new ResponsiveImageExtension);
+
         // Instantiate the converter
         $this->converter = new LeagueMarkdownConverter($environment);
     }
@@ -54,6 +58,9 @@ class Converter
      */
     public function toHtml(string $markdown): string
     {
+        // Ensure we have a valid string to avoid null errors
+        $markdown = $markdown ?: '';
+
         $html = $this->converter->convert($markdown)->getContent();
 
         return $html;

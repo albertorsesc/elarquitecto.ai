@@ -1,3 +1,128 @@
+/* ---------------------------------------------------- */
+/* Global Responsive Fixes & Mobile Optimizations       */
+/* ---------------------------------------------------- */
+
+/* Fix for preventing horizontal scrollbars */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Ensure content doesn't cause horizontal overflow */
+.container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Ensure nested elements don't cause overflow */
+.prose, .prose-custom, .prose-invert {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+/* Ensure images don't cause overflow */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Ensure code blocks don't cause overflow */
+pre, code {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Fix for sticky footer positioning */
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+footer {
+  flex-shrink: 0;
+}
+
+/* Scrollbar styling for all browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.5);
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.8);
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--primary) / 0.5) rgba(255, 255, 255, 0.05);
+}
+
+/* Make scrollbars smaller on mobile */
+@media screen and (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 3px !important;
+    height: 3px !important;
+  }
+  
+  body {
+    padding-right: 0 !important;
+  }
+}
+
+/* Social sharing buttons responsive styles */
+.social-share-btn {
+  min-width: 40px;
+  text-align: center;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .fab.fa-twitter, 
+  .fab.fa-facebook, 
+  .fab.fa-linkedin,
+  .fas.fa-share-alt,
+  .fas.fa-check {
+    margin-right: 0;
+    font-size: 1.25rem;
+  }
+  
+  .social-share-btn {
+    width: auto;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+/* Copy link button success effect */
+.copy-success {
+  border-color: rgba(var(--primary-rgb), 0.5) !important;
+  box-shadow: 0 0 15px rgba(var(--primary-rgb), 0.5);
+  background-color: rgba(var(--primary-rgb), 0.1);
+}
+
 /* Neon Animations */
 @keyframes neonSlideRight {
     from { transform: translateX(-100%); }
@@ -73,6 +198,25 @@
   
   .animate-pulse-slow {
     animation: pulse 4s infinite;
+  }
+  
+  /* Animation optimization containers */
+  .neon-border-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  
+  .animation-container {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
   }
   
   /* Glass Effect */
@@ -722,6 +866,60 @@
     box-shadow: 
       0 0 10px rgba(var(--primary-rgb), 0.7),
       0 0 20px rgba(var(--primary-rgb), 0.3);
+  }
+
+  /* Image styling in markdown content */
+  .markdown-image-container {
+    width: 100%;
+    margin: 1.5rem auto;
+    max-width: 800px; /* Control maximum width */
+  }
+
+  .markdown-image-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 15px rgba(var(--primary-rgb), 0.3);
+  }
+
+  .markdown-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 600px; /* Limit height of vertical images */
+    object-fit: contain; /* Changed from cover to contain to preserve aspect ratio */
+    border-radius: 0.375rem;
+    transition: transform 0.3s ease;
+  }
+
+  /* Optional hover effect */
+  .markdown-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(var(--primary-rgb), 0.4);
+  }
+
+  /* Ensure prose styles don't override our image styling */
+  .prose img.markdown-image,
+  .prose-invert img.markdown-image {
+    margin: 0;
+    max-width: 100%;
+    max-height: 600px; /* Ensure this is applied even with prose styles */
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .markdown-image-container {
+      max-width: 100%;
+      margin: 1rem auto;
+    }
+    
+    .markdown-image,
+    .prose img.markdown-image,
+    .prose-invert img.markdown-image {
+      max-height: 450px; /* Reduced height on mobile */
+    }
   }
 
   .cyber-button-container {

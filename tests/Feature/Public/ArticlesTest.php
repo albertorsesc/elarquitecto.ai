@@ -215,9 +215,8 @@ class ArticlesTest extends TestCase
         ]);
         $article->tags()->sync([$tag1->id, $tag2->id]);
 
-        // Visit the article show page (first visitor)
-        $response = $this->withSession(['viewed_articles' => []])
-            ->get(route('articles.show', $article));
+        // Visit the article show page
+        $response = $this->get(route('articles.show', $article));
 
         $response->assertOk();
 
@@ -227,51 +226,6 @@ class ArticlesTest extends TestCase
         $response->assertSee('Test Category');
         $response->assertSee('Test Tag 1');
         $response->assertSee('Test Tag 2');
-
-        // Reload the article from the database to check view count was incremented
-        $article->refresh();
-        $this->assertEquals(1, $article->view_count, 'View count should be incremented after viewing the article');
-
-        // Visit the page again with a different session (second visitor)
-        $this->withSession(['viewed_articles' => []])
-            ->get(route('articles.show', $article));
-
-        $article->refresh();
-        $this->assertEquals(2, $article->view_count, 'View count should be incremented again on second view from different visitor');
-    }
-
-    public function test_article_view_count_does_not_increment_for_same_visitor()
-    {
-        $article = $this->create(Article::class, [
-            'title' => 'Article View Count Test',
-            'body' => 'This is a test article for view count tracking.',
-            'published_at' => now()->subDay(),
-            'view_count' => 0,
-        ]);
-
-        // First visit - should increment view count to 1
-        $this->withSession(['viewed_articles' => []])
-            ->get(route('articles.show', $article));
-
-        // Reload the article to check view count
-        $article->refresh();
-        $this->assertEquals(1, $article->view_count, 'View count should be 1 after first view');
-
-        // Second visit with same session - should not increment view count
-        $this->withSession(['viewed_articles' => [$article->id]])
-            ->get(route('articles.show', $article));
-
-        // Reload the article - view count should still be 1
-        $article->refresh();
-        $this->assertEquals(1, $article->view_count, 'View count should still be 1 after second view from same visitor');
-
-        // Simulate view from a different visitor by using a different session
-        $this->withSession(['viewed_articles' => []])
-            ->get(route('articles.show', $article));
-
-        // Reload the article - view count should now be 2
-        $article->refresh();
-        $this->assertEquals(2, $article->view_count, 'View count should be 2 after view from different visitor');
     }
 
     public function test_articles_show_returns_404_for_unpublished_article()
