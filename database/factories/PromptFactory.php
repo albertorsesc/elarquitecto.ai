@@ -24,7 +24,7 @@ class PromptFactory extends Factory
         return [
             'title' => $title = fake()->sentence(),
             'slug' => Str::slug($title),
-            'excerpt' => fake()->paragraph(),
+            'excerpt' => fake()->sentence(10),
             'content' => fake()->paragraph(),
             'published_at' => fake()->dateTimeBetween('-1 year', 'now'),
             'word_count' => fake()->numberBetween(100, 1000),

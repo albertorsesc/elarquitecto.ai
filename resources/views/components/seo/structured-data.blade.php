@@ -37,7 +37,7 @@
                 'name' => config('app.name'),
                 'logo' => [
                     '@type' => 'ImageObject',
-                    'url' => asset('/img/logo.png')
+                    'url' => url('/img/logo.webp')
                 ]
             ],
             'mainEntityOfPage' => [
@@ -55,7 +55,7 @@
             '@type' => 'Organization',
             'name' => config('app.name'),
             'url' => config('app.url'),
-            'logo' => asset('/img/logo.png'),
+            'logo' => url('/img/logo.webp'),
             'sameAs' => [
                 'https://instagram.com/elarquitectoai',
                 'https://facebook.com/elarquitectoai',
@@ -79,7 +79,7 @@
                 'name' => config('app.name'),
                 'logo' => [
                     '@type' => 'ImageObject',
-                    'url' => asset('/img/logo.png')
+                    'url' => url('/img/logo.webp')
                 ]
             ],
             'mainEntityOfPage' => [

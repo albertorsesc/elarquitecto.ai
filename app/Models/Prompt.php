@@ -40,10 +40,33 @@ class Prompt extends Model
     ];
 
     /**
+     * Appends custom attributes to JSON representations of the model.
+     */
+    protected $appends = [
+        'reading_time',
+    ];
+
+    /**
      * Get the route key for the model.
      */
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    /**
+     * Calculate the reading time for the prompt in minutes.
+     */
+    public function getReadingTimeAttribute(): int
+    {
+        if (empty($this->content)) {
+            return 1;
+        }
+
+        // Average reading speed: 225 words per minute
+        $words = str_word_count(strip_tags($this->content));
+        $minutes = ceil($words / 225);
+
+        return max(1, $minutes); // Ensure at least 1 minute of reading time
     }
 }

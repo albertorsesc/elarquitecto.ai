@@ -51,6 +51,11 @@
                             'href' => '/prompts',
                             'icon' => 'fa-regular fa-comment-dots'
                         ],
+                        [
+                            'title' => 'Blog',
+                            'href' => '/articulos',
+                            'icon' => 'fa-regular fa-file-lines'
+                        ],
                         // [
                         //     'title' => 'Herramientas',
                         //     'href' => '/tools',
@@ -101,7 +106,7 @@
             <!-- Full copyright -->
             <div class="text-center text-xs text-foreground/60 mt-4">
                 <p>
-                    &copy; {{ date('Y') }} El Arquitecto A.I. <br/> Democratizando I.A. para el beneficio de LATAM.
+                    &copy; {{ date('Y') }} {{ config('app.name') }} <br/> Democratizando I.A. para el beneficio de LATAM.
                 </p>
             </div>
         </div>
@@ -110,13 +115,18 @@
         <div x-show="!isExpanded" class="mx-auto max-w-3xl px-4 h-full flex flex-col justify-center">
             <div class="flex flex-col items-center">
                 <!-- Icons only in collapsed state -->
-                <div class="flex flex-1 justify-between w-full items-center">
+                <div class="flex flex-1 justify-start gap-32 w-full items-center">
                     @php
                         $links = [
                             [
                                 'title' => 'Prompts',
                                 'href' => '/prompts',
                                 'icon' => 'fa-regular fa-comment-dots'
+                            ],
+                            [
+                                'title' => 'Blog',
+                                'href' => '/articulos',
+                                'icon' => 'fa-regular fa-file-lines'
                             ],
                             // [
                             //     'title' => 'Herramientas',
@@ -167,7 +177,7 @@
 
                 <!-- Subtle copyright -->
                 <div class="text-[10px] text-foreground/40 mt-0.5">
-                    &copy; {{ date('Y') }} El Arquitecto A.I.
+                    {{ date('Y') }} - {{ config('app.name') }} - Democratizando I.A. para el beneficio de LATAM.
                 </div>
             </div>
         </div>

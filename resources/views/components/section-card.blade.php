@@ -1,13 +1,16 @@
 @props(['sections' => []])
 
 @php
-    $enabledSections = ['Prompts'];
+    $enabledSections = ['Blog', 'Prompts'];
 @endphp
 
 <section class="py-12 sm:py-16">
   <div class="mx-auto max-w-6xl px-4">
-    <h2 class="text-glow-light mb-8 text-center text-2xl font-bold text-accent sm:mb-12 sm:text-3xl md:text-4xl">
-      Explora Nuestras Secciones
+    <h2 class="text-glow-light mb-8 text-center text-2xl font-bold text-secondary sm:mb-12 sm:text-3xl md:text-4xl">
+      Explorar 
+      <span class="text-primary">
+        A.I. Hub
+      </span>
     </h2>
 
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

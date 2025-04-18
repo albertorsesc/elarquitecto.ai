@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enums\CategoryEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -18,7 +17,8 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake()->randomElement(CategoryEnum::values());
+        $name = fake()->unique()->words(2, true);
+        $name = ucwords($name);
 
         return [
             'name' => $name,

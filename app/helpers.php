@@ -10,16 +10,18 @@ if (! function_exists('md_to_html')) {
     }
 }
 
-/**
- * Gets the appropriate Slack channel based on environment.
- */
-function slack_channel(): ?string
-{
-    // In production, use the production channel
-    if (app()->isProduction()) {
-        return env('SLACK_BOT_USER_DEFAULT_CHANNEL');
-    }
+if (! function_exists('slack_channel')) {
+    /**
+     * Gets the appropriate Slack channel based on environment.
+     */
+    function slack_channel(): ?string
+    {
+        // In production, use the production channel
+        if (app()->isProduction()) {
+            return env('SLACK_BOT_USER_DEFAULT_CHANNEL');
+        }
 
-    // In non-production, use the dev channel if set, otherwise fall back to production channel
-    return env('SLACK_BOT_USER_DEFAULT_CHANNEL_DEV', env('SLACK_BOT_USER_DEFAULT_CHANNEL'));
+        // In non-production, use the dev channel if set, otherwise fall back to production channel
+        return env('SLACK_BOT_USER_DEFAULT_CHANNEL_DEV', env('SLACK_BOT_USER_DEFAULT_CHANNEL'));
+    }
 }

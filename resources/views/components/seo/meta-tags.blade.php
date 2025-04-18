@@ -29,6 +29,9 @@
 <meta name="twitter:title" content="{{ $title }}">
 <meta name="twitter:description" content="{{ $description }}">
 <meta name="twitter:image" content="{{ $image }}">
+<meta name="twitter:image:src" content="{{ $image }}">
+<meta name="twitter:widgets:theme" content="light">
+<meta name="twitter:widgets:border-color" content="#7C3AED">
 @if($twitterCreator ?? false)
 <meta name="twitter:creator" content="{{ $twitterCreator }}">
 @endif

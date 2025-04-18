@@ -7,7 +7,7 @@
     
     @php
     // Get values from sections or use defaults
-    $seoTitle = View::hasSection('title') ? trim(View::getSection('title')) : 'El Arquitecto AI';
+    $seoTitle = View::hasSection('title') ? trim(View::getSection('title')) : config('app.name') . ' - Democratizando I.A. para el beneficio de LATAM';
     $seoDescription = View::hasSection('description') ? trim(View::getSection('description')) : '';
     $seoKeywords = View::hasSection('keywords') ? trim(View::getSection('keywords')) : '';
     $seoContent = View::hasSection('content-for-seo') ? trim(View::getSection('content-for-seo')) : '';
@@ -28,6 +28,11 @@
         schemaType="{{ $seoSchemaType }}"
         :schemaData="$schemaData ?? []"
     />
+
+    <link rel="apple-touch-icon" href="/favicon/apple-touch-icon-iphone-60x60-precomposed.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-touch-icon-ipad-76x76-precomposed.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-touch-icon-iphone-retina-120x120-precomposed.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-touch-icon-ipad-retina-152x152-precomposed.png">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,35 +48,8 @@
     
     <!-- Additional Styles -->
     @stack('styles')
-    
-    <style>
-        /* Fix for scroll performance issues with animations */
-        html {
-            overflow-x: hidden;
-        }
-        
-        /* Ensure animations don't affect scrolling performance */
-        .neon-border-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-        
-        /* Prevent layout shifts from animations */
-        .animation-container {
-            transform: translateZ(0);
-            will-change: transform;
-            backface-visibility: hidden;
-            perspective: 1000px;
-        }
-    </style>
 </head>
-<body class="font-sans antialiased bg-background text-foreground min-h-screen flex flex-col">
+<body id="app" class="font-sans antialiased bg-background text-foreground min-h-screen flex flex-col">
     <!-- Background with gradient -->
     <div class="fixed inset-0 z-0 pointer-events-none">
         <div class="absolute inset-0 bg-background opacity-90"></div>

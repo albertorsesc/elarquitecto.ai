@@ -91,7 +91,7 @@ class Seo extends Component
         string $schemaType = 'WebPage',
         array $schemaData = []
     ) {
-        $this->title = $title ?: config('app.name', 'El Arquitecto A.I.');
+        $this->title = $title ?: config('app.name').' - Democratizando I.A. para el beneficio de LATAM';
 
         // Use provided description or generate from content
         if (! empty($description)) {
@@ -112,7 +112,19 @@ class Seo extends Component
         }
 
         $this->canonical = $canonical ?: request()->url();
-        $this->image = $image ?: asset('/img/logo.png');
+
+        // Ensure image URL is absolute
+        if (! empty($image)) {
+            // If the image URL doesn't start with http/https, make it absolute
+            if (! preg_match('/^https?:\/\//', $image)) {
+                $this->image = url($image);
+            } else {
+                $this->image = $image;
+            }
+        } else {
+            $this->image = url('/img/logo.webp');
+        }
+
         $this->type = $type;
         $this->robots = $robots;
         $this->twitterCreator = $twitterCreator;
@@ -238,7 +250,7 @@ class Seo extends Component
                     'name' => config('app.name'),
                     'logo' => [
                         '@type' => 'ImageObject',
-                        'url' => asset('/img/logo.png'),
+                        'url' => asset('/img/logo.webp'),
                     ],
                 ],
                 'mainEntityOfPage' => [
@@ -256,7 +268,7 @@ class Seo extends Component
                 '@type' => 'Organization',
                 'name' => config('app.name'),
                 'url' => config('app.url'),
-                'logo' => asset('/img/logo.png'),
+                'logo' => asset('/img/logo.webp'),
                 'sameAs' => $this->schemaData['sameAs'] ?? [],
             ],
             'HowTo' => [
@@ -275,7 +287,7 @@ class Seo extends Component
                     'name' => config('app.name'),
                     'logo' => [
                         '@type' => 'ImageObject',
-                        'url' => asset('/img/logo.png'),
+                        'url' => asset('/img/logo.webp'),
                     ],
                 ],
                 'mainEntityOfPage' => [

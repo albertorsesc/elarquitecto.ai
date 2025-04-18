@@ -18,7 +18,7 @@
                     
                     <!-- Card Image -->
                     <div class="relative h-40 w-full overflow-hidden">
-                        <img :src="prompt.image_url || '/img/logo.png'" :alt="prompt.title"
+                        <img :src="prompt.image_url || '/img/logo.webp'" :alt="prompt.title"
                             class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
                         
                         <!-- Category Badge -->
