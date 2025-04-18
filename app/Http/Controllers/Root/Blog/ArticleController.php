@@ -29,7 +29,7 @@ class ArticleController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => ['required', 'string', 'max:255'],
-            'body' => ['required', 'string', 'max:10000'],
+            'body' => ['required', 'string', 'max:100000'],
             'published_at' => ['nullable', 'date'],
             'is_pinned' => ['nullable', 'boolean'],
             'is_featured' => ['nullable', 'boolean'],
@@ -80,7 +80,7 @@ class ArticleController extends Controller
     {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'body' => ['required', 'string'],
+            'body' => ['required', 'string', 'max:100000'],
             'published_at' => ['nullable', 'date'],
             'is_pinned' => ['boolean'],
             'is_featured' => ['boolean'],
