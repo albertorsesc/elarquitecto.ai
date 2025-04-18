@@ -28,6 +28,11 @@
         schemaType="{{ $seoSchemaType }}"
         :schemaData="$schemaData ?? []"
     />
+
+    <link rel="apple-touch-icon" href="/favicon/apple-touch-icon-iphone-60x60-precomposed.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-touch-icon-ipad-76x76-precomposed.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-touch-icon-iphone-retina-120x120-precomposed.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-touch-icon-ipad-retina-152x152-precomposed.png">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

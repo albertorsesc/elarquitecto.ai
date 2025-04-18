@@ -112,11 +112,11 @@ class Seo extends Component
         }
 
         $this->canonical = $canonical ?: request()->url();
-        
+
         // Ensure image URL is absolute
-        if (!empty($image)) {
+        if (! empty($image)) {
             // If the image URL doesn't start with http/https, make it absolute
-            if (!preg_match('/^https?:\/\//', $image)) {
+            if (! preg_match('/^https?:\/\//', $image)) {
                 $this->image = url($image);
             } else {
                 $this->image = $image;
@@ -124,7 +124,7 @@ class Seo extends Component
         } else {
             $this->image = url('/img/logo.webp');
         }
-        
+
         $this->type = $type;
         $this->robots = $robots;
         $this->twitterCreator = $twitterCreator;
