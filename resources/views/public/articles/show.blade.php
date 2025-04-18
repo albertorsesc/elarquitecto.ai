@@ -149,8 +149,8 @@ $schemaData = [
                     <a href="https://twitter.com/intent/tweet?url={{ urlencode(route('articles.show', $article)) }}&text={{ urlencode($article->title) }}" 
                        target="_blank" aria-label="Compartir en Twitter"
                        class="social-share-btn inline-flex items-center justify-center rounded-md font-medium h-10 px-3 sm:px-4 py-2 border border-border/50 hover:bg-primary/10 hover:text-primary transition-colors">
-                        <i class="fab fa-twitter text-glow-multi sm:mr-2"></i>
-                        <span class="hidden sm:inline">Twitter</span>
+                        <i class="fa-brands fa-x-twitter text-glow-multi sm:mr-2"></i>
+                        <span class="hidden sm:inline">X</span>
                     </a>
                     
                     <!-- Facebook Share -->

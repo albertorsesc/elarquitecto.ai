@@ -13,10 +13,10 @@
       @elseif($type === 'article')
         <x-article-card :article="$item" />
       @else
-        <x-timeline.item 
+        {{-- <x-timeline.item 
           :item="$item"
           :position="$index % 2 === 0 ? 'left' : 'right'"
-        />
+        /> --}}
       @endif
     @empty
       <div class="col-span-full flex flex-col items-center justify-center gap-4 p-8 text-center">

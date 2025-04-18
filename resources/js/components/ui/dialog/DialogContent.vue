@@ -4,19 +4,31 @@ import { X } from 'lucide-vue-next';
 import {
     DialogClose,
     DialogContent,
+    DialogDescription,
     DialogOverlay,
     DialogPortal,
+    DialogTitle,
     useForwardPropsEmits,
     type DialogContentEmits,
     type DialogContentProps,
 } from 'reka-ui';
 import { computed, type HTMLAttributes } from 'vue';
 
-const props = defineProps<DialogContentProps & { class?: HTMLAttributes['class'] }>();
+interface ExtendedDialogContentProps extends DialogContentProps {
+    class?: HTMLAttributes['class'];
+    title?: string;
+    description?: string;
+}
+
+const props = withDefaults(defineProps<ExtendedDialogContentProps>(), {
+    title: 'Dialog',
+    description: 'Dialog content with important information'
+});
+
 const emits = defineEmits<DialogContentEmits>();
 
 const delegatedProps = computed(() => {
-    const { class: _, ...delegated } = props;
+    const { class: _, title, description, ...delegated } = props;
 
     return delegated;
 });
@@ -38,6 +50,9 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
                 )
             "
         >
+            <DialogTitle class="sr-only">{{ title }}</DialogTitle>
+            <DialogDescription class="sr-only">{{ description }}</DialogDescription>
+
             <slot />
 
             <DialogClose

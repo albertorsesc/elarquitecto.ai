@@ -24,7 +24,7 @@ $schemaData = [
 @endphp
 
 @section('content')
-    <div class="flex h-full flex-1 flex-col gap-4 p-4 mb-24 relative z-10">
+    <div class="flex h-full flex-1 flex-col gap-4 p-4 mb-24 relative z-10 max-w-5xl mx-auto">
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-bold text-glow animate-text-glow">Prompts</h1>
         </div>
@@ -43,8 +43,8 @@ $schemaData = [
                 <div class="h-10 w-10 text-muted-foreground"></div>
             </div>
             <div class="space-y-2">
-                <h3 class="text-xl font-semibold">No prompts found</h3>
-                <p class="text-muted-foreground">Check back later for new prompts.</p>
+                <h3 class="text-xl font-semibold">No hay prompts disponibles</h3>
+                <p class="text-muted-foreground">Revisa más tarde para nuevos prompts.</p>
             </div>
         </div>
         @endif

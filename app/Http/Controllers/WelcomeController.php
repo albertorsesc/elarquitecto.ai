@@ -33,30 +33,7 @@ class WelcomeController extends Controller
             ->whereNotNull('published_at')
             ->orderByDesc('published_at')
             ->limit(6)
-            ->get()
-            ->map(function ($prompt) {
-                // Map tags to a simple array with 'name' and 'slug' keys
-                $tagsArray = $prompt->tags->map(function ($tag) {
-                    return [
-                        'name' => $tag->name,
-                        'slug' => $tag->slug,
-                    ];
-                })->toArray();
-
-                return [
-                    'id' => $prompt->id,
-                    'type' => 'prompt', // Type identifier for grouping
-                    'title' => $prompt->title,
-                    'excerpt' => $prompt->excerpt,
-                    'content' => $prompt->excerpt, // Use excerpt as timeline content
-                    'date' => $prompt->created_at->isoFormat('D [de] MMM, YYYY'),
-                    'image' => $prompt->image,
-                    'word_count' => $prompt->word_count,
-                    'url' => route('prompts.show', $prompt),
-                    'tags' => $tagsArray, // Use the transformed tags array
-                    'category' => $prompt->category ? [$prompt->category] : [],
-                ];
-            });
+            ->get();
     }
 
     /**

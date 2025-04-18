@@ -24,13 +24,13 @@ $schemaData = [
 @endphp
 
 @section('content')
-    <div class="flex h-full flex-1 flex-col gap-4 p-4 mb-24 relative z-10">
+    <div class="flex h-full flex-1 flex-col gap-4 p-4 mb-24 relative z-10 max-w-5xl mx-auto">
         <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold text-glow animate-text-glow">Artículos</h1>
+            <h1 class="text-2xl font-bold text-glow animate-text-glow">Blog</h1>
         </div>
 
         <!-- Grid of Article Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach ($articles as $article)
                 <x-article-card :article="$article" />
             @endforeach

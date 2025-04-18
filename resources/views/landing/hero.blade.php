@@ -62,16 +62,16 @@
                     @csrf
                     <div class="group relative w-full max-w-2xl">
                         <input
-                        name="email"
-                        type="email"
-                        placeholder="Tu correo electrónico"
-                        class="relative z-10 w-full rounded-xl border border-white/10 bg-background/50 py-3 pl-4 pr-36 text-sm text-foreground placeholder:text-foreground/50 focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all duration-300"
-                        @error('email') class="border-red-500" @enderror
-                        required
+                            name="email"
+                            type="email"
+                            placeholder="Tu correo electrónico"
+                            class="relative z-10 w-full rounded-xl border border-white/10 bg-background/50 py-3 pl-4 pr-36 text-sm text-foreground placeholder:text-foreground/50 focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all duration-300"
+                            @error('email') class="border-red-500" @enderror
+                            required
                         />
                         <button
-                        type="submit"
-                        class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-lg bg-primary px-4 py-1.5 text-sm font-semibold text-white transition-all hover:bg-primary/80 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)]"
+                            type="submit"
+                            class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-lg bg-primary px-4 py-1.5 text-sm font-semibold text-white transition-all hover:bg-primary/80 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)]"
                         >
                         Suscribirse
                     </button>
@@ -94,17 +94,45 @@
                 </div>
             </form>
             
-            <!-- Cyberpunk-styled buttons -->
-            <!--          <div class="mt-6 flex flex-wrap justify-center gap-3 sm:mt-8 sm:gap-4">
-                <button class="neon-border group relative rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-primary/80 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-6 sm:py-3">
-                    <span class="relative z-10">Explorar</span>
-                    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary via-secondary to-accent opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
-                </button>
-                <button class="group relative rounded-xl border border-primary/50 bg-transparent px-4 py-2 text-sm font-semibold text-primary transition-all hover:border-primary hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(124,58,237,0.3)] sm:px-6 sm:py-3">
-                    <span class="relative z-10">Más Info</span>
+            <!-- Social Media Icons -->
+            <div class="mt-6 flex flex-wrap justify-center gap-3 sm:mt-8 sm:gap-4">
+
+                <a href="https://tiktok.com/@elarquitectoai" target="_blank" class="neon-border group relative rounded-xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-all hover:bg-primary/20 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-5 sm:py-3">
+                    <span class="relative z-10"><i class="fab fa-tiktok text-lg"></i></span>
                     <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
-                </button>
-            </div>-->
+                    <!-- Animated glow effect -->
+                    <div class="absolute -inset-1 rounded-xl opacity-0 transition-opacity group-hover:opacity-100">
+                        <x-sliding-neon topColor="cyan-400" rightColor="accent" bottomColor="primary" leftColor="secondary" />
+                    </div>
+                </a>
+
+                <a href="https://facebook.com/elarquitectoai" target="_blank" class="neon-border group relative rounded-xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-all hover:bg-primary/20 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-5 sm:py-3">
+                    <span class="relative z-10"><i class="fab fa-facebook-f text-lg"></i></span>
+                    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
+                    <!-- Animated glow effect -->
+                    <div class="absolute -inset-1 rounded-xl opacity-0 transition-opacity group-hover:opacity-100">
+                        <x-sliding-neon topColor="primary" rightColor="secondary" bottomColor="accent" leftColor="cyan-400" />
+                    </div>
+                </a>
+
+                <a href="https://instagram.com/elarquitectoai" target="_blank" class="neon-border group relative rounded-xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-all hover:bg-primary/20 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-5 sm:py-3">
+                    <span class="relative z-10"><i class="fab fa-instagram text-lg"></i></span>
+                    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
+                    <!-- Animated glow effect -->
+                    <div class="absolute -inset-1 rounded-xl opacity-0 transition-opacity group-hover:opacity-100">
+                        <x-sliding-neon topColor="accent" rightColor="primary" bottomColor="secondary" leftColor="cyan-400" />
+                    </div>
+                </a>
+
+                <a href="https://youtube.com/@elarquitectoai" target="_blank" class="hidden neon-border group relative rounded-xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-all hover:bg-primary/20 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-5 sm:py-3">
+                    <span class="relative z-10"><i class="fab fa-youtube text-lg"></i></span>
+                    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
+                    <!-- Animated glow effect -->
+                    <div class="absolute -inset-1 rounded-xl opacity-0 transition-opacity group-hover:opacity-100">
+                        <x-sliding-neon topColor="secondary" rightColor="cyan-400" bottomColor="accent" leftColor="primary" />
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 </div>

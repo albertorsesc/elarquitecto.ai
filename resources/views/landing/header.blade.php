@@ -7,8 +7,25 @@
         
         <div class="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-2 px-2">
             <!-- Logo with glow -->
-            <a href="/" class="group flex items-center">
-                <img src="/img/logo.webp" alt="El Arquitecto A.I. Logo" class="h-8 w-auto transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.3)] sm:h-10" />
+            <a href="/" class="group">
+                <div class="relative">
+                    <img src="/img/logo.webp" alt="El Arquitecto A.I. Logo" class="h-8 w-auto rounded-full z-10 relative sm:h-10" />
+                    
+                    <!-- Animated border gradient -->
+                    <div class="absolute -inset-0.5 rounded-full opacity-90 overflow-hidden border border-transparent" style="box-shadow: 0 0 5px rgba(124, 58, 237, 0.3);">
+                        <!-- Top edge - faster animation -->
+                        <div class="absolute left-0 top-0 h-[2px] w-[200%] animate-neon-slide-right-color bg-gradient-to-r from-transparent via-[rgba(var(--primary-rgb),0.8)] to-transparent" style="animation-duration: 2s;"></div>
+                        <!-- Right edge - faster animation -->
+                        <div class="absolute right-0 top-0 h-[200%] w-[2px] animate-neon-slide-down-color bg-gradient-to-b from-transparent via-[rgba(var(--secondary-rgb),0.8)] to-transparent" style="animation-duration: 2s;"></div>
+                        <!-- Bottom edge - faster animation -->
+                        <div class="absolute bottom-0 left-0 h-[2px] w-[200%] animate-neon-slide-left-color bg-gradient-to-r from-transparent via-[rgba(var(--accent-rgb),0.8)] to-transparent" style="animation-duration: 2s;"></div>
+                        <!-- Left edge - faster animation -->
+                        <div class="absolute left-0 top-0 h-[200%] w-[2px] animate-neon-slide-up-color bg-gradient-to-b from-transparent via-[rgba(var(--cyan-400-rgb),0.8)] to-transparent" style="animation-duration: 2s;"></div>
+                        
+                        <!-- Additional left edge with different timing -->
+                        <div class="absolute left-0 top-0 h-[200%] w-[2px] animate-neon-slide-down-color bg-gradient-to-b from-transparent via-[rgba(var(--primary-rgb),0.8)] to-transparent" style="animation-duration: 1.5s; animation-delay: 0.5s;"></div>
+                    </div>
+                </div>
             </a>
 
             <!-- Search Bar -->
