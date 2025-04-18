@@ -1,6 +1,6 @@
 @extends('public.layouts.guest')
 
-@section('title', 'Artículos | El Arquitecto A.I.')
+@section('title', 'Artículos')
 @section('description', 'Explora nuestra colección de artículos sobre inteligencia artificial, programación y tecnología.')
 @section('keywords', 'artículos, inteligencia artificial, AI, IA, tecnología, El Arquitecto AI')
 @section('og-type', 'website')

@@ -1,6 +1,6 @@
 @extends('public.layouts.guest')
 
-@section('title', $article->title . ' | El Arquitecto AI')
+@section('title', $article->title)
 @section('description', strlen($article->body) > 150 ? substr(strip_tags($article->body), 0, 150) . '...' : strip_tags($article->body))
 @section('keywords')
 {{ $article->tags->pluck('name')->join(', ') }}, artículos, inteligencia artificial, AI, IA

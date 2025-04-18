@@ -106,7 +106,7 @@
             <!-- Full copyright -->
             <div class="text-center text-xs text-foreground/60 mt-4">
                 <p>
-                    &copy; {{ date('Y') }} El Arquitecto A.I. <br/> Democratizando I.A. para el beneficio de LATAM.
+                    &copy; {{ date('Y') }} {{ config('app.name') }} <br/> Democratizando I.A. para el beneficio de LATAM.
                 </p>
             </div>
         </div>
@@ -177,7 +177,7 @@
 
                 <!-- Subtle copyright -->
                 <div class="text-[10px] text-foreground/40 mt-0.5">
-                    &copy; {{ date('Y') }} El Arquitecto A.I.
+                    {{ date('Y') }} - {{ config('app.name') }} - Democratizando I.A. para el beneficio de LATAM.
                 </div>
             </div>
         </div>

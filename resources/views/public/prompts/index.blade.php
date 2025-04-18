@@ -1,6 +1,6 @@
 @extends('public.layouts.guest')
 
-@section('title', 'Prompts | El Arquitecto A.I.')
+@section('title', 'Prompts')
 @section('description', 'Explora nuestra colección de prompts de IA optimizados para ayudarte a obtener los mejores resultados con diferentes modelos de IA.')
 @section('keywords', 'prompts, inteligencia artificial, AI prompts, IA prompts, ChatGPT, El Arquitecto AI')
 @section('og-type', 'website')
@@ -30,7 +30,7 @@ $schemaData = [
         </div>
 
         <!-- Grid of Prompt Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach ($prompts as $prompt)
                 <x-prompt-card :prompt="$prompt" />
             @endforeach

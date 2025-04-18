@@ -1,6 +1,6 @@
 @extends('public.layouts.guest')
 
-@section('title', $prompt->title . ' | El Arquitecto AI')
+@section('title', $prompt->title)
 @section('description', $prompt->excerpt)
 @section('keywords')
 {{ $prompt->tags->pluck('name')->join(', ') }}, prompts, inteligencia artificial, AI, IA

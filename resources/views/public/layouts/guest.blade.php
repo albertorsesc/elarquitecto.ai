@@ -7,7 +7,7 @@
     
     @php
     // Get values from sections or use defaults
-    $seoTitle = View::hasSection('title') ? trim(View::getSection('title')) : 'El Arquitecto AI';
+    $seoTitle = View::hasSection('title') ? trim(View::getSection('title')) : config('app.name') . ' - Democratizando I.A. para el beneficio de LATAM';
     $seoDescription = View::hasSection('description') ? trim(View::getSection('description')) : '';
     $seoKeywords = View::hasSection('keywords') ? trim(View::getSection('keywords')) : '';
     $seoContent = View::hasSection('content-for-seo') ? trim(View::getSection('content-for-seo')) : '';

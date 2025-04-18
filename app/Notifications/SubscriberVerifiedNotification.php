@@ -52,7 +52,7 @@ class SubscriberVerifiedNotification extends Notification
             })
             ->dividerBlock()
             ->sectionBlock(function (SectionBlock $block) {
-                $block->text('El Arquitecto AI - Sistema de suscripciones');
+                $block->text(config('app.name').' - Sistema de suscripciones');
             });
     }
 }

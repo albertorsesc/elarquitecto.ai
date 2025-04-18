@@ -15,10 +15,11 @@ use Illuminate\Database\Eloquent\Model;
 class Article extends Model
 {
     use HasAuthor;
-
     use HasCategory;
+
     /** @use HasFactory<\Database\Factories\Blog\ArticleFactory> */
     use HasFactory;
+
     use HasMedia;
     use HasSlug;
     use HasTags;

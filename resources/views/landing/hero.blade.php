@@ -87,7 +87,9 @@
                     <div class="absolute bottom-0 left-0 h-[1px] w-0 bg-gradient-to-r from-primary via-cyan-400 to-secondary transition-all duration-300 group-focus-within:w-full"></div>
                     
                     <!-- Sliding neon lights -->
-                    <x-sliding-neon topColor="primary" rightColor="secondary" bottomColor="accent" leftColor="cyan-400" />
+                    <x-sliding-neon topColor="primary" rightColor="secondary" bottomColor="accent" leftColor="cyan-400" visible="true" />
+
+                    
                     
                     <!-- Corner accents -->
                     <x-corner-accent leftColor="primary" rightColor="cyan-400" transition="true" />

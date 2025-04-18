@@ -19,7 +19,7 @@
 
     {{-- SEO Component - Central place for all SEO meta tags --}}
     <x-seo 
-        title="{{ $seo['title'] ?? 'El Arquitecto A.I.' }}"
+        title="{{ $seo['title'] ?? config('app.name') . ' - Democratizando I.A. para el beneficio de LATAM' }}"
         description="{{ $seo['description'] ?? 'Democratizando I.A. para el beneficio de Latinoamérica' }}"
         keywords="{{ $seo['keywords'] ?? 'IA, Inteligencia Artificial, Latinoamérica, AI' }}"
         image="{{ $seo['image'] ?? url('/img/logo.webp') }}"

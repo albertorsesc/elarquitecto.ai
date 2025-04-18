@@ -91,7 +91,7 @@ class Seo extends Component
         string $schemaType = 'WebPage',
         array $schemaData = []
     ) {
-        $this->title = $title ?: config('app.name', 'El Arquitecto A.I.');
+        $this->title = $title ?: config('app.name').' - Democratizando I.A. para el beneficio de LATAM';
 
         // Use provided description or generate from content
         if (! empty($description)) {
