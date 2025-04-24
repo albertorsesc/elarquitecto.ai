@@ -108,6 +108,15 @@
                     </div>
                 </a>
 
+                <a href="https://discord.gg/UeaE3gq8" target="_blank" class="neon-border group relative rounded-xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-all hover:bg-primary/20 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-5 sm:py-3">
+                    <span class="relative z-10"><i class="fab fa-discord text-lg"></i></span>
+                    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
+                    <!-- Animated glow effect -->
+                    <div class="absolute -inset-1 rounded-xl opacity-0 transition-opacity group-hover:opacity-100">
+                        <x-sliding-neon topColor="secondary" rightColor="primary" bottomColor="cyan-400" leftColor="accent" />
+                    </div>
+                </a>
+
                 <a href="https://facebook.com/elarquitectoai" target="_blank" class="neon-border group relative rounded-xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-all hover:bg-primary/20 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-5 sm:py-3">
                     <span class="relative z-10"><i class="fab fa-facebook-f text-lg"></i></span>
                     <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
