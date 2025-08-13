@@ -13,7 +13,7 @@ class SendVerificationToUnverifiedSubscribers extends Command
      *
      * @var string
      */
-    protected $signature = 'subscribers:send-verification {--dry-run : Show what would be sent without actually sending}';
+    protected $signature = 'subscribers:send-verification {--dry-run : Show what would be sent without actually sending} {--force : Skip confirmation prompt}';
 
     /**
      * The console command description.
@@ -56,7 +56,7 @@ class SendVerificationToUnverifiedSubscribers extends Command
             return 0;
         }
 
-        if (! $this->confirm("Send verification emails to {$count} subscribers?")) {
+        if (! $this->option('force') && ! $this->confirm("Send verification emails to {$count} subscribers?")) {
             $this->info('❌ Operation cancelled.');
 
             return 0;
