@@ -13,7 +13,7 @@ class SendVerificationToUnverifiedSubscribers extends Command
      *
      * @var string
      */
-    protected $signature = 'subscribers:send-verification {--dry-run : Show what would be sent without actually sending} {--force : Skip confirmation prompt}';
+    protected $signature = 'subscribers:send-verification {--dry-run : Show what would be sent without actually sending} {--force : Skip confirmation prompt} {--emails= : Comma-separated list of specific emails to process}';
 
     /**
      * The console command description.
@@ -30,9 +30,17 @@ class SendVerificationToUnverifiedSubscribers extends Command
         $this->info('🔍 Checking for unverified subscribers...');
 
         // Get unverified subscribers that need hash regeneration
-        $unverifiedSubscribers = Subscriber::whereNull('verified_at')
-            ->whereNull('unsubscribed_at')
-            ->get();
+        $query = Subscriber::whereNull('verified_at')
+            ->whereNull('unsubscribed_at');
+
+        // Filter by specific emails if provided
+        if ($emailList = $this->option('emails')) {
+            $emails = array_map('trim', explode(',', $emailList));
+            $query->whereIn('email', $emails);
+            $this->info("🎯 Filtering for specific emails: " . implode(', ', $emails));
+        }
+
+        $unverifiedSubscribers = $query->get();
 
         if ($unverifiedSubscribers->isEmpty()) {
             $this->info('✅ No unverified subscribers found.');
@@ -64,8 +72,10 @@ class SendVerificationToUnverifiedSubscribers extends Command
 
         $sent = 0;
         $failed = 0;
+        $requestCount = 0;
+        $lastRequestTime = microtime(true);
 
-        $this->withProgressBar($unverifiedSubscribers, function ($subscriber) use ($resendService, &$sent, &$failed) {
+        $this->withProgressBar($unverifiedSubscribers, function ($subscriber) use ($resendService, &$sent, &$failed, &$requestCount, &$lastRequestTime) {
             try {
                 // Regenerate hash if missing
                 if (! $subscriber->hash) {
@@ -73,15 +83,48 @@ class SendVerificationToUnverifiedSubscribers extends Command
                     $subscriber->save();
                 }
 
-                // Add to Resend audience
-                $resendService->addContact($subscriber);
+                // Rate limiting: 2 requests per second
+                $currentTime = microtime(true);
+                $timeSinceLastRequest = $currentTime - $lastRequestTime;
+                
+                // If we've made 2 requests and less than 1 second has passed, wait
+                if ($requestCount >= 2 && $timeSinceLastRequest < 1.0) {
+                    $sleepTime = 1.0 - $timeSinceLastRequest;
+                    usleep($sleepTime * 1000000); // Convert to microseconds
+                    $requestCount = 0;
+                    $lastRequestTime = microtime(true);
+                }
 
-                // Send verification email
+                // Add to Resend audience (counts as 1 request)
+                $resendService->addContact($subscriber);
+                $requestCount++;
+                
+                // Check rate limit again before sending email
+                $currentTime = microtime(true);
+                $timeSinceLastRequest = $currentTime - $lastRequestTime;
+                
+                if ($requestCount >= 2 && $timeSinceLastRequest < 1.0) {
+                    $sleepTime = 1.0 - $timeSinceLastRequest;
+                    usleep($sleepTime * 1000000);
+                    $requestCount = 0;
+                    $lastRequestTime = microtime(true);
+                }
+
+                // Send verification email (counts as 1 request)
                 if ($resendService->sendVerificationEmail($subscriber)) {
                     $sent++;
                 } else {
                     $failed++;
                 }
+                $requestCount++;
+                
+                // Reset counter if 1 second has passed
+                $currentTime = microtime(true);
+                if ($currentTime - $lastRequestTime >= 1.0) {
+                    $requestCount = 0;
+                    $lastRequestTime = $currentTime;
+                }
+                
             } catch (\Exception $e) {
                 $this->error("Failed to process {$subscriber->email}: ".$e->getMessage());
                 $failed++;
