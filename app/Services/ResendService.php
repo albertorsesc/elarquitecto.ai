@@ -20,11 +20,13 @@ class ResendService
     public function addContact(Subscriber $subscriber): bool
     {
         try {
-            $this->resend->contacts->create([
-                'audienceId' => $this->audienceId,
-                'email' => $subscriber->email,
-                'unsubscribed' => false,
-            ]);
+            $this->resend->contacts->create(
+                $this->audienceId,
+                [
+                    'email' => $subscriber->email,
+                    'unsubscribed' => false,
+                ]
+            );
 
             return true;
         } catch (\Exception $e) {
