@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Subscriber;
 use App\Notifications\SubscriberVerifiedNotification;
+use App\Services\ResendService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -25,11 +26,14 @@ class SubscriberVerifiedJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(ResendService $resendService): void
     {
         $totalVerifiedSubscribers = Subscriber::whereNotNull('verified_at')->count();
 
         Notification::route('slack', slack_channel())
             ->notify(new SubscriberVerifiedNotification($this->subscriber, $totalVerifiedSubscribers));
+
+        // Send welcome email after verification
+        $resendService->sendWelcomeEmail($this->subscriber);
     }
 }

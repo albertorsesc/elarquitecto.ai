@@ -7,6 +7,7 @@ use App\Jobs\SubscriberVerifiedJob;
 use App\Models\Subscriber;
 use App\Notifications\NewSubscriberNotification;
 use App\Notifications\SubscriberVerifiedNotification;
+use App\Services\ResendService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Mail;
@@ -118,9 +119,13 @@ class SubscribersTest extends TestCase
             return $job->subscriber->email === $email;
         });
 
-        // Execute the job manually
+        // Execute the job manually with mocked ResendService
         $subscriber = Subscriber::where('email', $email)->first();
-        (new SubscriberJoinJob($subscriber))->handle();
+        $mockResendService = $this->createMock(ResendService::class);
+        $mockResendService->method('addContact')->willReturn(true);
+        $mockResendService->method('sendVerificationEmail')->willReturn(true);
+
+        (new SubscriberJoinJob($subscriber))->handle($mockResendService);
 
         // Assert that a notification was sent to Slack
         Notification::assertSentOnDemand(NewSubscriberNotification::class);
@@ -144,9 +149,12 @@ class SubscribersTest extends TestCase
             return $job->subscriber->email === $email;
         });
 
-        // Execute the job manually
+        // Execute the job manually with mocked ResendService
         $subscriber->refresh();
-        (new SubscriberVerifiedJob($subscriber))->handle();
+        $mockResendService = $this->createMock(ResendService::class);
+        $mockResendService->method('sendWelcomeEmail')->willReturn(true);
+
+        (new SubscriberVerifiedJob($subscriber))->handle($mockResendService);
 
         // Assert that a notification was sent to Slack
         Notification::assertSentOnDemand(SubscriberVerifiedNotification::class);

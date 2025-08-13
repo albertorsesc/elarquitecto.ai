@@ -178,5 +178,25 @@
       
     <!-- Footer -->
     @include('landing.components.footer')
+
+    <!-- Cookie Consent Banner -->
+    @include('components.cookie-consent')
+
+    <!-- Initialize Cookie Consent -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize cookie consent logic here if needed
+            
+            // Function to get cookie consent status
+            function getCookieConsent() {
+                return localStorage.getItem('cookie-consent-choice');
+            }
+            
+            // If cookies are rejected, disable Google Analytics
+            if (getCookieConsent() === 'rejected') {
+                window['ga-disable-G-7NGTTSRYL1'] = true;
+            }
+        });
+    </script>
 </body>
 </html>

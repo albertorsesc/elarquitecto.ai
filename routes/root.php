@@ -3,6 +3,7 @@
 use App\Http\Controllers\Root\Blog\ArticleController;
 use App\Http\Controllers\Root\CategoryController;
 use App\Http\Controllers\Root\PromptController;
+use App\Http\Controllers\Root\Resources\ResourceController;
 use App\Http\Controllers\Root\TagController;
 use App\Http\Middleware\EnsureRootUser;
 use Illuminate\Support\Facades\Route;
@@ -41,5 +42,15 @@ Route::middleware(['auth', 'verified', EnsureRootUser::class.':r007'])->prefix('
         Route::get('articles/{article:slug}', 'show')->name('articles.show');
         Route::get('articles/{article:slug}/edit', 'edit')->name('articles.edit');
         Route::put('articles/{article:slug}', 'update')->name('articles.update');
+    });
+
+    Route::controller(ResourceController::class)->group(function () {
+        Route::get('resources', 'index')->name('resources.index');
+        Route::get('resources/create', 'create')->name('resources.create');
+        Route::post('resources', 'store')->name('resources.store');
+        Route::get('resources/{resource}', 'show')->name('resources.show');
+        Route::get('resources/{resource}/edit', 'edit')->name('resources.edit');
+        Route::put('resources/{resource}', 'update')->name('resources.update');
+        Route::delete('resources/{resource}', 'destroy')->name('resources.destroy');
     });
 });

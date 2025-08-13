@@ -7,6 +7,9 @@ import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from 'ziggy-js';
 
+// Import cookie consent
+import './components/cookie-consent';
+
 // Force dark mode
 document.documentElement.classList.add('dark');
 

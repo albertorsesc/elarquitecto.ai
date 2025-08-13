@@ -15,6 +15,7 @@
         "laravel/slack-notification-channel": "^3.5",
         "laravel/tinker": "^2.10.1",
         "league/commonmark": "^2.6",
+        "resend/resend-php": "^0.19.1",
         "tightenco/ziggy": "^2.4"
     },
     "require-dev": {
