@@ -123,7 +123,7 @@ class ResendService
             $this->resend->emails->send([
                 'from' => 'no-reply@elarquitecto.ai',
                 'to' => [$subscriber->email],
-                'subject' => 'Confirma tu suscripción a El Arquitecto AI 🚀',
+                'subject' => 'Confirma tu suscripción a El Arquitecto AI',
                 'html' => view('emails.verification', ['subscriber' => $subscriber])->render(),
             ]);
 
