@@ -44,13 +44,22 @@ class NewsletterService
         }
 
         $processed = 0;
+        $skipped = 0;
         $markdownFiles = File::allFiles($this->newslettersPath);
 
         foreach ($markdownFiles as $file) {
             if ($file->getExtension() === 'md') {
-                $this->processNewsletterFile($file->getRealPath());
-                $processed++;
+                $result = $this->processNewsletterFile($file->getRealPath());
+                if ($result && $result['processed']) {
+                    $processed++;
+                } else {
+                    $skipped++;
+                }
             }
+        }
+
+        if ($skipped > 0) {
+            \Log::info("Newsletter scan completed: {$processed} processed, {$skipped} skipped (unchanged)");
         }
 
         return $processed;
