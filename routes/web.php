@@ -20,6 +20,7 @@ Route::get('articulos/{article}', [ArticleController::class, 'show'])->name('art
 // Subscriber Routes
 Route::post('subscribe', [SubscriberController::class, 'store'])->name('subscribers.store');
 Route::get('subscribe/{hash}', [SubscriberController::class, 'verify'])->name('subscribers.verify');
+Route::get('unsubscribe/{email}', [SubscriberController::class, 'unsubscribe'])->name('subscribers.unsubscribe');
 
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');

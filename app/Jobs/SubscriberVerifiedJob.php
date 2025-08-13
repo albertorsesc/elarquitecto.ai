@@ -28,7 +28,9 @@ class SubscriberVerifiedJob implements ShouldQueue
      */
     public function handle(ResendService $resendService): void
     {
-        $totalVerifiedSubscribers = Subscriber::whereNotNull('verified_at')->count();
+        $totalVerifiedSubscribers = Subscriber::whereNotNull('verified_at')
+            ->whereNull('unsubscribed_at')
+            ->count();
 
         Notification::route('slack', slack_channel())
             ->notify(new SubscriberVerifiedNotification($this->subscriber, $totalVerifiedSubscribers));

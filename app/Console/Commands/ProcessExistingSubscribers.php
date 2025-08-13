@@ -35,14 +35,20 @@ class ProcessExistingSubscribers extends Command
 
         $this->info('🚀 Processing existing subscribers...');
 
-        // Get all subscribers
-        $allSubscribers = Subscriber::all();
+        // Get all subscribers who haven't unsubscribed
+        $allSubscribers = Subscriber::whereNull('unsubscribed_at')->get();
         $totalCount = $allSubscribers->count();
+        $unsubscribedCount = Subscriber::whereNotNull('unsubscribed_at')->count();
 
-        $this->info("📊 Found {$totalCount} total subscribers");
+        $this->info("📊 Found {$totalCount} active subscribers");
+        if ($unsubscribedCount > 0) {
+            $this->info("🚫 Excluding {$unsubscribedCount} unsubscribed users");
+        }
 
-        // Get unverified subscribers
-        $unverifiedSubscribers = Subscriber::whereNull('verified_at')->get();
+        // Get unverified subscribers who haven't unsubscribed
+        $unverifiedSubscribers = Subscriber::whereNull('verified_at')
+            ->whereNull('unsubscribed_at')
+            ->get();
         $unverifiedCount = $unverifiedSubscribers->count();
 
         $this->info("📧 Found {$unverifiedCount} unverified subscribers");
@@ -107,7 +113,8 @@ class ProcessExistingSubscribers extends Command
         $this->table(
             ['Metric', 'Count'],
             [
-                ['Total subscribers', $totalCount],
+                ['Active subscribers', $totalCount],
+                ['Unsubscribed (excluded)', $unsubscribedCount],
                 ['Added to Resend', $addedCount],
                 ['Skipped (Resend)', $skippedCount],
                 ['Unverified subscribers', $unverifiedCount],

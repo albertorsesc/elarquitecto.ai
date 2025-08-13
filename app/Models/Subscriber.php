@@ -17,6 +17,7 @@ class Subscriber extends Model
     protected $fillable = [
         'email',
         'hash',
+        'unsubscribed_at',
     ];
 
     /**
@@ -26,10 +27,16 @@ class Subscriber extends Model
      */
     protected $casts = [
         'verified_at' => 'datetime',
+        'unsubscribed_at' => 'datetime',
     ];
 
     public function isVerified(): bool
     {
         return $this->verified_at !== null;
+    }
+
+    public function isUnsubscribed(): bool
+    {
+        return $this->unsubscribed_at !== null;
     }
 }

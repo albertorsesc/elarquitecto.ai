@@ -28,7 +28,7 @@ class SubscriberJoinJob implements ShouldQueue
      */
     public function handle(ResendService $resendService): void
     {
-        $totalSubscribers = Subscriber::count();
+        $totalSubscribers = Subscriber::whereNull('unsubscribed_at')->count();
 
         Notification::route('slack', slack_channel())
             ->notify(new NewSubscriberNotification($this->subscriber, $totalSubscribers));

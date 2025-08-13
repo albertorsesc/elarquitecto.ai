@@ -135,4 +135,25 @@ class ResendService
             return false;
         }
     }
+
+    public function unsubscribeContact(Subscriber $subscriber): bool
+    {
+        try {
+            // Mark contact as unsubscribed in Resend
+            $this->resend->contacts->update([
+                'audienceId' => $this->audienceId,
+                'email' => $subscriber->email,
+                'unsubscribed' => true,
+            ]);
+
+            return true;
+        } catch (\Exception $e) {
+            \Log::error('Failed to unsubscribe contact in Resend', [
+                'email' => $subscriber->email,
+                'error' => $e->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
 }

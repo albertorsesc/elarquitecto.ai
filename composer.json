@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.10.1",
         "league/commonmark": "^2.6",
         "resend/resend-php": "^0.19.1",
+        "spatie/yaml-front-matter": "^2.1",
         "tightenco/ziggy": "^2.4"
     },
     "require-dev": {
