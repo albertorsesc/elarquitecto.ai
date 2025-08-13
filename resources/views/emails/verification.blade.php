@@ -25,7 +25,7 @@
             </p>
             
             <div style="text-align: center; margin: 40px 0;">
-                <a href="{{ config('app.url') }}/subscribe/verify/{{ $subscriber->hash }}" 
+                <a href="{{ config('app.url') }}/subscribe/{{ $subscriber->hash }}" 
                    style="display: inline-block; background: linear-gradient(45deg, #ff00ff, #00ffff); color: #000000; text-decoration: none; padding: 20px 40px; border-radius: 8px; font-weight: bold; font-size: 18px; box-shadow: 0 6px 20px rgba(255, 0, 255, 0.4); text-transform: uppercase; letter-spacing: 1px;">
                     ✨ Confirmar Suscripción ✨
                 </a>
@@ -36,7 +36,7 @@
                     <strong>💡 Tip:</strong> Si no puedes hacer clic en el botón, copia y pega este enlace en tu navegador:
                 </p>
                 <p style="word-break: break-all; color: #00ffff; font-size: 12px; margin: 10px 0 0 0;">
-                    {{ config('app.url') }}/subscribe/verify/{{ $subscriber->hash }}
+                    {{ config('app.url') }}/subscribe/{{ $subscriber->hash }}
                 </p>
             </div>
             
