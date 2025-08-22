@@ -1,7 +1,7 @@
 @props(['sections' => []])
 
 @php
-    $enabledSections = ['Blog', 'Prompts'];
+    $enabledSections = ['Blog', 'Prompts', 'Herramientas'];
 @endphp
 
 <section class="py-12 sm:py-16">

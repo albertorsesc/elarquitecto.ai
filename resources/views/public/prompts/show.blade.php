@@ -16,7 +16,7 @@ $schemaData = [
     'published_at' => $prompt->published_at ?? $prompt->created_at,
     'updated_at' => $prompt->updated_at,
     'author' => 'Alberto Rosas',
-    'category' => $prompt->category ? $prompt->category[0]->name : null,
+    'category' => $prompt->category->first() ? $prompt->category->first()->name : null,
     'tags' => $prompt->tags->pluck('name')->toArray()
 ];
 @endphp

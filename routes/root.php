@@ -5,6 +5,7 @@ use App\Http\Controllers\Root\CategoryController;
 use App\Http\Controllers\Root\PromptController;
 use App\Http\Controllers\Root\Resources\ResourceController;
 use App\Http\Controllers\Root\TagController;
+use App\Http\Controllers\Root\ToolController;
 use App\Http\Middleware\EnsureRootUser;
 use Illuminate\Support\Facades\Route;
 
@@ -52,5 +53,16 @@ Route::middleware(['auth', 'verified', EnsureRootUser::class.':r007'])->prefix('
         Route::get('resources/{resource}/edit', 'edit')->name('resources.edit');
         Route::put('resources/{resource}', 'update')->name('resources.update');
         Route::delete('resources/{resource}', 'destroy')->name('resources.destroy');
+    });
+
+    Route::controller(ToolController::class)->group(function () {
+        Route::get('tools', 'index')->name('tools.index');
+        Route::get('tools/create', 'create')->name('tools.create');
+        Route::post('tools', 'store')->name('tools.store');
+        Route::get('tools/{tool}', 'show')->name('tools.show');
+        Route::get('tools/{tool}/edit', 'edit')->name('tools.edit');
+        Route::put('tools/{tool}', 'update')->name('tools.update');
+        Route::post('tools/{tool}', 'update')->name('tools.update.post'); // For file uploads with Inertia
+        Route::delete('tools/{tool}', 'destroy')->name('tools.destroy');
     });
 });

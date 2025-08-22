@@ -5,7 +5,7 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, MessageSquareText, Tag } from 'lucide-vue-next';
+import { BookOpen, Folder, LayoutGrid, MessageSquareText, Tag, Wrench } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const page = usePage<SharedData>();
@@ -28,6 +28,11 @@ const rootNavItems: NavItem[] = [
         title: 'Blog',
         href: route('root.blog.articles.index'),
         icon: BookOpen,
+    },
+    {
+        title: 'Tools',
+        href: route('root.tools.index'),
+        icon: Wrench,
     },
     {
         title: 'Categories',

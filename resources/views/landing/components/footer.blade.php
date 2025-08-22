@@ -56,11 +56,11 @@
                             'href' => '/articulos',
                             'icon' => 'fa-regular fa-file-lines'
                         ],
-                        // [
-                        //     'title' => 'Herramientas',
-                        //     'href' => '/tools',
-                        //     'icon' => 'fa-solid fa-screwdriver-wrench'
-                        // ],
+                        [
+                            'title' => 'Herramientas',
+                            'href' => '/herramientas',
+                            'icon' => 'fa-solid fa-screwdriver-wrench'
+                        ],
                         // [
                         //     'title' => 'Foro',
                         //     'href' => '/forum',
@@ -128,11 +128,11 @@
                                 'href' => '/articulos',
                                 'icon' => 'fa-regular fa-file-lines'
                             ],
-                            // [
-                            //     'title' => 'Herramientas',
-                            //     'href' => '/tools',
-                            //     'icon' => 'fa-solid fa-screwdriver-wrench'
-                            // ],
+                            [
+                                'title' => 'Herramientas',
+                                'href' => '/herramientas',
+                                'icon' => 'fa-solid fa-screwdriver-wrench'
+                            ],
                             // [
                             //     'title' => 'Foro',
                             //     'href' => '/forum',

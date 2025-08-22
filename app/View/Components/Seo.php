@@ -303,7 +303,13 @@ class Seo extends Component
                 'description' => $this->description,
                 'inLanguage' => 'es-LA',
             ],
+            'SoftwareApplication' => [],  // Use provided data directly for SoftwareApplication
         ];
+
+        // For SoftwareApplication, use the provided data directly
+        if ($this->schemaType === 'SoftwareApplication' && ! empty($this->schemaData)) {
+            return $this->schemaData;
+        }
 
         // Combine default data with provided data
         return array_merge(
