@@ -156,40 +156,40 @@ footer {
   
   /* Animation Classes */
   .animate-neon-slide-right {
-    animation: neonSlideRight 3s linear infinite;
+    animation: neonSlideRight 25s linear infinite;
   }
   
   .animate-neon-slide-right-slow {
-    animation: neonSlideRight 8s linear infinite;
+    animation: neonSlideRight 35s linear infinite;
   }
   
   .animate-neon-slide-left {
-    animation: neonSlideLeft 3s linear infinite;
+    animation: neonSlideLeft 25s linear infinite;
   }
   
   .animate-neon-slide-left-slow {
-    animation: neonSlideLeft 8s linear infinite;
+    animation: neonSlideLeft 35s linear infinite;
   }
   
   .animate-neon-slide-down {
-    animation: neonSlideDown 3s linear infinite;
+    animation: neonSlideDown 25s linear infinite;
   }
   
   .animate-neon-slide-down-slow {
-    animation: neonSlideDown 8s linear infinite;
+    animation: neonSlideDown 35s linear infinite;
   }
   
   .animate-neon-slide-down-delayed {
-    animation: neonSlideDown 3s linear infinite;
+    animation: neonSlideDown 25s linear infinite;
     animation-delay: 1.5s;
   }
   
   .animate-neon-slide-up {
-    animation: neonSlideUp 3s linear infinite;
+    animation: neonSlideUp 25s linear infinite;
   }
   
   .animate-neon-slide-up-slow {
-    animation: neonSlideUp 8s linear infinite;
+    animation: neonSlideUp 35s linear infinite;
   }
   
   .animate-glow {
@@ -256,7 +256,7 @@ footer {
       hsl(var(--cyan)), 
       hsl(var(--secondary)));
     background-size: 200% 100%;
-    animation: neonSlideRight 3s linear infinite;
+    animation: neonSlideRight 25s linear infinite;
     -webkit-mask:
       linear-gradient(#fff 0 0) content-box,
       linear-gradient(#fff 0 0);
@@ -630,19 +630,19 @@ footer {
   }
   
   .animate-neon-slide-right-color {
-    animation: neonSlideRightColor 4s linear infinite;
+    animation: neonSlideRightColor 25s linear infinite;
   }
   
   .animate-neon-slide-left-color {
-    animation: neonSlideLeftColor 4s linear infinite;
+    animation: neonSlideLeftColor 25s linear infinite;
   }
   
   .animate-neon-slide-down-color {
-    animation: neonSlideDownColor 4s linear infinite;
+    animation: neonSlideDownColor 25s linear infinite;
   }
   
   .animate-neon-slide-up-color {
-    animation: neonSlideUpColor 4s linear infinite;
+    animation: neonSlideUpColor 25s linear infinite;
   }
   
   /* Glow text effect */
@@ -798,19 +798,19 @@ footer {
   }
   
   .animate-neon-slide-right-color {
-    animation: neonSlideRightColor 4s linear infinite;
+    animation: neonSlideRightColor 25s linear infinite;
   }
   
   .animate-neon-slide-left-color {
-    animation: neonSlideLeftColor 4s linear infinite;
+    animation: neonSlideLeftColor 25s linear infinite;
   }
   
   .animate-neon-slide-down-color {
-    animation: neonSlideDownColor 4s linear infinite;
+    animation: neonSlideDownColor 25s linear infinite;
   }
   
   .animate-neon-slide-up-color {
-    animation: neonSlideUpColor 4s linear infinite;
+    animation: neonSlideUpColor 25s linear infinite;
   }
   
   .text-glow-multi {

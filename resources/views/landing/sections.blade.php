@@ -20,7 +20,7 @@ $sections = [
     'title' => 'Herramientas',
     'description' => 'Las mejores herramientas de IA recomendadas para potenciar tu productividad.',
     'icon' => 'carbon:tools',
-    'link' => '/tools'
+    'link' => '/herramientas'
   ],
   [
     'id' => 4,

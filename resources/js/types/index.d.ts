@@ -5,6 +5,7 @@ import type { Config } from 'ziggy-js';
 export * from './tag';
 export * from './category';
 export * from './article';
+export * from './tool';
 
 export interface Auth {
     user: User;

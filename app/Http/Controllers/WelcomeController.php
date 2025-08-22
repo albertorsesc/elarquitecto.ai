@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog\Article;
 use App\Models\Prompt;
+use App\Models\Tool;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
@@ -16,10 +17,12 @@ class WelcomeController extends Controller
     {
         $prompts = $this->getPrompts();
         $articles = $this->getArticles();
+        $tools = $this->getTools();
 
         return view('welcome', [
             'prompts' => $prompts,
             'articles' => $articles,
+            'tools' => $tools,
         ]);
     }
 
@@ -80,5 +83,19 @@ class WelcomeController extends Controller
         //         'category' => $article->category->first()->name,
         //     ];
         // });
+    }
+
+    /**
+     * Get tools for the welcome page.
+     */
+    protected function getTools(): Collection
+    {
+        return Tool::query()
+            ->with(['categories', 'tags', 'media'])
+            ->published()
+            ->orderByDesc('is_featured')
+            ->orderByDesc('published_at')
+            ->limit(6)
+            ->get();
     }
 }

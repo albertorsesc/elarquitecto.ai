@@ -12,6 +12,8 @@
         <x-prompt-card :prompt="$item" />
       @elseif($type === 'article')
         <x-article-card :article="$item" />
+      @elseif($type === 'tool')
+        <x-tool-card :tool="$item" />
       @else
         {{-- <x-timeline.item 
           :item="$item"

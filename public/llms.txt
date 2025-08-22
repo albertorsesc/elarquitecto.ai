@@ -1,0 +1,65 @@
+# ElArquitectoAI - Herramientas IA
+
+> Directorio completo de herramientas de inteligencia artificial y tecnología
+
+## Endpoints
+
+### Herramientas
+- /herramientas - Lista todas las herramientas IA disponibles
+- /herramientas/{slug} - Detalles de una herramienta específica
+- /herramientas/{slug}/markdown - Versión markdown de una herramienta
+
+### Prompts
+- /prompts - Directorio de prompts para IA
+- /prompts/{slug} - Detalle de un prompt específico
+
+### Artículos
+- /articulos - Blog con artículos sobre IA y arquitectura
+- /articulos/{slug} - Artículo completo
+
+## Filtros disponibles para herramientas
+
+### Parámetros de búsqueda
+- buscar: Búsqueda por texto en título, descripción y contenido
+- categoria: Filtrar por categoría (slug)
+- modelo: Filtrar por modelo de negocio (free, freemium, paid, subscription, one_time, open_source)
+- ordenar: Ordenar resultados (recientes, populares, alfabetico)
+
+### Ejemplo de uso
+/herramientas?categoria=ai-tools&modelo=free&ordenar=populares
+
+## Formatos de datos
+
+### JSON-LD Structured Data
+Todas las páginas incluyen datos estructurados en formato JSON-LD para mejor comprensión por parte de LLMs:
+- SoftwareApplication para herramientas
+- Article para artículos
+- HowTo para prompts
+
+### Markdown Export
+Las herramientas pueden exportarse en formato Markdown para fácil procesamiento:
+/herramientas/{slug}/markdown
+
+## Modelos de negocio
+
+- free: Herramientas completamente gratuitas
+- freemium: Versión gratuita con opciones premium
+- paid: Herramientas de pago
+- subscription: Modelo de suscripción
+- one_time: Pago único
+- open_source: Código abierto
+
+## Sitemap
+
+- /sitemap.xml - Índice principal del sitemap
+- /sitemap-tools.xml - Sitemap de herramientas
+- /sitemap-prompts.xml - Sitemap de prompts
+- /sitemap-articles.xml - Sitemap de artículos
+
+## Acerca de
+
+ElArquitectoAI es una plataforma dedicada a democratizar el acceso a la inteligencia artificial en LATAM, proporcionando recursos, herramientas y conocimiento sobre IA aplicada a la arquitectura y tecnología.
+
+## Contacto
+
+Para más información o sugerencias de nuevas herramientas, visita https://elarquitectoai.com

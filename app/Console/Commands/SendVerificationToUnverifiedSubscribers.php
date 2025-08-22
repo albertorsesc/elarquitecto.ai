@@ -37,7 +37,7 @@ class SendVerificationToUnverifiedSubscribers extends Command
         if ($emailList = $this->option('emails')) {
             $emails = array_map('trim', explode(',', $emailList));
             $query->whereIn('email', $emails);
-            $this->info("🎯 Filtering for specific emails: " . implode(', ', $emails));
+            $this->info('🎯 Filtering for specific emails: '.implode(', ', $emails));
         }
 
         $unverifiedSubscribers = $query->get();
@@ -84,11 +84,11 @@ class SendVerificationToUnverifiedSubscribers extends Command
 
                 // Rate limiter: ensure max 2 requests per second
                 $this->enforceRateLimit($requestTimes);
-                
+
                 // Add to Resend audience (request #1)
                 $resendService->addContact($subscriber);
                 $requestTimes[] = microtime(true);
-                
+
                 // Rate limiter before next request
                 $this->enforceRateLimit($requestTimes);
 
@@ -99,7 +99,7 @@ class SendVerificationToUnverifiedSubscribers extends Command
                     $failed++;
                 }
                 $requestTimes[] = microtime(true);
-                
+
             } catch (\Exception $e) {
                 $this->error("Failed to process {$subscriber->email}: ".$e->getMessage());
                 $failed++;
@@ -121,23 +121,23 @@ class SendVerificationToUnverifiedSubscribers extends Command
     private function enforceRateLimit(array &$requestTimes): void
     {
         $now = microtime(true);
-        
+
         // Remove requests older than 1 second
-        $requestTimes = array_filter($requestTimes, function($time) use ($now) {
+        $requestTimes = array_filter($requestTimes, function ($time) use ($now) {
             return ($now - $time) < 1.0;
         });
-        
+
         // If we have 2 requests in the last second, wait
         if (count($requestTimes) >= 2) {
             $oldestRequest = min($requestTimes);
             $waitTime = 1.0 - ($now - $oldestRequest);
-            
+
             if ($waitTime > 0) {
                 usleep($waitTime * 1000000); // Convert to microseconds
-                
+
                 // Clean up old requests after waiting
                 $now = microtime(true);
-                $requestTimes = array_filter($requestTimes, function($time) use ($now) {
+                $requestTimes = array_filter($requestTimes, function ($time) use ($now) {
                     return ($now - $time) < 1.0;
                 });
             }
