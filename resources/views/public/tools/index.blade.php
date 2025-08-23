@@ -278,9 +278,9 @@ if (isset($tools) && $tools->count() > 0) {
         </div>
 
         <!-- Grid of Tool Cards -->
-        <main class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" role="list">
+        <main class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             @forelse ($tools as $tool)
-                <article role="listitem">
+                <article>
                     <x-tool-card :tool="$tool" />
                 </article>
             @empty

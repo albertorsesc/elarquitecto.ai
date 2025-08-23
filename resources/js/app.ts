@@ -10,8 +10,10 @@ import { ZiggyVue } from 'ziggy-js';
 // Import cookie consent
 import './components/cookie-consent';
 
-// Force dark mode
+// Force dark mode and prevent white flash
 document.documentElement.classList.add('dark');
+document.documentElement.style.backgroundColor = '#0a0a0a';
+document.body.style.backgroundColor = '#0a0a0a';
 
 // Extend ImportMeta interface for Vite...
  
@@ -38,6 +40,7 @@ createInertiaApp({
             .mount(el);
     },
     progress: {
-        color: '#4B5563',
+        color: '#00FFE1',
+        showSpinner: true,
     },
 });

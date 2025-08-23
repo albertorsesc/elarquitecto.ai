@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"  @class(['dark' => ($appearance ?? 'system') == 'dark'])>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"  @class(['dark' => ($appearance ?? 'system') == 'dark']) style="background-color: #0a0a0a;">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         {{-- Inline script to detect system dark mode preference and apply it immediately --}}
         <script>
+            document.documentElement.style.backgroundColor = '#0a0a0a';
             (function() {
                 const appearance = '{{ $appearance ?? "system" }}';
 
@@ -21,12 +22,18 @@
 
         {{-- Inline style to set the HTML background color based on our theme in app.css --}}
         <style>
+            :root {
+                color-scheme: light dark;
+            }
             html {
                 background-color: oklch(1 0 0);
             }
-
             html.dark {
-                background-color: oklch(0.145 0 0);
+                background-color: #0a0a0a;
+                color-scheme: dark;
+            }
+            body {
+                background-color: inherit;
             }
         </style>
 

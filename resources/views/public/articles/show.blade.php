@@ -11,15 +11,47 @@
 @section('og-image', $article->hero_image_url ? $article->hero_image_url : url('/img/logo.webp'))
 
 @php
-// Define schema data for SEO component to use in the layout
+// Define comprehensive schema data for SEO
 $schemaData = [
-    'published_at' => $article->published_at ?? $article->created_at,
-    'updated_at' => $article->updated_at,
-    'author' => $article->author ? $article->author->name : 'Alberto Rosas',
-    'category' => $article->category && $article->category->count() > 0 ? $article->category[0]->name : null,
-    'tags' => $article->tags->pluck('name')->toArray()
+    '@context' => 'https://schema.org',
+    '@type' => 'Article',
+    'headline' => $article->title,
+    'description' => strlen($article->body) > 150 ? substr(strip_tags($article->body), 0, 150) . '...' : strip_tags($article->body),
+    'datePublished' => ($article->published_at ?? $article->created_at)->toIso8601String(),
+    'dateModified' => $article->updated_at->toIso8601String(),
+    'author' => [
+        '@type' => 'Person',
+        'name' => $article->author ? $article->author->name : 'Alberto Rosas',
+        'url' => url('/')
+    ],
+    'publisher' => [
+        '@type' => 'Organization',
+        'name' => config('app.name'),
+        'logo' => [
+            '@type' => 'ImageObject',
+            'url' => url('/img/logo.webp')
+        ]
+    ],
+    'mainEntityOfPage' => [
+        '@type' => 'WebPage',
+        '@id' => url()->current()
+    ],
+    'image' => $article->hero_image_url ? $article->hero_image_url : url('/img/logo.webp'),
+    'articleSection' => $article->category && $article->category->count() > 0 ? $article->category[0]->name : 'Inteligencia Artificial',
+    'keywords' => implode(', ', array_merge(
+        $article->tags->pluck('name')->toArray(),
+        ['artículos', 'inteligencia artificial', 'AI', 'IA', 'tecnología', 'innovación']
+    )),
+    'wordCount' => str_word_count(strip_tags($article->body)),
+    'timeRequired' => 'PT' . $article->reading_time . 'M'
 ];
 @endphp
+
+@push('structured-data')
+<script type="application/ld+json">
+{!! json_encode($schemaData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endpush
 
 @section('content')
     <div class="flex flex-col gap-6 mb-24 mx-auto max-w-5xl">

@@ -53,10 +53,10 @@
                         <path d="M12 12v.01" />
                     </svg>
                 </div>
-                <h3 class="text-lg font-semibold animate-text-glow">Cookie Consent</h3>
+                <h3 class="text-lg font-semibold animate-text-glow">Consentimiento de Cookies</h3>
             </div>
             <p class="text-muted-foreground text-sm">
-                This website uses cookies to enhance your experience. Choose to accept or reject cookies for this site.
+                Este sitio web utiliza cookies para mejorar tu experiencia. Elige aceptar o rechazar las cookies para este sitio.
             </p>
         </div>
         <div class="flex gap-3 md:flex-col lg:flex-row">
@@ -64,13 +64,13 @@
                 @click="reject()"
                 class="px-4 py-2 text-sm font-medium transition-all rounded-lg border border-primary/30 bg-background/90 hover:bg-primary/10 hover:shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)] text-foreground"
                 :class="{ 'cyber-button-container': animate }">
-                Reject All
+                Rechazar Todas
             </button>
             <button 
                 @click="accept()"
                 class="px-4 py-2 text-sm font-medium transition-all rounded-lg border border-primary/30 bg-primary/80 hover:bg-primary text-primary-foreground hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.7)]"
                 :class="{ 'cyber-button-container': animate }">
-                Accept All
+                Aceptar Todas
             </button>
         </div>
     </div>
