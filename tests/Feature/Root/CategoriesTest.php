@@ -61,4 +61,12 @@ class CategoriesTest extends TestCase
         $response->assertRedirect(route('root.categories.index'));
         $this->assertDatabaseHas('categories', $newCategory->toArray());
     }
+
+    public function test_root_user_can_delete_category()
+    {
+        $category = $this->create(Category::class);
+        $response = $this->delete(route('root.categories.destroy', $category->slug));
+        $response->assertRedirect(route('root.categories.index'));
+        $this->assertDatabaseMissing('categories', ['id' => $category->id]);
+    }
 }

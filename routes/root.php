@@ -26,6 +26,7 @@ Route::middleware(['auth', 'verified', EnsureRootUser::class.':r007'])->prefix('
         Route::post('categories', 'store')->name('categories.store');
         Route::get('categories/{category}/edit', 'edit')->name('categories.edit');
         Route::put('categories/{category}', 'update')->name('categories.update');
+        Route::delete('categories/{category}', 'destroy')->name('categories.destroy');
     });
 
     Route::controller(TagController::class)->group(function () {
