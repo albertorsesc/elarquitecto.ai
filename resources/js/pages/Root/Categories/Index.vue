@@ -48,12 +48,14 @@
                                 </td>
                                 <td class="px-4 py-3 whitespace-nowrap text-sm text-right">
                                     <div class="flex gap-2">
-                                        <CyberLink :href="route('root.categories.index', category.slug)" 
+                                        <CyberLink :href="route('root.categories.edit', category.slug)" 
                                             variant="outline" size="sm">
                                             Edit
                                         </CyberLink>
-                                        <CyberLink href="#" 
-                                            variant="primary" size="sm">
+                                        <CyberLink :href="route('root.categories.destroy', category.slug)" 
+                                            variant="primary" size="sm"
+                                            method="delete"
+                                            as="button">
                                             Delete
                                         </CyberLink>
                                     </div>
