@@ -40,6 +40,14 @@ class Tag extends Model
     }
 
     /**
+     * Get all tools that belong to this tag.
+     */
+    public function tools(): MorphToMany
+    {
+        return $this->morphedByMany(Tool::class, 'taggable');
+    }
+
+    /**
      * Get the route key for the model.
      */
     public function getRouteKeyName(): string

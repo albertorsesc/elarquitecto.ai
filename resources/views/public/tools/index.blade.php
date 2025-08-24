@@ -9,15 +9,17 @@
 @php
 // Get current filters from request
 $currentCategoria = request('categoria');
+$currentEtiqueta = request('etiqueta');
 $currentModelo = request('modelo');
 $currentBuscar = request('buscar');
 $currentOrdenar = request('ordenar', 'recientes');
 
 // Build canonical URL without unnecessary parameters
 $canonicalUrl = route('tools.index');
-if ($currentCategoria || $currentModelo || $currentBuscar || $currentOrdenar !== 'recientes') {
+if ($currentCategoria || $currentEtiqueta || $currentModelo || $currentBuscar || $currentOrdenar !== 'recientes') {
     $canonicalParams = array_filter([
         'categoria' => $currentCategoria,
+        'etiqueta' => $currentEtiqueta,
         'modelo' => $currentModelo,
         'buscar' => $currentBuscar,
         'ordenar' => $currentOrdenar !== 'recientes' ? $currentOrdenar : null,
@@ -103,7 +105,7 @@ if (isset($tools) && $tools->count() > 0) {
         <!-- Filters Section with better UX -->
         <div class="glass-effect neon-border rounded-xl p-4 mb-6" role="search" aria-label="Filtros de búsqueda">
             <form method="GET" action="{{ route('tools.index') }}" id="filterForm" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                     <!-- Search -->
                     <div>
                         <label for="buscar" class="block text-sm font-medium text-foreground/80 mb-1">
@@ -139,6 +141,28 @@ if (isset($tools) && $tools->count() > 0) {
                             @foreach($categories as $category)
                                 <option value="{{ $category->slug }}" {{ $currentCategoria == $category->slug ? 'selected' : '' }}>
                                     {{ $category->name }} ({{ $category->tools_count }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Tag Filter -->
+                    <div>
+                        <label for="etiqueta" class="block text-sm font-medium text-foreground/80 mb-1">
+                            Etiqueta
+                        </label>
+                        <select 
+                            id="etiqueta"
+                            name="etiqueta"
+                            class="w-full rounded-xl border border-white/10 bg-background/50 py-2 px-3 text-foreground 
+                                   focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 
+                                   focus:ring-cyan-400/30 transition-all duration-300"
+                            aria-label="Filtrar por etiqueta"
+                        >
+                            <option value="">Todas las etiquetas</option>
+                            @foreach($tags as $tag)
+                                <option value="{{ $tag->slug }}" {{ $currentEtiqueta == $tag->slug ? 'selected' : '' }}>
+                                    {{ $tag->name }} ({{ $tag->tools_count }})
                                 </option>
                             @endforeach
                         </select>
@@ -201,7 +225,7 @@ if (isset($tools) && $tools->count() > 0) {
                             Aplicar filtros
                         </span>
                     </button>
-                    @if($currentBuscar || $currentCategoria || $currentModelo || $currentOrdenar !== 'recientes')
+                    @if($currentBuscar || $currentCategoria || $currentEtiqueta || $currentModelo || $currentOrdenar !== 'recientes')
                         <a 
                             href="{{ route('tools.index') }}"
                             class="px-4 py-2 rounded-lg font-medium border border-border/30 bg-background/50 text-foreground 
@@ -221,12 +245,12 @@ if (isset($tools) && $tools->count() > 0) {
         </div>
 
         <!-- Active Filters Display -->
-        @if($currentBuscar || $currentCategoria || $currentModelo || $currentOrdenar !== 'recientes')
+        @if($currentBuscar || $currentCategoria || $currentEtiqueta || $currentModelo || $currentOrdenar !== 'recientes')
         <div class="flex flex-wrap gap-2 mb-4" aria-label="Filtros activos">
             @if($currentBuscar)
             <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">
                 Búsqueda: "{{ $currentBuscar }}"
-                <a href="{{ route('tools.index', array_merge(request()->except('buscar'), ['categoria' => $currentCategoria, 'modelo' => $currentModelo, 'ordenar' => $currentOrdenar])) }}" 
+                <a href="{{ route('tools.index', array_merge(request()->except('buscar'), ['categoria' => $currentCategoria, 'etiqueta' => $currentEtiqueta, 'modelo' => $currentModelo, 'ordenar' => $currentOrdenar])) }}" 
                    class="hover:text-primary/80" aria-label="Eliminar filtro de búsqueda">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -237,8 +261,19 @@ if (isset($tools) && $tools->count() > 0) {
             @if($currentCategoria)
             <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">
                 Categoría: {{ $categories->firstWhere('slug', $currentCategoria)?->name }}
-                <a href="{{ route('tools.index', array_merge(request()->except('categoria'), ['buscar' => $currentBuscar, 'modelo' => $currentModelo, 'ordenar' => $currentOrdenar])) }}" 
+                <a href="{{ route('tools.index', array_merge(request()->except('categoria'), ['buscar' => $currentBuscar, 'etiqueta' => $currentEtiqueta, 'modelo' => $currentModelo, 'ordenar' => $currentOrdenar])) }}" 
                    class="hover:text-primary/80" aria-label="Eliminar filtro de categoría">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </a>
+            </span>
+            @endif
+            @if($currentEtiqueta)
+            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">
+                Etiqueta: {{ $tags->firstWhere('slug', $currentEtiqueta)?->name }}
+                <a href="{{ route('tools.index', array_merge(request()->except('etiqueta'), ['buscar' => $currentBuscar, 'categoria' => $currentCategoria, 'modelo' => $currentModelo, 'ordenar' => $currentOrdenar])) }}" 
+                   class="hover:text-primary/80" aria-label="Eliminar filtro de etiqueta">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -258,7 +293,7 @@ if (isset($tools) && $tools->count() > 0) {
             @endphp
             <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">
                 Modelo: {{ $modelLabels[$currentModelo] ?? $currentModelo }}
-                <a href="{{ route('tools.index', array_merge(request()->except('modelo'), ['buscar' => $currentBuscar, 'categoria' => $currentCategoria, 'ordenar' => $currentOrdenar])) }}" 
+                <a href="{{ route('tools.index', array_merge(request()->except('modelo'), ['buscar' => $currentBuscar, 'categoria' => $currentCategoria, 'etiqueta' => $currentEtiqueta, 'ordenar' => $currentOrdenar])) }}" 
                    class="hover:text-primary/80" aria-label="Eliminar filtro de modelo">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -272,7 +307,7 @@ if (isset($tools) && $tools->count() > 0) {
         <!-- Results count -->
         <div class="text-sm text-muted-foreground mb-4" role="status" aria-live="polite">
             Mostrando <strong>{{ $tools->firstItem() ?? 0 }}</strong> - <strong>{{ $tools->lastItem() ?? 0 }}</strong> de <strong>{{ $tools->total() }}</strong> herramientas
-            @if($currentBuscar || $currentCategoria || $currentModelo)
+            @if($currentBuscar || $currentCategoria || $currentEtiqueta || $currentModelo)
                 (filtradas)
             @endif
         </div>
