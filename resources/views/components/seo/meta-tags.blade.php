@@ -21,6 +21,11 @@
 <meta property="og:url" content="{{ $canonical }}">
 <meta property="og:type" content="{{ $type }}">
 <meta property="og:image" content="{{ $image }}">
+<meta property="og:image:secure_url" content="{{ $image }}">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ $title }}">
 <meta property="og:locale" content="es_LA">
 <meta property="og:site_name" content="{{ config('app.name') }}">
 
@@ -29,9 +34,10 @@
 <meta name="twitter:title" content="{{ $title }}">
 <meta name="twitter:description" content="{{ $description }}">
 <meta name="twitter:image" content="{{ $image }}">
-<meta name="twitter:image:src" content="{{ $image }}">
-<meta name="twitter:widgets:theme" content="light">
-<meta name="twitter:widgets:border-color" content="#7C3AED">
+<meta property="twitter:image" content="{{ $image }}">
+<meta name="twitter:image:alt" content="{{ $title }}">
+<meta name="twitter:domain" content="{{ parse_url(config('app.url'), PHP_URL_HOST) }}">
+<meta name="twitter:url" content="{{ $canonical }}">
 @if($twitterCreator ?? false)
 <meta name="twitter:creator" content="{{ $twitterCreator }}">
 @endif

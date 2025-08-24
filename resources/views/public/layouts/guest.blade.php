@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark" style="background-color: #0a0a0a;">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <!-- Immediate dark mode to prevent flash -->
+    <script>
+        document.documentElement.style.backgroundColor = '#0a0a0a';
+        document.documentElement.classList.add('dark');
+    </script>
     
     @php
     // Get values from sections or use defaults
@@ -34,6 +40,27 @@
     <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-touch-icon-iphone-retina-120x120-precomposed.png">
     <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-touch-icon-ipad-retina-152x152-precomposed.png">
     
+    <!-- Critical CSS to prevent white flash -->
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+        html {
+            background-color: #0a0a0a !important;
+        }
+        body {
+            background-color: #0a0a0a !important;
+            color: #e5e5e5;
+        }
+        /* Prevent white flash during navigation */
+        .page-loading * {
+            transition: none !important;
+        }
+        #loading-overlay {
+            background: #0a0a0a !important;
+        }
+    </style>
+    
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,7 +76,33 @@
     <!-- Additional Styles -->
     @stack('styles')
 </head>
-<body id="app" class="font-sans antialiased bg-background text-foreground min-h-screen flex flex-col">
+<body id="app" class="font-sans antialiased bg-background text-foreground min-h-screen flex flex-col" style="background-color: #0a0a0a;">
+    <!-- Page transition overlay -->
+    <div id="page-transition" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #0a0a0a; z-index: 99999; opacity: 0; pointer-events: none; transition: opacity 0.2s;"></div>
+    <script>
+        // Smooth page transitions
+        document.addEventListener('DOMContentLoaded', function() {
+            const transition = document.getElementById('page-transition');
+            const links = document.querySelectorAll('a[href^="/"]');
+            
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (!link.hasAttribute('download') && !link.hasAttribute('target') && !link.getAttribute('href').startsWith('#')) {
+                        transition.style.pointerEvents = 'auto';
+                        transition.style.opacity = '1';
+                    }
+                });
+            });
+        });
+        // Hide transition on page load
+        window.addEventListener('load', function() {
+            const transition = document.getElementById('page-transition');
+            if (transition) {
+                transition.style.opacity = '0';
+                setTimeout(() => { transition.style.pointerEvents = 'none'; }, 200);
+            }
+        });
+    </script>
     <!-- Background with gradient -->
     <div class="fixed inset-0 z-0 pointer-events-none">
         <div class="absolute inset-0 bg-background opacity-90"></div>

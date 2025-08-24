@@ -28,32 +28,87 @@
                 </div>
             </a>
 
-            <!-- Search Bar -->
-            <div class="order-3 mt-2 w-full sm:order-2 sm:mt-0 sm:w-auto sm:flex-1 sm:px-4 md:px-6 hidden">
-                <div class="group relative">
-                <input
-                    type="text"
-                    placeholder="Buscar contenido..."
-                    class="peer relative z-10 w-full rounded-xl border border-white/10 bg-background/50 py-1.5 pl-8 pr-4 text-sm text-foreground placeholder:text-foreground/50 focus:border-cyan-400/30 focus:bg-background/70 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all duration-300"
-                />
-                <div class="absolute inset-y-0 left-0 z-10 flex items-center pl-2.5 text-foreground/50">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <!-- Animated border effect -->
-                <div class="absolute bottom-0 left-0 h-[1px] w-0 bg-gradient-to-r from-primary via-cyan-400 to-secondary transition-all duration-300 group-focus-within:w-full"></div>
-
-                <!-- Sliding neon lights -->
-                <x-sliding-neon topColor="accent" rightColor="primary" bottomColor="secondary" leftColor="cyan-400" />
-
-                <!-- Corner accents -->
-                <x-corner-accent leftColor="primary" rightColor="cyan-400" transition="true" />
+            <!-- Navigation Menu - Centered -->
+            <div class="order-2 flex-1 flex justify-center items-center">
+                <nav class="hidden sm:flex items-center space-x-1 md:space-x-2">
+                    <a href="{{ route('tools.index') }}" 
+                       class="group relative px-4 py-2 text-sm font-medium transition-all duration-300
+                              {{ request()->routeIs('tools.*') ? 'text-primary' : 'text-foreground/80 hover:text-primary' }}">
+                        <span class="relative z-10">Herramientas</span>
+                        <!-- Active/Hover underline effect -->
+                        <div class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-cyan-400 to-secondary transform transition-transform duration-300
+                                    {{ request()->routeIs('tools.*') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100' }}"></div>
+                        <!-- Active/Hover glow -->
+                        <div class="absolute inset-0 rounded-lg transition-all duration-300
+                                    {{ request()->routeIs('tools.*') ? 'bg-primary/10' : 'bg-primary/0 group-hover:bg-primary/10' }}"></div>
+                    </a>
+                    
+                    <a href="{{ route('prompts.index') }}" 
+                       class="group relative px-4 py-2 text-sm font-medium transition-all duration-300
+                              {{ request()->routeIs('prompts.*') ? 'text-primary' : 'text-foreground/80 hover:text-primary' }}">
+                        <span class="relative z-10">Prompts</span>
+                        <!-- Active/Hover underline effect -->
+                        <div class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-secondary via-accent to-primary transform transition-transform duration-300
+                                    {{ request()->routeIs('prompts.*') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100' }}"></div>
+                        <!-- Active/Hover glow -->
+                        <div class="absolute inset-0 rounded-lg transition-all duration-300
+                                    {{ request()->routeIs('prompts.*') ? 'bg-secondary/10' : 'bg-secondary/0 group-hover:bg-secondary/10' }}"></div>
+                    </a>
+                    
+                    <a href="{{ route('articles.index') }}" 
+                       class="group relative px-4 py-2 text-sm font-medium transition-all duration-300
+                              {{ request()->routeIs('articles.*') ? 'text-primary' : 'text-foreground/80 hover:text-primary' }}">
+                        <span class="relative z-10">Artículos</span>
+                        <!-- Active/Hover underline effect -->
+                        <div class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent via-primary to-cyan-400 transform transition-transform duration-300
+                                    {{ request()->routeIs('articles.*') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100' }}"></div>
+                        <!-- Active/Hover glow -->
+                        <div class="absolute inset-0 rounded-lg transition-all duration-300
+                                    {{ request()->routeIs('articles.*') ? 'bg-accent/10' : 'bg-accent/0 group-hover:bg-accent/10' }}"></div>
+                    </a>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <div class="sm:hidden" x-data="{ open: false }">
+                    <button @click="open = !open" 
+                            class="p-2 text-foreground/80 hover:text-primary transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path x-show="!open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            <path x-show="open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Mobile Dropdown Menu -->
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 transform scale-95"
+                         x-transition:enter-end="opacity-100 transform scale-100"
+                         x-transition:leave="transition ease-in duration-150"
+                         x-transition:leave-start="opacity-100 transform scale-100"
+                         x-transition:leave-end="opacity-0 transform scale-95"
+                         @click.outside="open = false"
+                         class="absolute top-full left-0 right-0 mt-2 mx-4 glass-effect rounded-xl border border-white/10 overflow-hidden">
+                        <a href="{{ route('tools.index') }}" 
+                           class="block px-4 py-3 text-sm font-medium transition-all
+                                  {{ request()->routeIs('tools.*') ? 'text-primary bg-primary/10' : 'text-foreground/80 hover:text-primary hover:bg-primary/10' }}">
+                            Herramientas
+                        </a>
+                        <a href="{{ route('prompts.index') }}" 
+                           class="block px-4 py-3 text-sm font-medium transition-all
+                                  {{ request()->routeIs('prompts.*') ? 'text-primary bg-secondary/10' : 'text-foreground/80 hover:text-primary hover:bg-secondary/10' }}">
+                            Prompts
+                        </a>
+                        <a href="{{ route('articles.index') }}" 
+                           class="block px-4 py-3 text-sm font-medium transition-all
+                                  {{ request()->routeIs('articles.*') ? 'text-primary bg-accent/10' : 'text-foreground/80 hover:text-primary hover:bg-accent/10' }}">
+                            Artículos
+                        </a>
+                    </div>
                 </div>
             </div>
             
-            <!-- Navigation Links -->
-            <div class="order-2 flex items-center gap-1 sm:order-3 sm:gap-3">
+            <!-- Auth Links -->
+            <div class="order-3 flex items-center gap-1 sm:gap-3">
                 @if(auth()->check())
                 <a href="{{ route('dashboard') }}"
                     class="neon-border rounded bg-primary/10 px-2 py-1 text-xs font-semibold text-primary transition-all hover:bg-primary/20 sm:px-3 sm:py-1.5 sm:text-sm"

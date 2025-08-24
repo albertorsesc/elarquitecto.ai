@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Tag;
 use App\Models\Tool;
 use Illuminate\Http\Request;
 
@@ -23,6 +24,14 @@ class ToolController extends Controller
             }
         }
 
+        // Tag filter
+        if ($request->filled('etiqueta')) {
+            $tag = Tag::where('slug', $request->etiqueta)->first();
+            if ($tag) {
+                $query->whereHas('tags', fn ($q) => $q->where('tags.id', $tag->id));
+            }
+        }
+
         // Business model filter
         if ($request->filled('modelo')) {
             $query->where('business_model', $request->modelo);
@@ -38,12 +47,12 @@ class ToolController extends Controller
             });
         }
 
-        // Sorting
+        // Sorting - Always show featured tools first
         $sort = $request->get('ordenar', 'recientes');
         $query = match ($sort) {
             'populares' => $query->orderBy('is_featured', 'desc')->orderBy('published_at', 'desc'),
-            'alfabetico' => $query->orderBy('title'),
-            default => $query->orderBy('published_at', 'desc'),
+            'alfabetico' => $query->orderBy('is_featured', 'desc')->orderBy('title'),
+            default => $query->orderBy('is_featured', 'desc')->orderBy('published_at', 'desc'),
         };
 
         $tools = $query->paginate(12)->withQueryString();
@@ -58,7 +67,17 @@ class ToolController extends Controller
                 return $category->tools_count > 0;
             });
 
-        return view('public.tools.index', compact('tools', 'categories'));
+        // Get tags with tool count
+        $tags = Tag::withCount(['tools' => function ($query) {
+            $query->published();
+        }])
+            ->orderBy('name')
+            ->get()
+            ->filter(function ($tag) {
+                return $tag->tools_count > 0;
+            });
+
+        return view('public.tools.index', compact('tools', 'categories', 'tags'));
     }
 
     public function show($slug)

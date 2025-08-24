@@ -210,16 +210,6 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Main Content -->
             <div class="lg:col-span-2 space-y-6">
-                <!-- Description -->
-                @if($tool->description)
-                <section class="glass-effect neon-border rounded-xl p-6" aria-labelledby="description-heading">
-                    <h2 id="description-heading" class="text-2xl font-bold mb-4">Descripción</h2>
-                    <div class="prose prose-invert max-w-none" itemprop="description">
-                        {!! \Illuminate\Support\Str::markdown($tool->description) !!}
-                    </div>
-                </section>
-                @endif
-
                 <!-- Tags -->
                 @if($tool->tags->isNotEmpty())
                 <section class="glass-effect neon-border rounded-xl p-6" aria-labelledby="tags-heading">
@@ -230,6 +220,16 @@
                             {{ $tag->name }}
                         </span>
                         @endforeach
+                    </div>
+                </section>
+                @endif
+
+                <!-- Description -->
+                @if($tool->description)
+                <section class="glass-effect neon-border rounded-xl p-6" aria-labelledby="description-heading">
+                    <h2 id="description-heading" class="text-2xl font-bold mb-4">Descripción</h2>
+                    <div class="prose prose-invert max-w-none" itemprop="description">
+                        {!! \Illuminate\Support\Str::markdown($tool->description) !!}
                     </div>
                 </section>
                 @endif

@@ -11,15 +11,56 @@
 @section('og-image', $prompt->image ? $prompt->image : url('/img/logo.webp'))
 
 @php
-// Define schema data for SEO component to use in the layout
+// Define comprehensive schema data for SEO
 $schemaData = [
-    'published_at' => $prompt->published_at ?? $prompt->created_at,
-    'updated_at' => $prompt->updated_at,
-    'author' => 'Alberto Rosas',
-    'category' => $prompt->category->first() ? $prompt->category->first()->name : null,
-    'tags' => $prompt->tags->pluck('name')->toArray()
+    '@context' => 'https://schema.org',
+    '@type' => 'HowTo',
+    'name' => $prompt->title,
+    'description' => $prompt->excerpt ?? substr(strip_tags($prompt->content), 0, 160),
+    'datePublished' => ($prompt->published_at ?? $prompt->created_at)->toIso8601String(),
+    'dateModified' => $prompt->updated_at->toIso8601String(),
+    'author' => [
+        '@type' => 'Person',
+        'name' => 'Alberto Rosas',
+        'url' => url('/')
+    ],
+    'publisher' => [
+        '@type' => 'Organization',
+        'name' => config('app.name'),
+        'logo' => [
+            '@type' => 'ImageObject',
+            'url' => url('/img/logo.webp')
+        ]
+    ],
+    'mainEntityOfPage' => [
+        '@type' => 'WebPage',
+        '@id' => url()->current()
+    ],
+    'step' => [
+        [
+            '@type' => 'HowToStep',
+            'name' => 'Copiar el prompt',
+            'text' => 'Haz clic en el botón "Copiar" para copiar el prompt al portapapeles'
+        ],
+        [
+            '@type' => 'HowToStep',
+            'name' => 'Usar en tu IA favorita',
+            'text' => 'Pega el prompt en ChatGPT, Claude, Gemini o cualquier otra IA'
+        ]
+    ],
+    'totalTime' => 'PT1M',
+    'keywords' => implode(', ', array_merge(
+        $prompt->tags->pluck('name')->toArray(),
+        ['prompts', 'inteligencia artificial', 'AI', 'IA', 'ChatGPT', 'Claude', 'Gemini']
+    ))
 ];
 @endphp
+
+@push('structured-data')
+<script type="application/ld+json">
+{!! json_encode($schemaData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endpush
 
 @section('content')
     <div class="flex flex-col gap-6 mb-24 max-w-5xl mx-auto">
