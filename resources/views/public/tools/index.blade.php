@@ -162,7 +162,7 @@ if (isset($tools) && $tools->count() > 0) {
                             <option value="">Todas las etiquetas</option>
                             @foreach($tags as $tag)
                                 <option value="{{ $tag->slug }}" {{ $currentEtiqueta == $tag->slug ? 'selected' : '' }}>
-                                    {{ $tag->name }} ({{ $tag->tools_count }})
+                                    {{ $tag->slug }} ({{ $tag->tools_count }})
                                 </option>
                             @endforeach
                         </select>

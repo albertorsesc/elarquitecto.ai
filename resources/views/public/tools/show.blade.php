@@ -217,7 +217,7 @@
                     <div class="flex flex-wrap gap-2" role="list">
                         @foreach($tool->tags as $tag)
                         <span role="listitem" class="px-3 py-1 text-sm rounded-full bg-sidebar-accent text-sidebar-accent-foreground" itemprop="keywords">
-                            {{ $tag->name }}
+                            {{ $tag->slug }}
                         </span>
                         @endforeach
                     </div>

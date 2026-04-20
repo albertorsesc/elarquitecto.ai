@@ -112,7 +112,7 @@ $schemaData = [
                 <div class="flex flex-wrap gap-1 mt-2">
                     @foreach($prompt->tags as $tag)
                         <span class="text-xs px-2 py-0.5 rounded-full bg-sidebar-accent text-sidebar-accent-foreground">
-                            {{ $tag->name }}
+                            {{ $tag->slug }}
                         </span>
                     @endforeach
                 </div>

@@ -76,7 +76,7 @@
         <div class="flex flex-wrap gap-1.5 mt-1" role="list" aria-label="Etiquetas">
             @foreach($tool->tags->take(3) as $tag)
                 <span class="text-xs px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30" role="listitem">
-                    #{{ $tag->name }}
+                    #{{ $tag->slug }}
                 </span>
             @endforeach
             @if($tool->tags->count() > 3)
