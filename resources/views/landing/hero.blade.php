@@ -95,64 +95,6 @@
                     <x-corner-accent leftColor="primary" rightColor="cyan-400" transition="true" />
                 </div>
             </form>
-            
-            <!-- Social Media Icons -->
-            <div class="mt-6 flex flex-wrap justify-center gap-3 sm:mt-8 sm:gap-4">
-
-                <a href="https://tiktok.com/@elarquitectoai" target="_blank" class="neon-border group relative rounded-xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-all hover:bg-primary/20 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-5 sm:py-3">
-                    <span class="relative z-10"><i class="fab fa-tiktok text-lg"></i></span>
-                    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
-                    <!-- Animated glow effect -->
-                    <div class="absolute -inset-1 rounded-xl opacity-0 transition-opacity group-hover:opacity-100">
-                        <x-sliding-neon topColor="cyan-400" rightColor="accent" bottomColor="primary" leftColor="secondary" />
-                    </div>
-                </a>
-
-                <a href="https://discord.gg/UeaE3gq8" target="_blank" class="neon-border group relative rounded-xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-all hover:bg-primary/20 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-5 sm:py-3">
-                    <span class="relative z-10"><i class="fab fa-discord text-lg"></i></span>
-                    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
-                    <!-- Animated glow effect -->
-                    <div class="absolute -inset-1 rounded-xl opacity-0 transition-opacity group-hover:opacity-100">
-                        <x-sliding-neon topColor="secondary" rightColor="primary" bottomColor="cyan-400" leftColor="accent" />
-                    </div>
-                </a>
-
-                <a href="https://t.me/elarquitectoaihub" target="_blank" class="neon-border group relative rounded-xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-all hover:bg-primary/20 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-5 sm:py-3">
-                    <span class="relative z-10"><i class="fab fa-telegram-plane text-lg"></i></span>
-                    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
-                    <!-- Animated glow effect -->
-                    <div class="absolute -inset-1 rounded-xl opacity-0 transition-opacity group-hover:opacity-100">
-                        <x-sliding-neon topColor="accent" rightColor="cyan-400" bottomColor="primary" leftColor="secondary" />
-                    </div>
-                </a>
-
-                <a href="https://facebook.com/elarquitectoai" target="_blank" class="neon-border group relative rounded-xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-all hover:bg-primary/20 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-5 sm:py-3">
-                    <span class="relative z-10"><i class="fab fa-facebook-f text-lg"></i></span>
-                    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
-                    <!-- Animated glow effect -->
-                    <div class="absolute -inset-1 rounded-xl opacity-0 transition-opacity group-hover:opacity-100">
-                        <x-sliding-neon topColor="primary" rightColor="secondary" bottomColor="accent" leftColor="cyan-400" />
-                    </div>
-                </a>
-
-                <a href="https://instagram.com/elarquitectoai" target="_blank" class="neon-border group relative rounded-xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-all hover:bg-primary/20 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-5 sm:py-3">
-                    <span class="relative z-10"><i class="fab fa-instagram text-lg"></i></span>
-                    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
-                    <!-- Animated glow effect -->
-                    <div class="absolute -inset-1 rounded-xl opacity-0 transition-opacity group-hover:opacity-100">
-                        <x-sliding-neon topColor="accent" rightColor="primary" bottomColor="secondary" leftColor="cyan-400" />
-                    </div>
-                </a>
-
-                <a href="https://youtube.com/@elarquitectoai" target="_blank" class="hidden neon-border group relative rounded-xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-all hover:bg-primary/20 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] sm:px-5 sm:py-3">
-                    <span class="relative z-10"><i class="fab fa-youtube text-lg"></i></span>
-                    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
-                    <!-- Animated glow effect -->
-                    <div class="absolute -inset-1 rounded-xl opacity-0 transition-opacity group-hover:opacity-100">
-                        <x-sliding-neon topColor="secondary" rightColor="cyan-400" bottomColor="accent" leftColor="primary" />
-                    </div>
-                </a>
-            </div>
         </div>
     </div>
 </div>

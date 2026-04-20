@@ -56,12 +56,6 @@
             'name' => config('app.name'),
             'url' => config('app.url'),
             'logo' => url('/img/logo.webp'),
-            'sameAs' => [
-                'https://instagram.com/elarquitectoai',
-                'https://facebook.com/elarquitectoai',
-                'https://youtube.com/@elarquitectoai',
-                'https://tiktok.com/@elarquitectoai',
-            ]
         ],
         'HowTo' => [
             '@context' => 'https://schema.org',

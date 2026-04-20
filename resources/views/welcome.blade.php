@@ -12,27 +12,14 @@
         document.body && (document.body.style.backgroundColor = '#0a0a0a');
     </script>
     
-    @php
-    // Define schema data for organization
-    $schemaData = [
-        'sameAs' => [
-            'https://instagram.com/elarquitectoai',
-            'https://facebook.com/elarquitectoai',
-            'https://youtube.com/@elarquitectoai',
-            'https://tiktok.com/@elarquitectoai',
-        ]
-    ];
-    @endphp
-
     {{-- SEO Component - Central place for all SEO meta tags --}}
-    <x-seo 
+    <x-seo
         title="{{ $seo['title'] ?? config('app.name') . ' - Democratizando I.A. para el beneficio de LATAM' }}"
         description="{{ $seo['description'] ?? 'Democratizando I.A. para el beneficio de Latinoamérica' }}"
         keywords="{{ $seo['keywords'] ?? 'IA, Inteligencia Artificial, Latinoamérica, AI' }}"
         image="{{ $seo['image'] ?? url('/img/logo.webp') }}"
         type="{{ $seo['type'] ?? 'website' }}"
         schemaType="Organization"
-        :schemaData="$schemaData"
     />
 
     @production

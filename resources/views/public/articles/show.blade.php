@@ -185,14 +185,6 @@ $schemaData = [
                         <span class="hidden sm:inline">X</span>
                     </a>
                     
-                    <!-- Facebook Share -->
-                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('articles.show', $article)) }}"
-                       target="_blank" aria-label="Compartir en Facebook"
-                       class="social-share-btn inline-flex items-center justify-center rounded-md font-medium h-10 px-3 sm:px-4 py-2 border border-border/50 hover:bg-primary/10 hover:text-primary transition-colors">
-                        <i class="fab fa-facebook text-glow-multi sm:mr-2"></i>
-                        <span class="hidden sm:inline">Facebook</span>
-                    </a>
-                    
                     <!-- LinkedIn Share -->
                     <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(route('articles.show', $article)) }}&title={{ urlencode($article->title) }}"
                        target="_blank" aria-label="Compartir en LinkedIn"

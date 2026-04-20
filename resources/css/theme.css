@@ -100,8 +100,7 @@ footer {
 }
 
 @media (max-width: 640px) {
-  .fab.fa-twitter, 
-  .fab.fa-facebook, 
+  .fab.fa-twitter,
   .fab.fa-linkedin,
   .fas.fa-share-alt,
   .fas.fa-check {
