@@ -1,56 +1,71 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirma tu suscripción</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Confirma tu suscripción a {{ config('app.name') }}</title>
 </head>
-<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #0f0f0f;">
-    <div style="max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%); color: #ffffff;">
-        <!-- Header -->
-        <div style="background: linear-gradient(45deg, #16213e, #0f3460); padding: 40px 20px; text-align: center; border-bottom: 2px solid #ff00ff;">
-            <h1 style="margin: 0; font-size: 28px; background: linear-gradient(45deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: #ff00ff; text-shadow: 0 0 20px rgba(255, 0, 255, 0.3);">
-                🚀 Confirma tu suscripción
-            </h1>
-        </div>
-        
-        <!-- Content -->
-        <div style="padding: 40px 20px;">
-            <p style="font-size: 18px; line-height: 1.6; color: #e0e0e0; margin-bottom: 20px;">
-                ¡Un paso más para unirte a la revolución! 🤖
-            </p>
-            
-            <p style="font-size: 16px; line-height: 1.6; color: #b0b0b0; margin-bottom: 25px;">
-                Hemos recibido tu solicitud para unirte a <strong style="color: #ff00ff;">{{ config('app.name') }}</strong>. Para completar tu suscripción y comenzar a recibir contenido exclusivo sobre IA, necesitamos que confirmes tu dirección de correo electrónico.
-            </p>
-            
-            <div style="text-align: center; margin: 40px 0;">
-                <a href="{{ config('app.url') }}/subscribe/{{ $subscriber->hash }}" 
-                   style="display: inline-block; background: linear-gradient(45deg, #ff00ff, #00ffff); color: #000000; text-decoration: none; padding: 20px 40px; border-radius: 8px; font-weight: bold; font-size: 18px; box-shadow: 0 6px 20px rgba(255, 0, 255, 0.4); text-transform: uppercase; letter-spacing: 1px;">
-                    ✨ Confirmar Suscripción ✨
-                </a>
-            </div>
-            
-            <div style="background: rgba(255, 0, 255, 0.1); border: 1px solid #ff00ff; border-radius: 8px; padding: 20px; margin: 25px 0;">
-                <p style="color: #ff00ff; margin: 0; font-size: 14px; line-height: 1.6;">
-                    <strong>💡 Tip:</strong> Si no puedes hacer clic en el botón, copia y pega este enlace en tu navegador:
-                </p>
-                <p style="word-break: break-all; color: #00ffff; font-size: 12px; margin: 10px 0 0 0;">
-                    {{ config('app.url') }}/subscribe/{{ $subscriber->hash }}
-                </p>
-            </div>
-            
-            <p style="font-size: 14px; line-height: 1.6; color: #808080; margin-top: 30px;">
-                Este enlace expirará en 24 horas por seguridad. Si no solicitaste esta suscripción, puedes ignorar este correo.
-            </p>
-        </div>
-        
-        <!-- Footer -->
-        <div style="background: rgba(255, 0, 255, 0.1); padding: 20px; text-align: center; border-top: 1px solid #333;">
-            <p style="margin: 0; font-size: 12px; color: #666;">
-                © {{ date('Y') }} {{ config('app.name') }} - El futuro de la IA en tus manos
-            </p>
-        </div>
-    </div>
+<body style="margin:0;padding:0;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;background-color:#0f0f0f;color:#ffffff;line-height:1.6;font-size:16px;">
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0f0f0f;">
+<tr><td align="center" style="padding:0;">
+<table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background-color:#1a1a2e;">
+
+<!-- HEADER -->
+<tr>
+<td align="center" style="background-color:#16213e;padding:30px 20px;border-bottom:3px solid #ff00ff;" bgcolor="#16213e">
+<p style="font-size:28px;font-weight:bold;color:#ff00ff;margin:0 0 10px 0;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;line-height:1.2;">🤖 {{ config('app.name') }} 🧠</p>
+<h1 style="font-size:22px;color:#ffffff;margin:0;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;line-height:1.3;">Un paso más — confirma tu correo</h1>
+</td>
+</tr>
+
+<!-- CONTENT -->
+<tr>
+<td style="padding:40px 30px;background-color:#1a1a2e;" bgcolor="#1a1a2e">
+
+<p style="font-size:16px;color:#e0e0e0;line-height:1.6;margin:0 0 16px 0;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;">¡Hola! 👋</p>
+
+<p style="font-size:16px;color:#e0e0e0;line-height:1.6;margin:0 0 16px 0;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;">Casi estás dentro. Solo falta que confirmes tu dirección de correo haciendo clic en el botón:</p>
+
+<!-- CTA button -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:30px 0;">
+<tr><td align="center">
+<table cellpadding="0" cellspacing="0" border="0">
+<tr><td align="center" style="border-radius:8px;background-color:#ff00ff;" bgcolor="#ff00ff">
+<a href="{{ config('app.url') }}/subscribe/{{ $subscriber->hash }}" target="_blank" style="display:inline-block;padding:16px 36px;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;font-size:16px;font-weight:bold;color:#000000;text-decoration:none;border-radius:8px;letter-spacing:0.5px;">✨ Confirmar suscripción</a>
+</td></tr>
+</table>
+</td></tr>
+</table>
+
+<!-- What to expect -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0d2635;border:1px solid #00ffff;border-radius:8px;margin:25px 0;" bgcolor="#0d2635">
+<tr><td style="padding:20px;">
+<p style="font-size:14px;color:#00ffff;margin:0 0 10px 0;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;line-height:1.5;"><strong>📬 Qué vas a recibir después de confirmar:</strong></p>
+<p style="font-size:14px;color:#e0e0e0;margin:0;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;line-height:1.6;">Todos los lunes en la mañana — 3 noticias importantes con enfoque LATAM, una herramienta con mi veredicto honesto, un prompt listo para copiar y pegar, y un BONUS técnico para los que quieren ir más profundo.</p>
+</td></tr>
+</table>
+
+<!-- Fallback link -->
+<p style="font-size:13px;color:#888888;line-height:1.6;margin:25px 0 8px 0;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;">Si el botón no funciona, copia y pega este enlace en tu navegador:</p>
+<p style="font-size:12px;color:#00ffff;word-break:break-all;margin:0 0 25px 0;font-family:'Courier New',monospace;line-height:1.4;">{{ config('app.url') }}/subscribe/{{ $subscriber->hash }}</p>
+
+<p style="font-size:13px;color:#808080;line-height:1.6;margin:25px 0 0 0;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;">Si no solicitaste esta suscripción, puedes ignorar este correo y nunca más escucharás de nosotros.</p>
+
+</td>
+</tr>
+
+<!-- FOOTER -->
+<tr>
+<td style="background-color:#0a1628;padding:25px 20px;text-align:center;border-top:1px solid #333333;" bgcolor="#0a1628">
+<p style="color:#888888;font-size:14px;margin:4px 0;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;line-height:1.4;"><strong style="color:#b0b0b0;">{{ config('app.name') }}</strong></p>
+<p style="color:#888888;font-size:13px;margin:4px 0;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;line-height:1.4;">Democratizando IA para el beneficio de LATAM 🚀</p>
+</td></tr>
+
+</table>
+</td></tr>
+</table>
+
 </body>
 </html>

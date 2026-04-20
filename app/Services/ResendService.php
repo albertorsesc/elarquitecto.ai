@@ -100,9 +100,10 @@ class ResendService
     {
         try {
             $this->resend->emails->send([
-                'from' => 'no-reply@elarquitecto.ai',
+                'from' => 'El Arquitecto A.I. <newsletter@elarquitecto.ai>',
+                'reply_to' => 'newsletter@elarquitecto.ai',
                 'to' => [$subscriber->email],
-                'subject' => '¡Bienvenido a El Arquitecto AI! 🤖',
+                'subject' => '¡Estás dentro! Esto es lo que vas a recibir 🤖',
                 'html' => view('emails.welcome', ['subscriber' => $subscriber])->render(),
             ]);
 
@@ -121,9 +122,10 @@ class ResendService
     {
         try {
             $this->resend->emails->send([
-                'from' => 'no-reply@elarquitecto.ai',
+                'from' => 'El Arquitecto A.I. <newsletter@elarquitecto.ai>',
+                'reply_to' => 'newsletter@elarquitecto.ai',
                 'to' => [$subscriber->email],
-                'subject' => 'Confirma tu suscripción a El Arquitecto AI',
+                'subject' => 'Confirma tu suscripción a El Arquitecto A.I.',
                 'html' => view('emails.verification', ['subscriber' => $subscriber])->render(),
             ]);
 
