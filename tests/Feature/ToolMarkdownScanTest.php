@@ -115,12 +115,12 @@ class ToolMarkdownScanTest extends TestCase
         $tool = Tool::where('slug', 'cursor')->first();
 
         $this->assertEqualsCanonicalizing(
-            ['ai', 'programming'],
+            ['ai', 'codigo'],
             $tool->categories->pluck('slug')->all()
         );
 
         $this->assertEqualsCanonicalizing(
-            ['code-generation', 'prompt-engineering'],
+            ['cli', 'prompt-engineering'],
             $tool->tags->pluck('slug')->all()
         );
     }
@@ -128,7 +128,7 @@ class ToolMarkdownScanTest extends TestCase
     public function test_rejects_unknown_category_slugs(): void
     {
         $frontmatter = str_replace(
-            'categories: ["ai", "programming"]',
+            'categories: ["ai", "codigo"]',
             'categories: ["nonexistent"]',
             $this->validFrontmatter('Cursor', 'cursor')
         );
@@ -144,7 +144,7 @@ class ToolMarkdownScanTest extends TestCase
     public function test_rejects_unknown_tag_slugs(): void
     {
         $frontmatter = str_replace(
-            'tags: ["code-generation", "prompt-engineering"]',
+            'tags: ["cli", "prompt-engineering"]',
             'tags: ["invented-tag"]',
             $this->validFrontmatter('Cursor', 'cursor')
         );
@@ -163,7 +163,7 @@ class ToolMarkdownScanTest extends TestCase
         $this->writeToolFile('good', $this->validFrontmatter('Good Tool', 'good'));
 
         $bad = str_replace(
-            'tags: ["code-generation", "prompt-engineering"]',
+            'tags: ["cli", "prompt-engineering"]',
             'tags: ["does-not-exist"]',
             $this->validFrontmatter('Bad Tool', 'bad')
         );
@@ -245,8 +245,8 @@ research:
     - "https://example.com/review"
   why_include: "Market leader"
 
-categories: ["ai", "programming"]
-tags: ["code-generation", "prompt-engineering"]
+categories: ["ai", "codigo"]
+tags: ["cli", "prompt-engineering"]
 
 is_featured: false
 published_at: null

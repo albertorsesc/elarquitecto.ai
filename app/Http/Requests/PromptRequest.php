@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\PromptTagEnum;
-use App\Models\Tag;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -27,9 +25,6 @@ class PromptRequest extends FormRequest
         $validModels = collect(config('models.models'))->flatMap(function ($models) {
             return $models;
         })->toArray();
-
-        // Get valid prompt tag ids
-        $validTagSlugs = PromptTagEnum::slugs();
 
         $rules = [
             'title' => ['required', 'string', 'max:255'],

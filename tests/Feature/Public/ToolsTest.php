@@ -186,7 +186,11 @@ class ToolsTest extends TestCase
     public function tools_show_page_displays_correct_tool()
     {
         $category = Category::factory()->create(['name' => 'AI Tools']);
-        $tag = Tag::factory()->create(['name' => 'Machine Learning', 'category_id' => $category->id]);
+        $tag = Tag::factory()->create([
+            'name' => 'Machine Learning',
+            'slug' => 'machine-learning',
+            'category_id' => $category->id,
+        ]);
 
         $tool = Tool::factory()->published()->create([
             'title' => 'Test Tool',
@@ -214,7 +218,9 @@ class ToolsTest extends TestCase
         $response->assertSee('This is a test tool excerpt');
         $response->assertSee('This is the full description of the test tool.');
         $response->assertSee('AI Tools');
-        $response->assertSee('Machine Learning');
+        // Tags render via slug (kebab-case) per the site-wide display rule,
+        // so assert the slug form rather than the name.
+        $response->assertSee('machine-learning');
 
         // Check meta tags
         $response->assertSee('Test Tool - SEO Title', false);
