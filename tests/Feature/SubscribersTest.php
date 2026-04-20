@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Jobs\SubscriberJoinJob;
 use App\Jobs\SubscriberVerifiedJob;
 use App\Models\Subscriber;
-use App\Notifications\NewSubscriberNotification;
 use App\Notifications\SubscriberVerifiedNotification;
 use App\Services\ResendService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -104,7 +103,7 @@ class SubscribersTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_notification_sent_when_user_subscribes(): void
+    public function test_no_slack_notification_on_unverified_subscribe(): void
     {
         $email = $this->faker->safeEmail();
 
@@ -114,7 +113,8 @@ class SubscribersTest extends TestCase
 
         $response->assertRedirect();
 
-        // First, test that the job was dispatched
+        // Job should still be queued — Slack silence applies only to the
+        // notification dispatch, not to the Resend contact/email work.
         Queue::assertPushed(SubscriberJoinJob::class, function ($job) use ($email) {
             return $job->subscriber->email === $email;
         });
@@ -127,8 +127,8 @@ class SubscribersTest extends TestCase
 
         (new SubscriberJoinJob($subscriber))->handle($mockResendService);
 
-        // Assert that a notification was sent to Slack
-        Notification::assertSentOnDemand(NewSubscriberNotification::class);
+        // Slack must stay silent until the subscriber verifies their email.
+        Notification::assertNothingSent();
     }
 
     public function test_notification_sent_when_user_verifies_subscription(): void
