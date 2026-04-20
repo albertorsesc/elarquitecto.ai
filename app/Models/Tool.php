@@ -35,6 +35,8 @@ class Tool extends Model
         'website_url',
         'pricing_url',
         'documentation_url',
+        'affiliate_data',
+        'research_data',
         'meta_title',
         'meta_description',
         'meta_keywords',
@@ -45,6 +47,8 @@ class Tool extends Model
 
     protected $casts = [
         'gallery' => 'array',
+        'affiliate_data' => 'array',
+        'research_data' => 'array',
         'meta_keywords' => 'array',
         'structured_data' => 'array',
         'is_featured' => 'boolean',
@@ -82,6 +86,28 @@ class Tool extends Model
     public function getFeaturedImageUrlAttribute()
     {
         return $this->getSingleFileUrl('featured');
+    }
+
+    /**
+     * The URL visitors should be sent to when clicking "Visit site".
+     * Uses the tracked affiliate link when present, otherwise falls back
+     * to the canonical website URL. Always prefer this over website_url
+     * on public pages so monetization isn't silently dropped.
+     */
+    public function getDisplayUrlAttribute(): ?string
+    {
+        $affiliateUrl = data_get($this->affiliate_data, 'url');
+
+        return $affiliateUrl ?: $this->website_url;
+    }
+
+    /**
+     * Whether this tool's primary outbound link is affiliate-tracked.
+     * Blade views use this to render the legally-required disclosure.
+     */
+    public function getHasAffiliateLinkAttribute(): bool
+    {
+        return ! empty(data_get($this->affiliate_data, 'url'));
     }
 
     public function getMetaTitleAttribute($value)

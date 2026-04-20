@@ -238,13 +238,13 @@
             <!-- Sidebar -->
             <aside class="space-y-6" role="complementary">
                 <!-- Links -->
-                @if($tool->website_url || $tool->pricing_url || $tool->documentation_url)
+                @if($tool->display_url || $tool->pricing_url || $tool->documentation_url)
                 <nav class="glass-effect neon-border rounded-xl p-6" aria-labelledby="links-heading">
                     <h2 id="links-heading" class="text-xl font-bold mb-4">Enlaces</h2>
                     <ul class="space-y-3" role="list">
-                        @if($tool->website_url)
+                        @if($tool->display_url)
                         <li role="listitem">
-                            <a href="{{ $tool->website_url }}" target="_blank" rel="noopener noreferrer" itemprop="url"
+                            <a href="{{ $tool->display_url }}" target="_blank" rel="{{ $tool->has_affiliate_link ? 'sponsored noopener noreferrer' : 'noopener noreferrer' }}" itemprop="url"
                                class="flex items-center justify-between p-3 rounded-lg bg-sidebar-accent/20 hover:bg-sidebar-accent/30 transition-colors group">
                                 <span class="font-medium">Sitio web oficial</span>
                                 <svg class="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -278,6 +278,12 @@
                         </li>
                         @endif
                     </ul>
+
+                    @if($tool->has_affiliate_link)
+                    <p class="mt-4 pt-3 border-t border-border/30 text-xs text-muted-foreground leading-relaxed">
+                        Este enlace contiene un identificador de afiliado. Recibo una pequeña comisión si compras, sin costo extra para ti.
+                    </p>
+                    @endif
                 </nav>
                 @endif
 
