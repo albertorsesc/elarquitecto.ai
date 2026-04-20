@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Category;
 use App\Models\Tag;
 use App\Models\Tool;
 use App\Services\ToolMarkdownService;

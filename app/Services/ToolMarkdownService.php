@@ -143,7 +143,7 @@ class ToolMarkdownService
         $unknownCategories = $categorySlugs->diff($validCategorySlugs);
         if ($unknownCategories->isNotEmpty()) {
             throw new \RuntimeException(sprintf(
-                "Unknown category slug(s) in %s: [%s]. Valid options: %s",
+                'Unknown category slug(s) in %s: [%s]. Valid options: %s',
                 basename($filePath),
                 $unknownCategories->implode(', '),
                 collect($validCategorySlugs)->implode(', ')
@@ -153,7 +153,7 @@ class ToolMarkdownService
         $unknownTags = $tagSlugs->diff($validTagSlugs);
         if ($unknownTags->isNotEmpty()) {
             throw new \RuntimeException(sprintf(
-                "Unknown tag slug(s) in %s: [%s]. Valid options: %s",
+                'Unknown tag slug(s) in %s: [%s]. Valid options: %s',
                 basename($filePath),
                 $unknownTags->implode(', '),
                 collect($validTagSlugs)->implode(', ')

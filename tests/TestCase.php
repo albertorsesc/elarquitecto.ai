@@ -8,6 +8,16 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Skip Vite asset resolution so `composer tests` runs cleanly
+        // without a prior `npm run build`. Tests exercise Blade/controller
+        // behavior, not compiled asset output.
+        $this->withoutVite();
+    }
+
     public function signInAsRoot()
     {
         $user = User::create([
