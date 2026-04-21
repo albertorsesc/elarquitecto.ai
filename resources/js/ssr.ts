@@ -29,16 +29,15 @@ createServer((page) =>
         page,
         render: renderToString,
         title: (title) => `${title} - ${appName}`,
-        resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
+        resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>('./Pages/**/*.vue')),
         setup({ App, props, plugin }) {
             const app = createSSRApp({ render: () => h(App, props) });
 
             // Configure Ziggy for SSR...
             const ziggyConfig = typeof page.props.ziggy === 'object' ? page.props.ziggy : {};
-            
+
             // Create route function...
-            const routeFunction = (name: string, params?: any, absolute?: boolean) => 
-                ziggyRoute(name, params, absolute, ziggyConfig as any);
+            const routeFunction = (name: string, params?: any, absolute?: boolean) => ziggyRoute(name, params, absolute, ziggyConfig as any);
 
             // Make route function available globally...
             // @ts-expect-error - Type definitions for Ziggy routes are complex
