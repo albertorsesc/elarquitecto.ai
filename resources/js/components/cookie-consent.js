@@ -7,10 +7,10 @@ import CookieConsentService from '../cookie-consent';
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize the cookie consent service
     const cookieConsent = new CookieConsentService();
-    
+
     // Make it available globally for debugging
     window.cookieConsent = cookieConsent;
-    
+
     // Check for existing cookie consent and act accordingly
     if (cookieConsent.hasConsentChoice()) {
         if (cookieConsent.areCookiesAccepted()) {
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cookieConsent.disableCookies();
         }
     }
-    
+
     // Optional: Add a function to reset cookie consent (for testing)
     window.resetCookieConsent = () => {
         cookieConsent.resetConsentChoice();
@@ -28,4 +28,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Export the CookieConsentService for use in other components
-export { CookieConsentService }; 
+export { CookieConsentService };

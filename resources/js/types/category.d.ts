@@ -4,4 +4,4 @@ export interface Category {
     slug: string;
     description: string | null;
     tags?: Array<import('./tag').Tag>;
-} 
+}

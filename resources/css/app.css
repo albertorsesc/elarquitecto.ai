@@ -18,15 +18,15 @@ html {
         --popover: 0 0% 100% / 0.9;
         --popover-foreground: 226 64% 15%;
         --primary: 263 70% 50%; /* Neon purple */
-        --primary-rgb: 124, 58, 237;  /* RGB value for primary */
+        --primary-rgb: 124, 58, 237; /* RGB value for primary */
         --primary-foreground: 0 0% 98%;
         --secondary: 196 80% 55%; /* Neon blue */
-        --secondary-rgb: 56, 189, 248;  /* RGB value for secondary */
+        --secondary-rgb: 56, 189, 248; /* RGB value for secondary */
         --secondary-foreground: 0 0% 9%;
         --muted: 220 10% 94%;
         --muted-foreground: 226 10% 40%;
         --accent: 335 80% 60%; /* Neon pink */
-        --accent-rgb: 236, 72, 153;  /* RGB value for accent */
+        --accent-rgb: 236, 72, 153; /* RGB value for accent */
         --accent-foreground: 0 0% 98%;
         --destructive: 0 84.2% 60.2%;
         --destructive-foreground: 0 0% 98%;
@@ -34,14 +34,14 @@ html {
         --input: 220 10% 90%;
         --ring: 263 70% 50%;
         --cyan: 196 80% 55%;
-        --cyan-rgb: 34, 211, 238;  /* RGB value for cyan */
+        --cyan-rgb: 34, 211, 238; /* RGB value for cyan */
 
         /* Cyberpunk chart colors */
         --chart-1: 263 70% 50%; /* Purple */
         --chart-2: 196 80% 55%; /* Blue */
         --chart-3: 335 80% 60%; /* Pink */
         --chart-4: 150 60% 50%; /* Green */
-        --chart-5: 40 90% 60%;  /* Yellow */
+        --chart-5: 40 90% 60%; /* Yellow */
 
         --radius: 0.5rem;
 
@@ -65,15 +65,15 @@ html {
         --popover: 226 30% 15% / 0.9;
         --popover-foreground: 213 10% 95%;
         --primary: 263 70% 60%; /* Neon purple */
-        --primary-rgb: 139, 92, 246;  /* RGB value for primary in dark mode */
+        --primary-rgb: 139, 92, 246; /* RGB value for primary in dark mode */
         --primary-foreground: 0 0% 98%;
         --secondary: 196 80% 55%; /* Neon blue */
-        --secondary-rgb: 56, 189, 248;  /* RGB value for secondary in dark mode */
+        --secondary-rgb: 56, 189, 248; /* RGB value for secondary in dark mode */
         --secondary-foreground: 0 0% 98%;
         --muted: 226 30% 20%;
         --muted-foreground: 213 10% 75%;
         --accent: 335 80% 60%; /* Neon pink */
-        --accent-rgb: 236, 72, 153;  /* RGB value for accent in dark mode */
+        --accent-rgb: 236, 72, 153; /* RGB value for accent in dark mode */
         --accent-foreground: 0 0% 98%;
         --destructive: 0 84% 60%;
         --destructive-foreground: 0 0% 98%;
@@ -81,14 +81,14 @@ html {
         --input: 226 30% 25%;
         --ring: 263 70% 60%;
         --cyan: 196 80% 55%;
-        --cyan-rgb: 34, 211, 238;  /* RGB value for cyan in dark mode */
+        --cyan-rgb: 34, 211, 238; /* RGB value for cyan in dark mode */
 
         /* Cyberpunk chart colors - dark mode */
         --chart-1: 263 70% 60%; /* Purple */
         --chart-2: 196 80% 55%; /* Blue */
         --chart-3: 335 80% 60%; /* Pink */
         --chart-4: 150 60% 50%; /* Green */
-        --chart-5: 40 90% 60%;  /* Yellow */
+        --chart-5: 40 90% 60%; /* Yellow */
 
         /* Sidebar styling - dark mode */
         --sidebar-background: 226 30% 15% / 0.7;
@@ -108,7 +108,7 @@ html {
     }
 
     body {
-        @apply bg-background text-foreground min-h-screen;
+        @apply min-h-screen bg-background text-foreground;
         background-image:
             radial-gradient(circle at 15% 50%, rgb(var(--secondary-rgb)) / 0.15, transparent 25%),
             radial-gradient(circle at 85% 30%, rgb(var(--accent-rgb)) / 0.15, transparent 25%);
@@ -124,10 +124,10 @@ html {
         background-color: hsl(var(--card));
         border: 1px solid hsl(var(--border));
     }
-    
+
     .neon-border {
         @apply relative overflow-hidden;
-        box-shadow: 
+        box-shadow:
             0 0 5px rgba(var(--primary-rgb), 0.7),
             0 0 10px rgba(var(--primary-rgb), 0.5);
     }

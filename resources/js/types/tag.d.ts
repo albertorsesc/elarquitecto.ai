@@ -6,4 +6,4 @@ export interface Tag {
     category?: import('./category').Category;
     created_at?: string;
     updated_at?: string;
-} 
+}

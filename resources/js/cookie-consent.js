@@ -14,7 +14,7 @@ export default class CookieConsentService {
     initEventListeners() {
         window.addEventListener('cookie-consent-updated', (event) => {
             const { choice } = event.detail;
-            
+
             if (choice === 'accepted') {
                 this.enableCookies();
             } else {
@@ -53,12 +53,12 @@ export default class CookieConsentService {
      */
     enableCookies() {
         console.log('Cookies enabled');
-        
+
         // Enable Google Analytics
         if (typeof gtag === 'function') {
             window['ga-disable-G-7NGTTSRYL1'] = false;
         }
-        
+
         // Add other cookie-dependent services here
     }
 
@@ -67,12 +67,12 @@ export default class CookieConsentService {
      */
     disableCookies() {
         console.log('Cookies disabled');
-        
+
         // Disable Google Analytics
         if (typeof gtag === 'function') {
             window['ga-disable-G-7NGTTSRYL1'] = true;
         }
-        
+
         // Remove or disable other cookies here
         this.removeCookies();
     }
@@ -82,15 +82,15 @@ export default class CookieConsentService {
      */
     removeCookies() {
         const cookies = document.cookie.split(';');
-        
+
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i];
             const eqPos = cookie.indexOf('=');
             const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
-            
+
             // Skip essential cookies that should remain
             if (name === 'XSRF-TOKEN' || name === 'laravel_session') continue;
-            
+
             document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
         }
     }
@@ -101,4 +101,4 @@ export default class CookieConsentService {
     resetConsentChoice() {
         localStorage.removeItem(this.storageKey);
     }
-} 
+}
