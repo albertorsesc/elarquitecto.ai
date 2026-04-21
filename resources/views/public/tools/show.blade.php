@@ -155,23 +155,15 @@
         <!-- Header -->
         <div class="glass-effect neon-border rounded-xl overflow-hidden mb-6">
             @if($tool->featured_image_url || $tool->featured_image)
-            <div class="relative h-64 md:h-96 w-full">
-                <img src="{{ $tool->featured_image_url ?? $tool->featured_image }}" alt="{{ $tool->title }}" 
-                     class="h-full w-full object-cover" />
-                <div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
-                
-                <!-- Title overlay -->
-                <div class="absolute bottom-0 left-0 right-0 p-6">
-                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 text-shadow-lg">{{ $tool->title }}</h1>
-                    <p class="text-lg text-white/90 text-shadow">{{ $tool->excerpt }}</p>
-                </div>
+            <div class="relative w-full bg-background/60 flex items-center justify-center py-4">
+                <img src="{{ $tool->featured_image_url ?? $tool->featured_image }}" alt="{{ $tool->title }}"
+                     class="block max-h-24 md:max-h-32 w-auto max-w-full object-contain" />
             </div>
-            @else
+            @endif
             <div class="p-6">
                 <h1 class="text-3xl md:text-4xl font-bold text-glow animate-text-glow mb-2">{{ $tool->title }}</h1>
                 <p class="text-lg text-muted-foreground">{{ $tool->excerpt }}</p>
             </div>
-            @endif
 
             <!-- Metadata bar -->
             <div class="flex flex-wrap items-center gap-4 p-4 border-t border-border/30">

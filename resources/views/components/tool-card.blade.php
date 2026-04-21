@@ -20,9 +20,9 @@
 
 <div class="group relative h-full overflow-hidden rounded-xl border border-cyan-400/20 glass-effect transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_25px_rgba(0,255,225,0.3)] hover:border-cyan-400/40">
     <!-- Card Image -->
-    <div class="relative h-44 w-full overflow-hidden">
+    <div class="relative h-44 w-full overflow-hidden bg-background/60">
         <img src="{{ $tool->featured_image_url ?? $tool->featured_image ?? '/img/logo.webp' }}" alt="{{ $tool->title }}"
-            class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" 
+            class="h-full w-full object-contain p-3"
             loading="lazy" />
         
         <!-- Business Model Badge - Top Left -->
