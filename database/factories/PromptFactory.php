@@ -2,8 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\PromptCategoryEnum;
-use App\Enums\PromptTagEnum;
+use App\Data\CanonicalTaxonomy;
 use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -14,11 +13,6 @@ use Illuminate\Support\Str;
  */
 class PromptFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
@@ -36,40 +30,32 @@ class PromptFactory extends Factory
     }
 
     /**
-     * Configure the model factory to use a prompt-specific category.
+     * Attach a random canonical category and one of its tags after the
+     * prompt is persisted. Both are upserted by slug from CanonicalTaxonomy
+     * so test data never diverges from the real taxonomy.
      */
     public function withPromptCategory(): self
     {
         return $this->afterCreating(function ($prompt) {
-            // Get a random prompt category
-            $categoryValue = fake()->randomElement(PromptCategoryEnum::values());
+            $tagDef = fake()->randomElement(CanonicalTaxonomy::tags());
+            $categorySlug = $tagDef['category'];
 
-            // Find or create the category
             $category = Category::firstOrCreate(
-                ['slug' => Str::slug($categoryValue)],
-                ['name' => $categoryValue]
+                ['slug' => $categorySlug],
+                ['name' => CanonicalTaxonomy::categoryName($categorySlug) ?? Str::headline($categorySlug)]
             );
 
-            // Assign the category to the prompt
             $prompt->setCategory($category);
 
-            // Get tags for this category
-            $tagsForCategory = PromptTagEnum::getByCategory($categoryValue);
+            $tag = Tag::firstOrCreate(
+                ['slug' => $tagDef['slug']],
+                [
+                    'name' => $tagDef['name'],
+                    'category_id' => $category->id,
+                ]
+            );
 
-            if (count($tagsForCategory) > 0) {
-                // Create at least one tag for this category
-                $tagValue = fake()->randomElement($tagsForCategory);
-                $tag = Tag::firstOrCreate(
-                    ['slug' => Str::slug($tagValue)],
-                    [
-                        'name' => $tagValue,
-                        'category_id' => $category->id,
-                    ]
-                );
-
-                // Assign the tag to the prompt
-                $prompt->setTags([$tag->id]);
-            }
+            $prompt->setTags([$tag->id]);
         });
     }
 }

@@ -114,8 +114,8 @@ meta_title: "Cursor — Editor de código con IA"
 meta_description: "Editor AI-first basado en VS Code. Autocompletado contextual, refactors en lenguaje natural, chat con tu código."
 meta_keywords: ["IDE", "AI coding", "VS Code"]
 
-categories: ["programming", "ai"]
-tags: ["ide", "ai-coding", "vscode-fork"]
+categories: ["codigo", "ai"]   # must match CanonicalTaxonomy slugs exactly
+tags: ["ide", "cli", "llm"]   # must match CanonicalTaxonomy slugs exactly
 
 is_featured: false
 # featured_image: "featured.png"  # drop the file in storage/tools/assets/cursor/ if you have one

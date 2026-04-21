@@ -2,8 +2,7 @@
 
 namespace Tests\Feature\Root;
 
-use App\Enums\PromptCategoryEnum;
-use App\Enums\PromptTagEnum;
+use App\Data\CanonicalTaxonomy;
 use App\Models\Category;
 use App\Models\Prompt;
 use App\Models\Tag;
@@ -55,9 +54,9 @@ class PromptsTest extends TestCase
         ]);
 
         // Create category and tags using prompt-specific values
-        $category = $this->createPromptCategory(PromptCategoryEnum::CONTENT_CREATION->value);
-        $tag1 = $this->createPromptTag($category, PromptTagEnum::BLOG_WRITING->value);
-        $tag2 = $this->createPromptTag($category, PromptTagEnum::SOCIAL_MEDIA->value);
+        $category = $this->createPromptCategory('Creación de contenido');
+        $tag1 = $this->createPromptTag($category, 'Blog writing');
+        $tag2 = $this->createPromptTag($category, 'Redes sociales');
 
         $response = $this->post(
             route('root.prompts.store'),
@@ -127,8 +126,8 @@ class PromptsTest extends TestCase
     public function test_root_user_can_update_prompt()
     {
         // Create category and tag using prompt-specific values
-        $category = $this->createPromptCategory(PromptCategoryEnum::CONTENT_CREATION->value);
-        $tag = $this->createPromptTag($category, PromptTagEnum::BLOG_WRITING->value);
+        $category = $this->createPromptCategory('Creación de contenido');
+        $tag = $this->createPromptTag($category, 'Blog writing');
 
         // Create prompt
         $prompt = $this->create(Prompt::class);
@@ -278,11 +277,11 @@ class PromptsTest extends TestCase
     public function test_root_user_can_assign_tags_to_prompt()
     {
         // Create category first with a valid prompt category
-        $category = $this->createPromptCategory(PromptCategoryEnum::PROGRAMMING->value);
+        $category = $this->createPromptCategory('Código');
 
         // Create tags that belong to this category using prompt-specific tags
-        $tag1 = $this->createPromptTag($category, PromptTagEnum::CODE_GENERATION->value);
-        $tag2 = $this->createPromptTag($category, PromptTagEnum::DEBUGGING->value);
+        $tag1 = $this->createPromptTag($category, 'Code generation');
+        $tag2 = $this->createPromptTag($category, 'Debugging');
 
         $prompt = $this->make(Prompt::class);
 
@@ -309,17 +308,17 @@ class PromptsTest extends TestCase
     public function test_root_user_can_update_prompt_with_category_and_tags()
     {
         // Create initial category and prompt with valid prompt-specific values
-        $category = $this->createPromptCategory(PromptCategoryEnum::CONTENT_CREATION->value);
+        $category = $this->createPromptCategory('Creación de contenido');
         $prompt = $this->create(Prompt::class);
         $prompt->setCategory($category);
 
         // Create tag for initial category
-        $tag1 = $this->createPromptTag($category, PromptTagEnum::BLOG_WRITING->value);
+        $tag1 = $this->createPromptTag($category, 'Blog writing');
         $prompt->setTags([$tag1->id]);
 
         // Create new category and tag for update with valid prompt-specific values
-        $newCategory = $this->createPromptCategory(PromptCategoryEnum::PROGRAMMING->value);
-        $newTag = $this->createPromptTag($newCategory, PromptTagEnum::CODE_GENERATION->value);
+        $newCategory = $this->createPromptCategory('Código');
+        $newTag = $this->createPromptTag($newCategory, 'Code generation');
 
         $response = $this->put(route('root.prompts.update', $prompt), [
             'title' => 'Updated Prompt',
@@ -354,39 +353,48 @@ class PromptsTest extends TestCase
     }
 
     /**
-     * Create a valid prompt tag for testing
+     * Create a valid prompt tag for testing. If no name is provided, pick
+     * a random canonical tag that belongs to the given category.
      */
     private function createPromptTag(Category $category, ?string $tagName = null): Tag
     {
-        // If no specific tag requested, use a random one from PromptTagEnum
         if ($tagName === null) {
-            $tagValue = fake()->randomElement(PromptTagEnum::values());
-        } else {
-            $tagValue = $tagName;
+            $candidates = collect(CanonicalTaxonomy::tags())
+                ->where('category', $category->slug)
+                ->values()
+                ->all();
+
+            $pick = $candidates
+                ? fake()->randomElement($candidates)
+                : fake()->randomElement(CanonicalTaxonomy::tags());
+
+            // Uniquify so parallel test cases don't collide with canonical rows.
+            $tagName = $pick['name'].' '.Str::random(4);
         }
 
-        return $this->create(Tag::class, [
-            'name' => $tagValue,
-            'slug' => Str::slug($tagValue),
-            'category_id' => $category->id,
-        ]);
+        return Tag::firstOrCreate(
+            ['slug' => Str::slug($tagName)],
+            [
+                'name' => $tagName,
+                'category_id' => $category->id,
+            ]
+        );
     }
 
     /**
-     * Create a valid prompt category for testing
+     * Resolve a category for testing by name. Reuses existing canonical
+     * rows when the slug already exists (seeded by the taxonomy migration).
      */
     private function createPromptCategory(?string $categoryName = null): Category
     {
-        // If no specific category requested, use a random one from PromptCategoryEnum
         if ($categoryName === null) {
-            $categoryValue = fake()->randomElement(PromptCategoryEnum::values());
-        } else {
-            $categoryValue = $categoryName;
+            $pick = fake()->randomElement(CanonicalTaxonomy::categories());
+            $categoryName = $pick['name'].' '.Str::random(4);
         }
 
-        return $this->create(Category::class, [
-            'name' => $categoryValue,
-            'slug' => Str::slug($categoryValue),
-        ]);
+        return Category::firstOrCreate(
+            ['slug' => Str::slug($categoryName)],
+            ['name' => $categoryName]
+        );
     }
 }

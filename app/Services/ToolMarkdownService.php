@@ -122,7 +122,7 @@ class ToolMarkdownService
 
     /**
      * Reject unknown category/tag slugs before touching the DB. The site's
-     * taxonomy is enum-driven (CategoryEnum, TagEnum) and seeded — ad-hoc
+     * taxonomy lives in CanonicalTaxonomy and is seeded + migrated — ad-hoc
      * slugs would fragment navigation and SEO.
      */
     private function validateTaxonomy(array $frontmatter, string $filePath): void
@@ -397,14 +397,9 @@ meta_description: ""
 meta_keywords: []
 
 # Taxonomy — use canonical slugs. Scanner fails on unknown ones.
-# Valid categories: ai, machine-learning, automation, agents, content-creation, programming
-# Valid tags by category:
-#   ai: fine-tuning, prompt-engineering
-#   agents: multi-agent, reasoning-agent, planning
-#   machine-learning: deep-learning, neural-networks, transformers
-#   automation: workflow, scripting, task-management
-#   content-creation: blog-writing, social-media
-#   programming: code-generation, debugging
+# Valid categories: ai, codigo, creacion-de-contenido, productividad, estrategia,
+#   emprendimiento, agentes, machine-learning, automatizacion
+# See app/Data/CanonicalTaxonomy.php for the full tag list per category.
 categories: []
 tags: []
 

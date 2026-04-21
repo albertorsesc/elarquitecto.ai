@@ -43,19 +43,20 @@ schema with examples. Required fields: `title`, `slug`.
 
 `categories` and `tags` must reference slugs that already exist in the DB.
 The scanner rejects unknown slugs with a helpful error listing valid options.
-Canonical taxonomy is seeded from `CategoryEnum` and `TagEnum`:
+Canonical taxonomy lives in `app/Data/CanonicalTaxonomy.php` — Spanish names
+with ASCII kebab-case slugs. Key slugs:
 
-- **Categories:** `ai`, `machine-learning`, `automation`, `agents`, `content-creation`, `programming`
-- **Tags by category:**
-  - `ai`: `fine-tuning`, `prompt-engineering`
-  - `agents`: `multi-agent`, `reasoning-agent`, `planning`
-  - `machine-learning`: `deep-learning`, `neural-networks`, `transformers`
-  - `automation`: `workflow`, `scripting`, `task-management`
-  - `content-creation`: `blog-writing`, `social-media`
-  - `programming`: `code-generation`, `debugging`
+- **Categories:** `ai`, `codigo`, `creacion-de-contenido`, `productividad`,
+  `estrategia`, `emprendimiento`, `agentes`, `machine-learning`,
+  `automatizacion`
+- **Tags:** see `CanonicalTaxonomy::tags()` for the full list — each tag
+  belongs to exactly one parent category
 
-Adding a new category or tag is a deliberate code change (update the enum +
-seeder) — not something that happens implicitly from a markdown file.
+Adding a new category or tag is a deliberate code change — update
+`CanonicalTaxonomy::categories()` / `tags()` and the
+`NormalizeCategoriesAndTags` migration will upsert it on the next deploy.
+An invariant test asserts that `Str::slug(name) === slug` for every
+canonical entry, so drift cannot sneak in.
 
 ## Production deploy — one-time Forge setup
 
