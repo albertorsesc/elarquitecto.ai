@@ -110,6 +110,38 @@ class Tool extends Model
         return ! empty(data_get($this->affiliate_data, 'url'));
     }
 
+    /**
+     * Describe the featured image aspect so the show view can pick a
+     * larger cap for wide banners (Paperclip-style screenshots, Hermes
+     * horizontal logos) and a smaller cap for square/portrait icons
+     * (OpenClaw lobster). Returns "banner" when width/height > 2:1,
+     * "icon" for anything else, or null when no featured image exists.
+     */
+    public function getFeaturedImageAspectAttribute(): ?string
+    {
+        $media = $this->getPrimaryMedia('featured');
+
+        if (! $media || $media->disk !== 'public') {
+            return null;
+        }
+
+        $absolutePath = storage_path('app/public/'.$media->path);
+
+        if (! is_file($absolutePath)) {
+            return null;
+        }
+
+        $size = @getimagesize($absolutePath);
+
+        if (! $size || empty($size[1])) {
+            return 'icon';
+        }
+
+        [$width, $height] = $size;
+
+        return ($width / $height) >= 2 ? 'banner' : 'icon';
+    }
+
     public function getMetaTitleAttribute($value)
     {
         return $value ?: $this->title;

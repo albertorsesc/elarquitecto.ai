@@ -155,9 +155,16 @@
         <!-- Header -->
         <div class="glass-effect neon-border rounded-xl overflow-hidden mb-6">
             @if($tool->featured_image_url || $tool->featured_image)
+            @php
+                // Wider banners get a larger cap so they read; square/portrait
+                // icons stay compact so they don't dominate the layout.
+                $imgSize = $tool->featured_image_aspect === 'banner'
+                    ? 'max-h-40 md:max-h-56'
+                    : 'max-h-24 md:max-h-32';
+            @endphp
             <div class="relative w-full bg-background/60 flex items-center justify-center py-4">
                 <img src="{{ $tool->featured_image_url ?? $tool->featured_image }}" alt="{{ $tool->title }}"
-                     class="block max-h-24 md:max-h-32 w-auto max-w-full object-contain" />
+                     class="block {{ $imgSize }} w-auto max-w-full object-contain" />
             </div>
             @endif
             <div class="p-6">
